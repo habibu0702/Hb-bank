@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bank App</title>
+</head>
+<body>
+  <h2>🏦 Bank App Demo</h2>
+
+  <div style="border:1px solid #aaa; padding:10px; margin-bottom:20px">
+    <h3>🤖 User Account</h3>
+    <p>Username: <span id="username" style="font-size: 16px; heigth: 50px;"></span></p>
+    <p>Account Number: <span id="accNumber"></span></p>
+    <p>Balance: ₦<span id="balance"></span></p>
+    <button onclick="copyAccount()">📋 Copy Account Number</button>
+  </div>
+
+  <div style="border:1px solid #aaa; padding:10px">
+    <h3>💸 Send Money</h3>
+    <input type="text" id="toAccount" placeholder="Account Number" style="font-size: 16px"/><br><br>
+    <input type="number" id="amount" placeholder="Amount" style="font-size: 16px"/><br><br>
+    <input type="password" id="pin" placeholder="Your PIN" style="font-size: 16px"/><br><br>
+    <button onclick="sendMoney()">Send</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    class BankAccount {
+      static nextAccountRaw = 1000000000;
+      static usedAccounts = new Set();
+      static bankCode = "012";
+
+      constructor(username, password, pin) {
+        this.username = username;
+        this._password = password;
+        this._pin = pin;
+        this.balance = 0;
+
+        let fullAccountNumber;
+        do {
+          const raw = BankAccount.nextAccountRaw++;
+          fullAccountNumber = BankAccount.bankCode + raw.toString().slice(3);
+        } while (BankAccount.usedAccounts.has(fullAccountNumber));
+
+        this.accountNumber = fullAccountNumber;
+        BankAccount.usedAccounts.add(fullAccountNumber);
+      }
+
+      verifyPin(pin) {
+        return this._pin === pin;
+      }
+
+      deposit(amount) {
+        if (amount > 0) this.balance += amount;
+      }
+
+      withdraw(amount, pin) {
+        if (!this.verifyPin(pin)) return "❌ Incorrect PIN.";
+        if (amount > this.balance) return "❌ Not enough funds.";
+        this.balance -= amount;
+        return `✅ ₦${amount} withdrawn.`;
+      }
+    }
+
+    // Users list
+    let allUsers = [];
+
+    // Create test users
+    const user1 = new BankAccount("Habibu", "pass1", "1234");
+    user1.deposit(10000); // initial deposit
+    const user2 = new BankAccount("Umar", "pass2", "5678");
+
+    allUsers.push(user1, user2);
+
+    // Show user1 info
+    document.getElementById("username").innerText = user1.username;
+    document.getElementById("accNumber").innerText = user1.accountNumber;
+    document.getElementById("balance").innerText = user1.balance;
+
+    // Copy account number
+    function copyAccount() {
+      const acc = document.getElementById("accNumber").innerText;
+      navigator.clipboard.writeText(acc).then(() => {
+        alert("Copied: " + acc);
+      });
+    }
+
+    // Send money
+    function sendMoney() {
+      const toAcc = document.getElementById("toAccount").value.trim();
+      const amount = parseFloat(document.getElementById("amount").value);
+      const pin = document.getElementById("pin").value.trim();
+
+      const fromUser = user1; // active user
+      const recipient = allUsers.find(user => user.accountNumber === toAcc);
+
+      const result = document.getElementById("result");
+
+      if (!recipient) {
+        result.innerText = "❌ Account number not found.";
+        return;
+      }
+
+      if (!fromUser.verifyPin(pin)) {
+        result.innerText = "❌ Incorrect PIN.";
+        return;
+      }
+
+      if (amount <= 0 || isNaN(amount)) {
+        result.innerText = "❌ Invalid amount.";
+        return;
+      }
+
+      if (fromUser.balance < amount) {
+        result.innerText = "❌ Insufficient funds.";
+        return;
+      }
+
+      fromUser.balance -= amount;
+      recipient.deposit(amount);
+
+      result.innerText = `✅ ₦${amount} sent to ${recipient.username}.`;
+      document.getElementById("balance").innerText = fromUser.balance;
+    }
+  </script>
+</body>
+</html>
