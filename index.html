@@ -1,127 +1,466 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Bank App</title>
-</head>
-<body>
-  <h2>🏦 Bank App Demo</h2>
+  <head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <div style="border:1px solid #aaa; padding:10px; margin-bottom:20px">
-    <h3>🤖 User Account</h3>
-    <p>Username: <span id="username" style="font-size: 16px; heigth: 50px;"></span></p>
-    <p>Account Number: <span id="accNumber"></span></p>
-    <p>Balance: ₦<span id="balance"></span></p>
-    <button onclick="copyAccount()">📋 Copy Account Number</button>
+     
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ml5/0.4.3/ml5.min.js"></script>
+
+
+    <link rel="stylesheet" href="ts.css">
+    <link rel="stylesheet" href="btn.css">
+    <link rel="stylesheet" href="service1.css">
+    <link rel="stylesheet" href="bot.css">
+    <link rel="stylesheet" href="mediA.css">
+  </head>
+  <body>
+ 
+  <div id="page1" class="page active">
+  <header class="header1">
+  <img src="https://i.ibb.co/LztcMrnP/IMG-4659.jpg" alt="#" class="user-synbol">
+
+  <div class="home-text">
+  <b id="greetin"></b>
+  <span id="userName">
+  Habeeb</span></div>
+
+  <button id="btn-bot">
+  <i class="fa fa-robot">
+  </i></button>
+
+  <a class="fa-watsapp" href="https://chat.whatsapp.com/HUUhtmQmzd7LnPo8Rtm6Gq" target="_blank">
+  <i class="fab fa-whatsapp"></i></a>
+
+  <i class="fa fa-bell"></i></header>
+
+
+
+
+
+
+
+  <div class="home-page1">
+  <nav class="wallet">
+  <span>Available Balance</span><i id="toggle" class="fa fa-eye"></i>
+  <span>&#8358; <span id="balance">0,00</span></span><b id="hide" style="display: none;">
+  *****</b>
+  <button id="pundWallet">
+  Pund Wallet</button>
+  <button id="transaction">
+  Transaction</button>
+  </nav>
+
+
+
+
+
+
+
+  <div class="group1">
+  <button class="service">
+  <i class="fa sends fa-phone"></i>
+  Airtime</button>
+
+  <button class="service">
+  <i class="fa sends fa-mobile"></i>
+  Data</button>
+
+  <button class="service">
+  <i class="fa sends fa-lightbulb"></i>
+  Electry</button>
+
+  <button id="buyTv">
+  <i class="fa sends fa-television"></i>
+  Cable Tv</button>
+
+  <button id="buyExan">
+  <i class="fa sends fa-graduation-cap"></i>
+  Exam</button>
+
+  <button id="buy">
+  <i class="fa sends fa-print"></i>
+  Rchg_Card</button>
+  </div></div>
   </div>
 
-  <div style="border:1px solid #aaa; padding:10px">
-    <h3>💸 Send Money</h3>
-    <input type="text" id="toAccount" placeholder="Account Number" style="font-size: 16px"/><br><br>
-    <input type="number" id="amount" placeholder="Amount" style="font-size: 16px"/><br><br>
-    <input type="password" id="pin" placeholder="Your PIN" style="font-size: 16px"/><br><br>
-    <button onclick="sendMoney()">Send</button>
-    <p id="result"></p>
-  </div>
 
-  <script>
-    class BankAccount {
-      static nextAccountRaw = 1000000000;
-      static usedAccounts = new Set();
-      static bankCode = "012";
 
-      constructor(username, password, pin) {
-        this.username = username;
-        this._password = password;
-        this._pin = pin;
-        this.balance = 0;
 
-        let fullAccountNumber;
-        do {
-          const raw = BankAccount.nextAccountRaw++;
-          fullAccountNumber = BankAccount.bankCode + raw.toString().slice(3);
-        } while (BankAccount.usedAccounts.has(fullAccountNumber));
 
-        this.accountNumber = fullAccountNumber;
-        BankAccount.usedAccounts.add(fullAccountNumber);
-      }
 
-      verifyPin(pin) {
-        return this._pin === pin;
-      }
 
-      deposit(amount) {
-        if (amount > 0) this.balance += amount;
-      }
 
-      withdraw(amount, pin) {
-        if (!this.verifyPin(pin)) return "❌ Incorrect PIN.";
-        if (amount > this.balance) return "❌ Not enough funds.";
-        this.balance -= amount;
-        return `✅ ₦${amount} withdrawn.`;
-      }
-    }
 
-    // Users list
-    let allUsers = [];
 
-    // Create test users
-    const user1 = new BankAccount("Habibu", "pass1", "1234");
-    user1.deposit(10000); // initial deposit
-    const user2 = new BankAccount("Umar", "pass2", "5678");
 
-    allUsers.push(user1, user2);
 
-    // Show user1 info
-    document.getElementById("username").innerText = user1.username;
-    document.getElementById("accNumber").innerText = user1.accountNumber;
-    document.getElementById("balance").innerText = user1.balance;
 
-    // Copy account number
-    function copyAccount() {
-      const acc = document.getElementById("accNumber").innerText;
-      navigator.clipboard.writeText(acc).then(() => {
-        alert("Copied: " + acc);
-      });
-    }
 
-    // Send money
-    function sendMoney() {
-      const toAcc = document.getElementById("toAccount").value.trim();
-      const amount = parseFloat(document.getElementById("amount").value);
-      const pin = document.getElementById("pin").value.trim();
 
-      const fromUser = user1; // active user
-      const recipient = allUsers.find(user => user.accountNumber === toAcc);
 
-      const result = document.getElementById("result");
 
-      if (!recipient) {
-        result.innerText = "❌ Account number not found.";
-        return;
-      }
 
-      if (!fromUser.verifyPin(pin)) {
-        result.innerText = "❌ Incorrect PIN.";
-        return;
-      }
+  <!----page-2-->
+<aside id="page2" class="page">
+  <header class="header2">
+  <b>Wallet</b></header>
 
-      if (amount <= 0 || isNaN(amount)) {
-        result.innerText = "❌ Invalid amount.";
-        return;
-      }
+  <div class="home-page2">
+  <div class="wallet2">
+  </div></div>
+</aside>
 
-      if (fromUser.balance < amount) {
-        result.innerText = "❌ Insufficient funds.";
-        return;
-      }
 
-      fromUser.balance -= amount;
-      recipient.deposit(amount);
 
-      result.innerText = `✅ ₦${amount} sent to ${recipient.username}.`;
-      document.getElementById("balance").innerText = fromUser.balance;
-    }
-  </script>
-</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--bot-page-->
+<aside id="bot-page">
+<header class="bot-head">
+<button id="returnBot">
+<i class="fa fa-arrow-left">
+</i></button>
+<b>Chat Bot</b>
+</header>
+
+<div class="bot-home">
+<img src="https://i.ibb.co/Dgj2M6DQ/IMG-4044.jpg" alt="IMG-4044" class="home-synbol">
+<div id="botReply"></div>
+<div id="bot"></div>
+
+<div id="textBot-home">
+<div id="line">1</div>
+<textarea id="input" placeholder="Reply bot">
+</textarea><button id="send">
+<i class="fa fa-arrow-up">
+</i>
+</button>
+</div></div>
+</aside>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!---service-web-->
+
+<aside id="card-page1" class="aside">
+<header class="thead1">
+<button id="Back1" class="back">
+<i class="fa fa-arrow-left"></i></button><b>Buy Airtime</b>
+<button id="history1">
+History</button>
+</header>
+
+<div class="card-home">
+<form id="form1">
+<div class="networks-home">
+
+<div class="network1"
+onclick="getCard()" value="MTN">
+<img src="https://i.ibb.co/svxRHztQ/IMG-4839.png" alt="#" class="card-synbol">
+</div>
+
+<div class="network1"
+onclick="getCard()" value="GLO">
+<img src="https://i.ibb.co/kgn7ZXtC/IMG-4835.jpg" alt="#" class="card-synbol">
+</div>
+
+<div class="network1"
+onclick="getCard()" value="AIRTEL">
+<img src="https://i.ibb.co/ksLJMZ3h/IMG-4838.png" alt="#" class="card-synbol">
+</div>
+
+<div class="network1"
+onclick="getCard('')" value="9MOBILE">
+<img src="https://i.ibb.co/wXMbwqZ/IMG-5649.png" alt="#" class="card-synbol">
+</div></div>
+
+<div class="middle1">
+<input id="number1"
+type="number" onblur="this.placeholder=''" onfocus="this.placeholder='Enter Your Phone Number'" inputmode="numeric" required>
+<div class="inline1">
+Phone Number</div></div>
+
+
+<div id="out-card"
+style="display: none;"></div>
+
+<div class="midd1">
+<input id="number"
+ onblur="this.placeholder=''" onfocus="this.placeholder='100-10000'" inputmode="numeric" required>
+<div class="inl1">Enter Amount</div></div>
+
+<button type="submit" formnovalidate>Buy Now</button>
+</form>
+</aside>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-----Containers-->
+
+<aside id="data-page2" class="aside">
+<header class="thead2">
+<button id="Back2" class="back">
+<i class="fa fa-arrow-left"></i>
+</button>
+<b>Buy Data</b>
+<button id="history2">
+History</button>
+</header>
+
+<div class="home-data">
+<form id="form2">
+<div class="network-synbl">
+
+<div class="network" 
+ onclick="getData()"
+ data-value="MTN">
+<img src="https://i.ibb.co/8nymD3xm/IMG-4839.png" alt="#" class="data-synbol">
+</div>
+
+<div class="network"
+ onclick="getData()"
+ data-value="GLO">
+<img src="https://i.ibb.co/5W7JPddB/IMG-4835.jpg" alt="#" class="data-synbol">
+</div>
+
+<div class="network"
+ onclick="getData()"
+ data-value="AIRTEL">
+<img src="https://i.ibb.co/bj7kqWRM/IMG-4838.png" alt="#" class="data-synbol">
+</div>
+
+<div class="network"
+ onclick="getData()"
+ data-value="9MOBILE">
+<img src="https://i.ibb.co/cKgJb5QX/IMG-5649.png" alt="#" class="data-synbol">
+</div></div>
+
+<div id="middle2">
+<input id="number2" 
+type="number" inputmode="numeric" onblur="this.placeholder=''" onfocus="this.placeholder='Enter Phone Numbe'" required>
+<div class="inline2">
+Phone Number
+</div>
+</div>
+
+<div id="planType" style="display: none;">
+</div>
+
+<div id="dataPlan" style="display: none;">
+</div>
+
+<button type="submit"
+formnovalidate>Next
+</button>
+</form></div>
+</aside>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<aside id="electry-page3">
+<header class="thead3">
+<button id="back3">
+<i class="fa fa-arrow-left"></i></button></header></aside>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="checkError">
+<span id="timer"></span>
+<span id="Error"></span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <footer>
+  <button class="showpage">
+  <i class="fa btn1 fa-home"></i>Home</button>
+
+  <button class="showpage">
+  <i class="fa btn1 fa-wallet"></i>
+  Wallet</button>
+
+  <button class="showpage">
+  <i class="fa btn1 fa-user"></i>Profile</button>
+  </footer>
+
+
+  <script src="index.js"></script>
+
+  <script src="json.js"></script>
+  <script src="form1.js"></script>
+  <script src="form2.js"></script>
+  <script src="service2.js"></script>
+  <script src="prefix.js"></script>
+  <script src="card.js"></script>
+  <script src="bot.js"></script>
+  <script src="bot-style.js"></script>
+  <script src="AI.js"></script>
+
+  </body>
 </html>

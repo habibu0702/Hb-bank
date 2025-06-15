@@ -1,0 +1,57 @@
+
+@media screen and (max-width: 600px) {
+  #bot span, #bot p, #bot nav {
+    display: inline-block;
+    padding: 20px;
+  }
+  #bot p{
+    min-height: 50px;
+    max-height: auto;
+    max-width: 60%;
+    min-width: 60%;
+  }
+  #bot span{
+    min-height: 50px;
+    max-width: 50%;
+  }
+  .bot-home{
+    max-height: 100vh;
+    min-height: 100vh;
+  }
+  #bot{
+    max-height: 70vh;
+    max-width: 100%;
+  }
+}
+
+
+@media screen and (max-height: 600px) {
+  #bot-page{
+    max-height: 100vh;
+    min-height: 100vh;
+  }
+}
+
+
+@media all {
+  #page1{
+    max-height: 100vh;
+    max-width: 100%;
+    min-height: 100vh;
+    min-width: 100%;
+  }
+  .wallet {
+    max-height: 200px;
+    min-width: 100%;
+    font-size: 14px;
+  }
+  #pundWallet{
+    max-width: 40%;
+    font-size: 14px;
+  }
+  #transaction{
+    max-height: 50%;
+    max-width: 40%;
+    font-size: 14px;
+  }
+}
