@@ -1,5 +1,5 @@
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 100%) {
   #bot span, #bot p, #bot nav {
     display: inline-block;
     padding: 20px;
@@ -23,13 +23,13 @@
 }
 
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 100%) {
   #bot-page{
     max-height: 100vh;
     max-width: 100%;
   }
 }
-@media all and (max-width: 380px) {
+@media all and (max-width: 100%) {
   *{
     padding: 0%;
     margin: 0%;
@@ -46,7 +46,7 @@
 }
 
 
-@media all and (max-width: 600px) {
+@media all and (max-width: 100%) {
   *{
     padding: 0%;
     margin: 0%;
