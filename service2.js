@@ -5,7 +5,7 @@
  const form2 = document.getElementById("form2");
 
  asideBtn.forEach((btn, index) => {
-    btn.addEventListener("pointerdown", () => {
+    btn.addEventListener("click", function() {
         
         aside.forEach(e => e.classList.remove("active"));
     
