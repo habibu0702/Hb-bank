@@ -32,6 +32,16 @@
 
 
 @media all and (max-width: 600px) {
+  *{
+    padding: 0%;
+    margin: 0%;
+    box-sizing: border-box;
+  }
+  body {
+    max-height: 100vh;
+    min-height: 100vh;
+    max-width: 100%;
+  }
   footer{
     max-height: 60px;
     min-height: 60px;
@@ -61,10 +71,31 @@
     max-width: auto;
     size: 14px;
   }
+  .group1 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    max-width: 100%;
+    max-height: auto;
+    min-height: auto;
+    min-width: 100%;
+
+  }
   .group1 button{
     max-height: 100px;
     min-height: 100px;
     max-width: 100px;
     min-width: 100px;
+  }
+
+
+
+
+
+
+  #card-page1{
+    max-height: 100vh;
+    max-width: 100%;
+    min-height: 100vh;
+    min-width: 100%;
   }
 }
