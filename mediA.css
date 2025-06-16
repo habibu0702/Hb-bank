@@ -29,7 +29,7 @@
     max-width: 100%;
   }
 }
-@media all and (max-width: 100%) {
+@media screen and (max-width: 600px) {
   *{
     padding: 0%;
     margin: 0%;
@@ -46,7 +46,7 @@
 }
 
 
-@media all and (max-width: 760px) {
+@media screen and (max-width: 760px) {
   *{
     padding: 0%;
     margin: 0%;
