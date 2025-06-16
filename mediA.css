@@ -29,9 +29,24 @@
     max-width: 100%;
   }
 }
+@media all and (max-width: 380px) {
+  *{
+    padding: 0%;
+    margin: 0%;
+    box-sizing: border-box;
+  }
+  body {
+    max-height: 100vh;
+    min-height: 100%;
+  }
+  #page1{
+    max-height: 100vh;
+    max-width: 100%;
+  }
+}
 
 
-@media all and (max-width: 600px) and (max-width: 580px) {
+@media all and (max-width: 600px) {
   *{
     padding: 0%;
     margin: 0%;
