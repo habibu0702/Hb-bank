@@ -3,118 +3,41 @@
   <head>
     <title>Title</title>
     <meta charset="utf-8">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-     
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ml5/0.4.3/ml5.min.js"></script>
-
-
-    <link rel="stylesheet" href="ts.css">
-    <link rel="stylesheet" href="btn.css">
-    <link rel="stylesheet" href="service1.css">
-    <link rel="stylesheet" href="bot.css">
-    <link rel="stylesheet" href="mediA.css">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="containers.css">
   </head>
   <body>
- 
-  <div id="page1" class="page active">
+
+  <aside class="section active" id="home">
   <header class="header1">
-  <img src="https://i.ibb.co/LztcMrnP/IMG-4659.jpg" alt="#" class="user-synbol">
-
-  <div class="home-text">
-  <b id="greetin"></b>
-  <span id="userName">
-  Habeeb</span></div>
-
-  <button id="btn-bot">
-  <i class="fa fa-robot">
-  </i></button>
-
-  <a class="fa-watsapp" href="https://chat.whatsapp.com/HUUhtmQmzd7LnPo8Rtm6Gq" target="_blank">
-  <i class="fab fa-whatsapp"></i></a>
-
-  <i class="fa fa-bell"></i></header>
-
-
-
-
-
-
-
-  <div class="home-page1">
-  <nav class="wallet">
-  <span>Available Balance</span><i id="toggle" class="fa fa-eye"></i>
-  <span>&#8358; <span id="balance">0,00</span></span><b id="hide" style="display: none;">
-  *****</b>
-  <button id="pundWallet">
-  Pund Wallet</button>
-  <button id="transaction">
-  Transaction</button>
+  <nav class="suna-photo">
+  <img src="#" alt="#" class="user-synbol">
+  <span id="Suna1">h</span>
   </nav>
 
+  <i id="bell" class="fa fa-bell"></i></header>
 
-
-
-
-
-
-  <div class="group1">
-  <button class="service">
-  <i class="fa sends fa-phone"></i>
-  Airtime</button>
-
-  <button class="service">
-  <i class="fa sends fa-mobile"></i>
-  Data</button>
-
-  <button class="service">
-  <i class="fa sends fa-lightbulb"></i>
-  Electry</button>
-
-  <button id="buyTv">
-  <i class="fa sends fa-television"></i>
-  Cable Tv</button>
-
-  <button id="buyExan">
-  <i class="fa sends fa-graduation-cap"></i>
-  Exam</button>
-
-  <button id="buy">
-  <i class="fa sends fa-print"></i>
-  Rchg_Card</button>
-  </div></div>
+  <div class="filingida">
+  <div class="wallet1">
+  <span>My Balance 
+  <i id="eye" class="fa fa-eye"></i></span></span>
+  <nav class="kudi-hide">
+  <span>&#8358;
+  <span id="kudin">0,00
+  </span><span id="hide" style="display: none;">🙈🙈🙈</span></span>
+  </nav>
+  <button class="btn2"
+  data-taget2="addMoney">
+  AddMoney</button>
   </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <!----page-2-->
-<aside id="page2" class="page">
-  <header class="header2">
-  <b>Wallet</b></header>
-
-  <div class="home-page2">
-  <div class="wallet2">
-  </div></div>
+  
+  
+  </div>
+  
 </aside>
 
 
@@ -144,31 +67,11 @@
 
 
 
-
-
-
-<!--bot-page-->
-<aside id="bot-page">
-<header class="bot-head">
-<button id="returnBot">
-<i class="fa fa-arrow-left">
-</i></button>
-<b>Chat Bot</b>
+<aside class="section" id="history">
+<header class="header2">
+<b>Transaction</b>
 </header>
 
-<div class="bot-home">
-<img src="https://i.ibb.co/Dgj2M6DQ/IMG-4044.jpg" alt="IMG-4044" class="home-synbol">
-<div id="botReply"></div>
-<div id="bot"></div>
-
-<div id="textBot-home">
-<div id="line">1</div>
-<textarea id="input" placeholder="Reply bot">
-</textarea><button id="send">
-<i class="fa fa-arrow-up">
-</i>
-</button>
-</div></div>
 </aside>
 
 
@@ -191,247 +94,45 @@
 
 
 
-<!---service-web-->
 
-<aside id="card-page1" class="aside">
+
+
+
+
+<aside class="section" id="profile">
+<header class="header3">
+<b>Settins</b></header>
+</aside>
+
+
+
+
+
+
+
+
+
+
+
+    
+
+ 
+
+
+
+
+
+
+
+
+
+
+<!---containers-->
+<aside class="section2" id="addMoney">
 <header class="thead1">
-<button id="Back1" class="back">
-<i class="fa fa-arrow-left"></i></button><b>Buy Airtime</b>
-<button id="history1">
-History</button>
-</header>
-
-<div class="card-home">
-<form id="form1">
-<div class="networks-home">
-
-<div class="network1"
-onclick="getCard()" value="MTN">
-<img src="https://i.ibb.co/svxRHztQ/IMG-4839.png" alt="#" class="card-synbol">
-</div>
-
-<div class="network1"
-onclick="getCard()" value="GLO">
-<img src="https://i.ibb.co/kgn7ZXtC/IMG-4835.jpg" alt="#" class="card-synbol">
-</div>
-
-<div class="network1"
-onclick="getCard()" value="AIRTEL">
-<img src="https://i.ibb.co/ksLJMZ3h/IMG-4838.png" alt="#" class="card-synbol">
-</div>
-
-<div class="network1"
-onclick="getCard('')" value="9MOBILE">
-<img src="https://i.ibb.co/wXMbwqZ/IMG-5649.png" alt="#" class="card-synbol">
-</div></div>
-
-<div class="middle1">
-<input id="number1"
-type="number" onblur="this.placeholder=''" onfocus="this.placeholder='Enter Your Phone Number'" inputmode="numeric" required>
-<div class="inline1">
-Phone Number</div></div>
-
-
-<div id="out-card"
-style="display: none;"></div>
-
-<div class="midd1">
-<input id="number"
- onblur="this.placeholder=''" onfocus="this.placeholder='100-10000'" inputmode="numeric" required>
-<div class="inl1">Enter Amount</div></div>
-
-<button type="submit" formnovalidate>Buy Now</button>
-</form>
-</aside>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-----Containers-->
-
-<aside id="data-page2" class="aside">
-<header class="thead2">
-<button id="Back2" class="back">
-<i class="fa fa-arrow-left"></i>
-</button>
-<b>Buy Data</b>
-<button id="history2">
-History</button>
-</header>
-
-<div class="home-data">
-<form id="form2">
-<div class="network-synbl">
-
-<div class="network" 
- onclick="getData()"
- data-value="MTN">
-<img src="https://i.ibb.co/8nymD3xm/IMG-4839.png" alt="#" class="data-synbol">
-</div>
-
-<div class="network"
- onclick="getData()"
- data-value="GLO">
-<img src="https://i.ibb.co/5W7JPddB/IMG-4835.jpg" alt="#" class="data-synbol">
-</div>
-
-<div class="network"
- onclick="getData()"
- data-value="AIRTEL">
-<img src="https://i.ibb.co/bj7kqWRM/IMG-4838.png" alt="#" class="data-synbol">
-</div>
-
-<div class="network"
- onclick="getData()"
- data-value="9MOBILE">
-<img src="https://i.ibb.co/cKgJb5QX/IMG-5649.png" alt="#" class="data-synbol">
-</div></div>
-
-<div id="middle2">
-<input id="number2" 
-type="number" inputmode="numeric" onblur="this.placeholder=''" onfocus="this.placeholder='Enter Phone Numbe'" required>
-<div class="inline2">
-Phone Number
-</div>
-</div>
-
-<div id="planType" style="display: none;">
-</div>
-
-<div id="dataPlan" style="display: none;">
-</div>
-
-<button type="submit"
-formnovalidate>Next
-</button>
-</form></div>
-</aside>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<aside id="electry-page3">
-<header class="thead3">
-<button id="back3">
-<i class="fa fa-arrow-left"></i></button></header></aside>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div id="checkError">
-<span id="timer"></span>
-<span id="Error"></span>
-</div>
-
-
-
-
+<i class="fa return fa-arrow-left" value2="addMoney"></i>
+<b>Add Money</b>
+</header></aside>
 
 
 
@@ -440,29 +141,15 @@ formnovalidate>Next
 
 
   <footer>
-  <button class="showpage">
-  <i class="fa btn1 fa-home"></i>Home</button>
+  <button class="btn1" data-taget="home"><i class="fa fa-home"></i>
+  Home</button>
 
-  <button class="showpage">
-  <i class="fa btn1 fa-wallet"></i>
-  Wallet</button>
+  <button class="btn1" data-taget="history"><i class="fa fa-history">
+ </i>History</button>
 
-  <button class="showpage">
-  <i class="fa btn1 fa-user"></i>Profile</button>
-  </footer>
+  <button class="btn1" data-taget="profile"><i class="fa fa-user"></i>Profile</button>
 
 
   <script src="index.js"></script>
-
-  <script src="json.js"></script>
-  <script src="form1.js"></script>
-  <script src="form2.js"></script>
-  <script src="service2.js"></script>
-  <script src="prefix.js"></script>
-  <script src="card.js"></script>
-  <script src="bot.js"></script>
-  <script src="bot-style.js"></script>
-  <script src="AI.js"></script>
-
   </body>
 </html>
