@@ -53,7 +53,18 @@ const [amount1, setAmount1] = useState('');
 const [logo1, setLogo1] = useState(null);
 
 
-const [views1, setView1] = useState(false)
+const [views1, setView1] = useState(false);
+
+
+
+
+
+
+
+
+
+
+const [exam, setExam] = useState('');
 
 
 
@@ -164,21 +175,7 @@ const slide6 = useRef(new Animated.Value(screnWidth)).current;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-const [views, setView] = useState(false);
-const [fist, setFist] = useState(null);
+const [views, setView] = useState(false)
 
 
 
@@ -194,15 +191,14 @@ const [fist, setFist] = useState(null);
 
 
 
-
-const [activeHome, setActiveHome] = useState(true);
-const [active1, setActive1] = useState(false);
-const [active2, setActive2] = useState(false);
-const [active3, setActive3] = useState(false);
-const [active4, setActive4] = useState(false);
-const [active5, setActive5] = useState(false);
-const [active6, setActive6] = useState(false);
-const [activePlans, setActivePlans] = useState(false);
+const [activeHome, setActiveHome] = useState(true)
+const [active1, setActive1] = useState(false)
+const [active2, setActive2] = useState(false)
+const [active3, setActive3] = useState(false)
+const [active4, setActive4] = useState(false)
+const [active5, setActive5] = useState(false)
+const [active6, setActive6] = useState(false)
+const [activePlans, setActivePlans] = useState(false)
 
 
 
@@ -1358,11 +1354,31 @@ const verify2 = (value) => {
     <TouchableOpacity style={styles.back}>
     <Ionicons name='arrow-back-outline' size={30} color='333' onPress={() => {close4(); openHome()}}/>
     </TouchableOpacity>
-    
+    </View>
+
+    <View style={styles.examHome}>
+    <View style={styles.form4}>
+    <TextInput value={exam} onChangeText={setExam} keyboardType='numeric' placeholder='soon'
+    style={styles.input4} />
+
+    </View>
     </View>
     </Animated.View>
     </Modal>
   )}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1390,11 +1406,22 @@ const verify2 = (value) => {
     <TouchableOpacity style={styles.back}>
     <Ionicons name='arrow-back-outline' size={30} color='333' onPress={() => {close5(); openHome()}}/>
     </TouchableOpacity>
-    
+    </View>
+
+    <View style={styles.electiryHome}>
+    <View style={styles.form5}>
+    <TextInput value={null} keyboardType='numeric' placeholder='soon' style={styles.input5} />
+    </View>
     </View>
     </Animated.View>
     </Modal>
 )}
+
+
+
+
+
+
 
 
 
@@ -1426,16 +1453,37 @@ const verify2 = (value) => {
     <TouchableOpacity style={styles.back}>
     <Ionicons name='arrow-back-outline' size={30} color='333' onPress={() => {close6(); openHome()}}/>
     </TouchableOpacity>
+    </View>
+
+    <View style={styles.comveteHome}>
+    <View style={styles.form6}>
+    <TextInput value={null} onChangeText={null} keyboardType='numeric' placeholder='soon' 
+    style={styles.input6} />
+    </View>
     
     </View>
     </Animated.View>
-    </Modal>
-)}
+    </Modal>)}
+
 
 
 
 </View>
    )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1869,10 +1917,68 @@ shadowOffset: {width: 0, height: 2}, shadowOpacity: 2, shadowRadius: 8, justifyC
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    service4: {backgroundColor: '#ddd', flex: 1},
   thead4: {backgroundColor: '#fff', height: 80, width: '100%', textAlign: 'center', alignItems: 'center',
-  justifyContent: 'center', padding: 15
-  },
+  justifyContent: 'center', padding: 15},
+
+  examHome: {height: 'auto', width: '100%', flexDirection: 'column', textAlign: 'center', alignItems: 'center',
+  padding: 20},
+
+  form4: {backgroundColor: '#fff', height: 100, width: '100%', shadowColor: '#000', shadowOpacity: 21,
+   shadowOffset: {width: 0, height: 2}, shadowRadius: 5, elevation: 5, borderRadius: 20, padding: 10,
+  flexDirection: 'column', textAlign: 'center', alignItems: 'center'},
+
+   input4: {height: 50, width: '100%', borderWidth: 2, borderColor: 'gray', borderRadius: 10, padding: 10},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1907,9 +2013,15 @@ shadowOffset: {width: 0, height: 2}, shadowOpacity: 2, shadowRadius: 8, justifyC
 
 
    service5: {backgroundColor: '#ddd', flex: 1},
-  thead5: {backgroundColor: '#fff', height: 80, width: '100%', textAlign: 'center', alignItems: 'center',
-  justifyContent: 'center', padding: 15
-  },
+  thead5: {backgroundColor: '#fff', height: 80, width: '100%',  padding: 15, textAlign: 'center',
+  alignItems: 'center', justifyContent: 'center'},
+
+  electiryHome: {height: 'auto', width: '100%', flexDirection: 'column', padding: 20},
+
+  form5: {backgroundColor: '#fff', height: 100, width: '100%', shadowColor: '#000', shadowOpacity: 2,
+   shadowOffset: {width: 0, height: 2,}, shadowRadius: 5, elevation: 5, padding: 10, borderRadius: 20},
+
+  input5: {height: 50, width: '100%', borderWidth: 2, borderColor: 'gray', padding: 10, borderRadius: 10},
 
 
 
@@ -1938,8 +2050,14 @@ shadowOffset: {width: 0, height: 2}, shadowOpacity: 2, shadowRadius: 8, justifyC
 
    service6: {backgroundColor: '#ddd', flex: 1},
   thead6: {backgroundColor: '#fff', height: 80, width: '100%', textAlign: 'center', alignItems: 'center',
-  justifyContent: 'center', padding: 15
-  },
+  justifyContent: 'center', padding: 15},
+
+  comveteHome: {height: 'auto', width: '100%', flexDirection: 'column', padding: 20},
+
+  form6: {backgroundColor: '#fff', height: 100, width: '100%', shadowColor: '#000', shadowOpacity: 2,
+  shadowOffset: {width: 0, height: 2,}, shadowRadius: 5, elevation: 5, padding: 10, borderRadius: 20},
+
+  input6: {height: 50, width: '100%', borderWidth: 2, borderColor: 'gray', padding: 10, borderRadius: 10}
 
   
 
