@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { UserProvider } from "./context";
@@ -63,6 +64,7 @@ export default function App() {
 
       </View>
     </View>
+    <StatusBar style="auto" />
     </UserProvider>
   )
 }

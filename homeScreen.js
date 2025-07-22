@@ -12,6 +12,8 @@ import { Network } from './network';
 import { useContext } from 'react';
 import { UserContext } from './context';
 import { cablePlan } from './plantv';
+import { exSynbol } from './exameSynbol';
+import { exam_plan } from './exam';
 
  
 const { height, width } = Dimensions.get('window');
@@ -155,11 +157,23 @@ const screnWidth  = Dimensions.get('window').width;
 const Home = useRef(new Animated.Value(-screnWidth)).current;
 const slide1 = useRef(new Animated.Value(screnWidth)).current;
 const anims = useRef( new Animated.Value(screnWidth)).current;
-const slide = useRef(new Animated.Value(screnWidth)).current;
 const slide3 = useRef(new Animated.Value(screnWidth)).current;
 const slide4 = useRef(new Animated.Value(screnWidth)).current;
 const slide5 = useRef( new Animated.Value(screnWidth)).current;
 const slide6 = useRef(new Animated.Value(screnWidth)).current;
+
+
+
+
+
+
+
+
+
+
+
+const side2 = useRef(new Animated.Value(screnWidth)).current;
+const side3 = useRef(new Animated.Value(screnWidth)).current;
 
 
 
@@ -370,11 +384,6 @@ const close5 = () => {
 
 
 
-
-
-
-
-
 const open6 = () => {
   setActive6(true);
   Animated.timing(slide6, {
@@ -398,12 +407,9 @@ const close6 = () => {
 
 
 
-
-
-
-const handlePlan = () => {
+const handlePlan2 = () => {
   setActivePlans(true);
-  Animated.timing(slide, {
+  Animated.timing(side2, {
     toValue: 0,
     duration: 250,
     useNativeDriver: true
@@ -411,8 +417,8 @@ const handlePlan = () => {
 }
 
 
-const closePlan = () => {
-  Animated.timing(slide, {
+const closePlan2 = () => {
+  Animated.timing(side2, {
     toValue: screnWidth,
     duration: 250,
     useNativeDriver: true
@@ -421,6 +427,33 @@ const closePlan = () => {
   });
 }
 
+
+
+
+
+
+
+
+
+const handlePlan3 = () => {
+  verifyShow3();
+  Animated.timing(side3, {
+    toValue: 0,
+    duration: 250,
+    useNativeDriver: true
+  }).start();
+}
+
+
+const closePlan3 = () => {
+  Animated.timing(side3, {
+    toValue: screnWidth,
+    duration: 250,
+    useNativeDriver: true
+  }).start(() => {
+    setShow3(false);
+  });
+}
 
 
 
@@ -1067,9 +1100,9 @@ const verify2 = (value) => {
 
    <View style={styles.form2}>
    <View style={styles.homeSynbol}>
-   {Network.map((net) => (
+   {Network.map((net) => ( 
    <TouchableOpacity key={net.id} onPress={() => {
-   setNetwork2(net.id); setLogo2(net.logo); setType2(null); closePlan(); setPlan2('')}}
+   setNetwork2(net.id); setLogo2(net.logo); setType2(null); closePlan2(); setPlan2('')}}
    style={[styles.network, network2 === net.id && styles.selected]}>
    <Image source={net.logo} style={styles.images} />
    </TouchableOpacity>))}
@@ -1083,7 +1116,7 @@ const verify2 = (value) => {
    {network2 && phone2 && ( 
    <View style={styles.homeType}>
    {Object.keys(Plans[network2]).map((type) => (
-   <TouchableOpacity key={type} onPress={() => {setType2(type); handlePlan()}}
+   <TouchableOpacity key={type} onPress={() => {setType2(type); handlePlan2()}}
    style={[styles.planType, type2 === type && styles.type]}>
    <Text>{type}</Text>
    </TouchableOpacity> ))}
@@ -1104,10 +1137,10 @@ const verify2 = (value) => {
 
    {activePlans && phone2 && (
     <Modal visible={activePlans} transparent={true}>
-    <Animated.View  style={[styles.planContainer, [{transform: [{translateY: slide}]}]]}>
+    <Animated.View  style={[styles.planContainer, [{transform: [{translateY: side2}]}]]}>
    <FlatList data={AllPlans} keyExtractor={((item) => item.id.toString())} 
    renderItem={({ item }) => (
-    <TouchableOpacity style={styles.plans} onPress={() => {setPlan2(item); closePlan()}}>
+    <TouchableOpacity style={styles.plans} onPress={() => {setPlan2(item); closePlan2()}}>
       <Text>{item.size} {item.name}</Text>
       <Text>&#8358; {item.price}</Text>
       <Text>expire {item.validity}</Text>
@@ -1250,6 +1283,8 @@ const verify2 = (value) => {
     <Animated.View style={[styles.service3, [{transform: [{translateX: slide3}]}]]}>
     <View style={styles.thead3}>
 
+    <Text style={{fontSize: 20, fontWeight: 'bold'}}>Purchase Subscribe Now</Text>
+
     <TouchableOpacity style={styles.back}>
     <Ionicons name='arrow-back-outline' size={30} color='333' onPress={() => {close3(); openHome()}}/>
     </TouchableOpacity>
@@ -1259,18 +1294,19 @@ const verify2 = (value) => {
     <View style={styles.form3}>
 
     <View style={styles.smartHome}>
-    {Object.keys(cablePlan).map((ky) => (
+    {Object.keys(exSynbol).map((ky) => (
+    exSynbol[ky].map(exLogo => (
     <TouchableOpacity key={ky} style={[styles.smartBtn, typetv === ky && styles.selectNameTV]} onPress={() => {
     setTypetv(ky); setOther3(null)}}>
-      <Text>{ky}</Text>
+    <Image source={exLogo.logo} resizeMode='cover' style={styles.tvImage} />
     </TouchableOpacity>
-    ))}
+    ))))}
     </View>
 
     <TextInput value={smart} placeholder='Smart Card number Decoder...' keyboardType='numeric'
     onChangeText={setSmart} style={styles.smart} />
 
-    <TouchableOpacity style={styles.selectTV} onPress={verifyShow3}>
+    <TouchableOpacity style={styles.selectTV} onPress={handlePlan3}>
     {lableOther3 && ( <Text style={{fontWeight: 'bold', padding: 10}}>Select Cable Plan</Text>)}
     {other3 && (
     <View style={{ textAlign: 'center', alignItems: 'center', justifyContent: 'space-between',
@@ -1292,15 +1328,15 @@ const verify2 = (value) => {
  
     {show3 && (
     <Modal visible={show3} transparent={true}>
-    <View style={styles.typetvTable}>
+    <Animated.View style={[styles.typetvTable, [{transform: [{translateY: side3}]}]]}>
     {cablePlan[typetv].map((t) => (
-    <TouchableOpacity key={t.id} style={styles.typetv} onPress={() => {setOther3(t); setShow3(false)}}>
+    <TouchableOpacity key={t.id} style={styles.typetv} onPress={() => {setOther3(t); closePlan3()}}>
     <Text style={{fontWeight: 'bold'}}>{typetv} {t.name}</Text>
     <Text style={{fontWeight: 'bold'}}>Naira &#8358; {t.price}</Text>
     <Text style={{fontWeight: 'bold'}}>{t.duration}</Text>
     </TouchableOpacity>
     ))}
-    </View>
+    </Animated.View>
     </Modal>)}
     </Animated.View>
     </Modal>
@@ -1351,6 +1387,8 @@ const verify2 = (value) => {
     <Animated.View style={[styles.service4, [{transform: [{translateX: slide4}]}]]}>
     <View style={styles.thead4}>
 
+    <Text style={{fontWeight: 'bold', fontSize: 18}}>Buy Exame</Text>
+
     <TouchableOpacity style={styles.back}>
     <Ionicons name='arrow-back-outline' size={30} color='333' onPress={() => {close4(); openHome()}}/>
     </TouchableOpacity>
@@ -1358,8 +1396,22 @@ const verify2 = (value) => {
 
     <View style={styles.examHome}>
     <View style={styles.form4}>
-    <TextInput value={exam} onChangeText={setExam} keyboardType='numeric' placeholder='soon'
+    <View style={styles.exameCon}>
+    {Object.keys(exam_plan).map((ex) => ( 
+      exam_plan[ex].map((e) => (
+      <TouchableOpacity key={e} style={styles.exameBtn}>
+      <Image source={e.logo} style={styles.exameLogo} resizeMode='cover' />
+      </TouchableOpacity>
+    ))))}
+    </View>
+    <TextInput value={exam} onChangeText={setExam} keyboardType='numeric' placeholder='quntity'
     style={styles.input4} />
+
+    <TouchableOpacity style={styles.buyExame}>
+    <Text style={{textAlign: 'center', alignItems: 'center', fontSize: 18,
+    justifyContent: 'center', color: '#fff', fontWeight: 'bold'
+    }}>Pay Now</Text>
+    </TouchableOpacity>
 
     </View>
     </View>
@@ -1865,11 +1917,14 @@ shadowOffset: {width: 0, height: 2}, shadowOpacity: 2, shadowRadius: 8, justifyC
   smartHome: {height: 80, width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'space-between',
   flexDirection: 'row', borderRadius: 10},
 
-  smartBtn: {height: 78, width: 78, textAlign: 'center', justifyContent: 'center', backgroundColor: '#00CC99',
+  smartBtn: {height: 70, width: 85, textAlign: 'center', justifyContent: 'center', backgroundColor: '#ddd',
   textAlign: 'center', alignItems: 'center', borderRadius: 10, fontWeight: 'bold', fontSize: 15},
 
-  selectNameTV: {backgroundColor: 'rgba(25,25,25,0.20)', height: 80, width: 80, textAlign: 'center',
-  justifyContent: 'center'},
+  tvImage: {height: 68, width: 83, borderRadius: 10},
+
+  selectNameTV: {backgroundColor: 'rgba(25,25,25,0.20)', height: 72, width: 87, textAlign: 'center',
+  justifyContent: 'center', shadowColor: '#000', shadowOffset: {width: 0, height: 2}, shadowOpacity: 2,
+  shadowRadius: 5, elevation: 5},
 
   smart: {height: 50, width: '100%', fontSize: 15, fontWeight: 'bold', padding: 10, borderWidth: 2,
   borderColor: 'gray', borderRadius: 10},
@@ -1946,11 +2001,22 @@ shadowOffset: {width: 0, height: 2}, shadowOpacity: 2, shadowRadius: 8, justifyC
   examHome: {height: 'auto', width: '100%', flexDirection: 'column', textAlign: 'center', alignItems: 'center',
   padding: 20},
 
-  form4: {backgroundColor: '#fff', height: 100, width: '100%', shadowColor: '#000', shadowOpacity: 21,
-   shadowOffset: {width: 0, height: 2}, shadowRadius: 5, elevation: 5, borderRadius: 20, padding: 10,
-  flexDirection: 'column', textAlign: 'center', alignItems: 'center'},
+  form4: {backgroundColor: '#fff', height: 'auto', width: '100%', shadowColor: '#000', shadowOpacity: 21,
+  shadowOffset: {width: 0, height: 2}, shadowRadius: 5, elevation: 5, borderRadius: 20, padding: 10,
+  flexDirection: 'column', textAlign: 'center', alignItems: 'center', gap: 15},
 
-   input4: {height: 50, width: '100%', borderWidth: 2, borderColor: 'gray', borderRadius: 10, padding: 10},
+  exameCon: {height: 'auto', width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'space-between',
+  flexDirection: 'row'},
+
+  exameBtn: {backgroundColor: '#ddd', height: 72, width: 86, borderRadius: 10, textAlign: 'center',
+  alignItems: 'center', justifyContent: 'center'},
+
+  exameLogo: {height: 70, width: 85, borderRadius: 10},
+
+  input4: {height: 50, width: '100%', borderWidth: 2, borderColor: 'gray', borderRadius: 10, padding: 10},
+
+  buyExame: {backgroundColor: '#00cc99', height: 60, width: '100%', textAlign: 'center', padding: 10,
+  borderTopLeftRadius: 20, borderBottomRightRadius: 20, justifyContent: 'center'},
 
 
 
