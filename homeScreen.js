@@ -134,9 +134,11 @@ const AllPlans = network2 && type2 ? Plans[network2][type2] : [];
  const [typetv, setTypetv] = useState(null);
  const [smart, setSmart] = useState(null);
  const [other3, setOther3] = useState(null);
+ const [logo3, setLogo3] = useState(null);
 
  const [show3, setShow3] = useState(false);
  const [lableOther3, setLableOther3] = useState(false);
+ const [cableComfing, setCableComfing] = useState(false);
 
 
 
@@ -669,23 +671,6 @@ const verify2 = (value) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
  const buyData = () => {
 
   if (!network2) {
@@ -696,9 +681,19 @@ const verify2 = (value) => {
   setError2('Please Enter Your Phone Number');
   return;
  } 
+
+ if (!/^[0-9]{11}$/.test(phone2)){
+  setError2('error Invalid phone number');
+  return;
+ }
  if (!type2) {
  setError2('Please select a plan type');
  return;
+   }
+
+   if (!plan2) {
+    setError2('please select a Data Plan')
+    return;
    }
  
    if (logo2 && network2 && phone2 && type2 && plan2) {
@@ -742,6 +737,52 @@ const verify2 = (value) => {
   }
  };
 
+
+
+
+
+
+
+ const buyCbleTv = () => {
+
+  if (!typetv) {
+    Alert.alert('ERROR1');
+    return;
+  }
+  
+  if (!smart) {
+    Alert.alert('error2');
+    return;
+  }
+  if (!other3) {
+    Alert.alert('error3');
+    return;
+  }
+  if (typetv && smart && other3) {
+    setCableComfing(true);
+  }
+ }
+
+
+ const sendCableTv = async (amount) => {
+
+  try {
+    const response = await axios.post(example, {
+      cable_id: null,
+      disco_number: null,
+      payment_medium: null
+    },
+  {
+    headers: {
+      Authorization: `berery ${null}`,
+      'Content-Type': 'application/json'
+    }
+  });
+  console.log('success', response.data);
+  } catch (err) {
+    console.error('send Data error', err.response?.data || err.message);
+  }
+ }
 
 
 
@@ -1283,7 +1324,7 @@ const verify2 = (value) => {
     <Animated.View style={[styles.service3, [{transform: [{translateX: slide3}]}]]}>
     <View style={styles.thead3}>
 
-    <Text style={{fontSize: 20, fontWeight: 'bold'}}>Purchase Subscribe Now</Text>
+    <Text style={{fontSize: 15, fontWeight: 'bold'}}>Cable TV Subscription Now</Text>
 
     <TouchableOpacity style={styles.back}>
     <Ionicons name='arrow-back-outline' size={30} color='333' onPress={() => {close3(); openHome()}}/>
@@ -1297,17 +1338,17 @@ const verify2 = (value) => {
     {Object.keys(exSynbol).map((ky) => (
     exSynbol[ky].map(exLogo => (
     <TouchableOpacity key={ky} style={[styles.smartBtn, typetv === ky && styles.selectNameTV]} onPress={() => {
-    setTypetv(ky); setOther3(null)}}>
+    setTypetv(ky); setOther3(null); setLogo3(exLogo.logo)}}>
     <Image source={exLogo.logo} resizeMode='cover' style={styles.tvImage} />
     </TouchableOpacity>
     ))))}
     </View>
 
-    <TextInput value={smart} placeholder='Smart Card number Decoder...' keyboardType='numeric'
-    onChangeText={setSmart} style={styles.smart} />
+    <TextInput value={smart} placeholder='SmartCard / IUC Number Decoder...' keyboardType='numeric'
+    onChangeText={setSmart} style={styles.smart} maxLength={11} />
 
     <TouchableOpacity style={styles.selectTV} onPress={handlePlan3}>
-    {lableOther3 && ( <Text style={{fontWeight: 'bold', padding: 10}}>Select Cable Plan</Text>)}
+    {lableOther3 && ( <Text style={{fontWeight: 'bold', padding: 10}}>Select Cable Name</Text>)}
     {other3 && (
     <View style={{ textAlign: 'center', alignItems: 'center', justifyContent: 'space-between',
     flexDirection: 'row', width: '100%', padding: 10}}>
@@ -1318,7 +1359,7 @@ const verify2 = (value) => {
      )}
     </TouchableOpacity>
 
-    <TouchableOpacity style={styles.buySmart}>
+    <TouchableOpacity style={styles.buySmart} onPress={buyCbleTv}>
       <Text style={styles.lableSmart}>purchase</Text>
     </TouchableOpacity>
 
@@ -1337,6 +1378,47 @@ const verify2 = (value) => {
     </TouchableOpacity>
     ))}
     </Animated.View>
+    </Modal>)}
+
+
+
+    {cableComfing && ( <Modal visible={cableComfing} transparent={true}>
+    <View style={styles.cableAgre}>
+
+    <Image source={logo3} style={styles.cableLogo3} resizeMode='cover' />
+    <Text style={{fontSize: 15, fontWeight: 'bold'}}>Subscription your Cable TV below</Text>
+
+    <View style={{flexDirection: 'row', textAlign: 'center', justifyContent: 'space-between',
+    height: 'auto', width: '100%'
+    }}>
+    <View style={styles.otherText3}>
+    <Text style={{fontSize: 15, fontWeight: 'bold'}}>Iuc_Number</Text>
+    <Text style={{fontSize: 15, fontWeight: 'bold'}}>Cable_Name</Text>
+    <Text style={{fontSize: 15, fontWeight: 'bold'}}>Amount</Text>
+    <Text style={{fontSize: 15, fontWeight: 'bold'}}>duration</Text>
+    </View>
+
+    <View style={styles.out3}>
+    <Text style={{textAlign: 'right', fontSize: 15, fontWeight: 'bold'}}>{smart}</Text>
+    <Text style={{textAlign: 'right', fontSize: 15, fontWeight: 'bold'}}>{other3.name}</Text>
+    <Text style={{textAlign: 'right', fontSize: 15, fontWeight: 'bold'}}>&#8358; {other3.price}</Text>
+    <Text style={{textAlign: 'right', fontSize: 15, fontWeight: 'bold'}}>{other3.duration}</Text>
+    </View>
+
+    </View>
+    
+    <View style={styles.agre3}>
+    <TouchableOpacity style={styles.agre3Btn} onPress={() => {setCableComfing(false)}}>
+    <Text style={{fontWeight: 'bold', fontSize: 20, color: '#fff', textAlign: 'center',
+    alignItems: 'center', justifyContent: 'center'}}>No</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity style={styles.agre3Btn}>
+    <Text style={{fontWeight: 'bold', fontSize: 20, color: '#fff', textAlign: 'center',
+    alignItems: 'center', justifyContent: 'center'}}>Yes</Text>
+    </TouchableOpacity>
+    </View>
+    </View>
     </Modal>)}
     </Animated.View>
     </Modal>
@@ -1404,7 +1486,7 @@ const verify2 = (value) => {
       </TouchableOpacity>
     ))))}
     </View>
-    <TextInput value={exam} onChangeText={setExam} keyboardType='numeric' placeholder='quntity'
+    <TextInput value={exam} onChangeText={setExam} keyboardType='numeric' placeholder='quantity'
     style={styles.input4} />
 
     <TouchableOpacity style={styles.buyExame}>
@@ -1948,6 +2030,27 @@ shadowOffset: {width: 0, height: 2}, shadowOpacity: 2, shadowRadius: 8, justifyC
   alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', padding: 10, marginBottom: 20},
 
 
+  
+  cableAgre: {backgroundColor: '#fff', height: '60%', width: '100%', flexDirection: 'column', textAlign:'center',
+  borderTopLeftRadius: 20, borderTopRightRadius: 20, position: 'absolute', left: 0, bottom: 0, zIndex: 5,
+  padding: 20, shadowColor: '#000', shadowOffset: {width: 0, height: 2}, shadowOpacity: 3, shadowRadius: 6,
+  elevation: 5, alignItems: 'center', gap: 15},
+
+  cableLogo3: {height: 70, width: 70, borderRadius: 50, shadowColor: '#000', shadowOffset: {width: 1, height: 5},
+  shadowOpacity: 10, shadowRadius: 5, elevation: 5, borderWidth: 2},
+
+  otherText3: {height: 150, width: 'auto', padding: 10, gap: 20},
+
+  out3: {height: 150, width: 'auto', padding: 10, gap: 20},
+
+
+  agre3: {height: 'auto', width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'space-between',
+  flexDirection: 'row', bottom: 10, position: 'absolute', left: 20, right: 20, padding: 10},
+
+  agre3Btn: {backgroundColor: '#00cc99', height: 60, width: 100, textAlign: 'center', justifyContent: 'center',
+  borderRadius: 15},
+
+
 
 
 
@@ -2017,6 +2120,12 @@ shadowOffset: {width: 0, height: 2}, shadowOpacity: 2, shadowRadius: 8, justifyC
 
   buyExame: {backgroundColor: '#00cc99', height: 60, width: '100%', textAlign: 'center', padding: 10,
   borderTopLeftRadius: 20, borderBottomRightRadius: 20, justifyContent: 'center'},
+
+
+
+
+
+  
 
 
 
