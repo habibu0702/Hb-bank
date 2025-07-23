@@ -21,7 +21,6 @@ export default function App() {
   const render = () => {
     switch (tabActive) {
       case 'Home': return <HomeScreen/>;
-      case 'Wallet': return <WalletScreen/>;
       case 'History': return <HistoryScreen/>
       case 'Profile': return <Profile/>
       default: return <HomeScreen/>
@@ -45,11 +44,6 @@ export default function App() {
         <TouchableOpacity style={styles.tab} onPress={() => setTabActive('Home')}>
           <Ionicons name="home" size={25} color='gray' />
           <Text style={styles.lableTab}>Home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.tab} onPress={() => setTabActive('Wallet')}>
-          <Ionicons name="wallet" size={24} color='gray' />
-          <Text style={styles.lableTab}>Wallet</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.tab} onPress={() => setTabActive('History')}>

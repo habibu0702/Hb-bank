@@ -11,7 +11,7 @@ import HomeScreen from './homeScreen';
 
 
 export default function Profile() {
- const { user } = useContext(UserContext);
+ const { user, uploadImage } = useContext(UserContext);
   const [image4, setImage4] = useState('');
 
 
@@ -32,8 +32,9 @@ export default function Profile() {
     });
 
     if (!result.canceled) {
-      setImage4(result.assets[0].uri);
-      setUser(result.assets[0].uri);
+      const photoUrl = result.assets[0].uri;
+
+      uploadImage({ image: photoUrl });
     }
   };
 
@@ -76,7 +77,7 @@ export default function Profile() {
 
     <ScrollView>
     <View style={styles.homeSettings}>
-    <Image source={image4 ? { uri: image4 } : require('./assets/default-profile.png')} style={styles.image4}/>
+    <Image source={user.image ? { uri: user.image } : require('./assets/default-profile.png')} style={styles.image4}/>
     <Text style={{fontSize: 15, fontWeight: 'bold'}}>{user.userName}</Text>
 
     <TouchableOpacity style={styles.uploadImage} onPress={upload}>

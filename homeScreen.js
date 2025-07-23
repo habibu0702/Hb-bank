@@ -5,6 +5,7 @@ import { Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { View, ScrollView, Animated, Button, Image, Alert,
  StyleSheet, TextInput, Modal, FlatList } from 'react-native';
+ import { verifyIUC, TopUp, verifyMeter, getCable } from './verifyData';
 import axios from 'axios';
 import { Text } from 'react-native';
 import { Plans } from './dataPlans';
@@ -743,24 +744,25 @@ const verify2 = (value) => {
 
 
 
- const buyCbleTv = () => {
+ const verifyCableTV = () => {
 
   if (!typetv) {
-    Alert.alert('ERROR1');
+    setError2('Error Select TV Cable Plan fields');
     return;
   }
   
   if (!smart) {
-    Alert.alert('error2');
+    setError2('Error SmartCard / IUC Number Decoder... fields?');
     return;
   }
   if (!other3) {
-    Alert.alert('error3');
+    setError2('Please Select Cable Name');
     return;
   }
   if (typetv && smart && other3) {
     setCableComfing(true);
   }
+
  }
 
 
@@ -787,7 +789,13 @@ const verify2 = (value) => {
 
 
 
-
+ useEffect(() => {
+  const getCAB = async () => {
+    const data = await getCable();
+    Alert.alert(data);
+  };
+  getCAB();
+ }, []);
 
 
 
@@ -864,7 +872,7 @@ const verify2 = (value) => {
    {activeHome && ( <Animated.View style={[styles.Home, [{transform: [{translateX: Home}]}]]}>
    <View style={styles.header1}>
 
-   <Image source={image1 ? {uri: image1 } : require('./assets/default-profile.png')} style={styles.img1} /> 
+   <Image source={user.image ? {uri: user.image } : require('./assets/default-profile.png')} style={styles.img1} /> 
    <Text style={styles.name}>{user.userName || "user23"}</Text>
 
    <TouchableOpacity style={styles.bell} onPress={''}>
@@ -1248,6 +1256,7 @@ const verify2 = (value) => {
 {spin && ( 
   <View style={styles.spinContainer}>
   <ActivityIndicator size="large" color='#00cc99' />
+  <Text style={{fontSize: 15, fontWeight: 'bold', color: '#fff'}}>wait In progress...</Text>
   </View>
 )}
     </Animated.View>
@@ -1359,7 +1368,7 @@ const verify2 = (value) => {
      )}
     </TouchableOpacity>
 
-    <TouchableOpacity style={styles.buySmart} onPress={buyCbleTv}>
+    <TouchableOpacity style={styles.buySmart} onPress={verifyCableTV}>
       <Text style={styles.lableSmart}>purchase</Text>
     </TouchableOpacity>
 
@@ -1420,6 +1429,16 @@ const verify2 = (value) => {
     </View>
     </View>
     </Modal>)}
+
+
+
+
+    {error2 && (
+  <View style={styles.error2}>
+  <Text style={styles.lableError2}>{error2}</Text>
+  </View> 
+)}
+
     </Animated.View>
     </Modal>
   )}
@@ -1537,6 +1556,8 @@ const verify2 = (value) => {
     <Animated.View style={[styles.service5, [{transform: [{translateX: slide5}]}]]}>
     <View style={styles.thead5}>
 
+    <Text style={{fontSize: 15, fontWeight: 'bold'}}>Buy Bill Electricity</Text>
+
     <TouchableOpacity style={styles.back}>
     <Ionicons name='arrow-back-outline' size={30} color='333' onPress={() => {close5(); openHome()}}/>
     </TouchableOpacity>
@@ -1544,7 +1565,10 @@ const verify2 = (value) => {
 
     <View style={styles.electiryHome}>
     <View style={styles.form5}>
-    <TextInput value={null} keyboardType='numeric' placeholder='soon' style={styles.input5} />
+    <TouchableOpacity style={styles.selectBiller}>
+    <Text style={{fontSize: 15, fontWeight: 'bold'}}>select Disco</Text>
+    </TouchableOpacity>
+    <TextInput value={null} keyboardType='numeric' placeholder='Meter Number' style={styles.input5} />
     </View>
     </View>
     </Animated.View>
@@ -1906,9 +1930,9 @@ selectedData: {backgroundColor: '#ddd', height: 50, width: '100%', textAlign: 'c
 
 
  error2: {backgroundColor: 'red', height: 100, width: '90%', borderRadius: 20, textAlign: 'center',
-  alignItems: 'center', position: 'absolute', top: 10, left: 20, right: 20, shadowColor: '#000',
-shadowOffset: {width: 0, height: 2}, shadowOpacity: 2, shadowRadius: 8, justifyContent: 'center'},
-  lableError2: {fontWeight: 'bold', color: '#fff'},
+ alignItems: 'center', position: 'absolute', top: 10, left: 20, right: 20, shadowColor: '#000',
+ shadowOffset: {width: 0, height: 2}, shadowOpacity: 2, shadowRadius: 8, justifyContent: 'center'},
+ lableError2: {fontWeight: 'bold', color: '#fff', textAlign: 'center', alignItems: 'center', justifyContent: 'center'},
 
 
 
@@ -2187,14 +2211,17 @@ shadowOffset: {width: 0, height: 2}, shadowOpacity: 2, shadowRadius: 8, justifyC
 
 
 
-   service5: {backgroundColor: '#ddd', flex: 1},
+  service5: {backgroundColor: '#ddd', flex: 1},
   thead5: {backgroundColor: '#fff', height: 80, width: '100%',  padding: 15, textAlign: 'center',
   alignItems: 'center', justifyContent: 'center'},
 
   electiryHome: {height: 'auto', width: '100%', flexDirection: 'column', padding: 20},
 
-  form5: {backgroundColor: '#fff', height: 100, width: '100%', shadowColor: '#000', shadowOpacity: 2,
-   shadowOffset: {width: 0, height: 2,}, shadowRadius: 5, elevation: 5, padding: 10, borderRadius: 20},
+  form5: {backgroundColor: '#fff', height: 'auto', width: '100%', shadowColor: '#000', shadowOpacity: 2,
+  shadowOffset: {width: 0, height: 2,}, shadowRadius: 5, elevation: 5, padding: 10, borderRadius: 20, gap: 20},
+
+  selectBiller: {height: 60, width: '100%', borderWidth: 2, borderColor: 'gray', borderRadius: 10,
+  textAlign: 'center', justifyContent: 'center', padding: 10},
 
   input5: {height: 50, width: '100%', borderWidth: 2, borderColor: 'gray', padding: 10, borderRadius: 10},
 

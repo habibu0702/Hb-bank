@@ -8,7 +8,6 @@ export const UserProvider = ({ children }) => {
     const [user, setUser] = useState({
         userName: 'habibu',
         balance: 100000,
-        image: null
     });
 
 
@@ -28,10 +27,18 @@ export const UserProvider = ({ children }) => {
         return false;
     };
 
+    const uploadImage = (image) => {
+        if (image) {
+            setUser(prev => ({ ...prev, ...image}))
+        } else {
+            return null;
+        }
+    }
+
 
 
     return (
-        <UserContext.Provider value={{ user, setUser, deposit, withdraw }}>
+        <UserContext.Provider value={{ user, setUser, deposit, withdraw, uploadImage }}>
             {children}
         </UserContext.Provider>
     )
