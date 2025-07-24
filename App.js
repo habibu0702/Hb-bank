@@ -3,11 +3,13 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
+import { ScrollView } from "react-native";
+import { useEffect } from "react";
 import { UserProvider } from "./context";
 import HomeScreen from "./homeScreen";
-import WalletScreen from "./WalletScreen";
 import HistoryScreen from "./HistoryScreen";
 import Profile from "./SettingScreen";
+import SingUp from "./singup";
 
 
 
@@ -15,17 +17,45 @@ import Profile from "./SettingScreen";
 export default function App() {
 
 
-  const [tabActive, setTabActive] = useState('Home');
+  const [tabActive, setTabActive] = useState(false);
+  const [APP, setAPP] = useState(false);
+  const [login, setLogin] = useState(false);
+  const [sing, setSing] = useState(true);
 
 
   const render = () => {
+  
     switch (tabActive) {
-      case 'Home': return <HomeScreen/>;
+      case 'Home': return <HomeScreen/>
       case 'History': return <HistoryScreen/>
       case 'Profile': return <Profile/>
       default: return <HomeScreen/>
     }
   }
+
+const Render2 = ({ children }) => {
+  return (
+    <ScrollView style={{ backgroundColor: 'royalblue'}}>
+     {children}
+    </ScrollView>
+      )
+  }
+
+
+
+
+  useEffect(() => {
+    if (sing === true) {
+    setTimeout(() => {
+      setAPP(false)
+    }, 100);
+    } else {
+      setTimeout(() => {
+      setAPP(true);
+      setSing(false);
+      }, 100)
+    }
+  }, [sing]);
 
 
   return (
@@ -34,7 +64,7 @@ export default function App() {
 
 
     <UserProvider>
-     <View style={styles.HomeScreen}>
+    {APP && ( <View style={styles.HomeScreen}>
       <View styles={{backgroundColor: '#fff', flex: 1, paddingBottom: 10}}>
         {render()}
         </View>
@@ -57,7 +87,14 @@ export default function App() {
         </TouchableOpacity>
 
       </View>
-    </View>
+    </View>)}
+
+
+    {sing && ( <Render2><SingUp/></Render2>)}
+
+
+
+
     <StatusBar style="auto" />
     </UserProvider>
   )

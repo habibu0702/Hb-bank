@@ -789,15 +789,6 @@ const verify2 = (value) => {
 
 
 
- useEffect(() => {
-  const getCAB = async () => {
-    const data = await getCable();
-    Alert.alert(data);
-  };
-  getCAB();
- }, []);
-
-
 
 
 

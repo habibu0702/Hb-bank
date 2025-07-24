@@ -1,4 +1,5 @@
 import axios from "axios"
+import { Alert } from "react-native";
 
 
 export const verifyIUC = async () => {
@@ -101,15 +102,18 @@ export const verifyMeter = async () => {
 
 export const getCable = async () => {
 
- try {
- const response = await axios.get('https://maskawasubapi.com/api/cablesub', {
- headers: {
-    'Authorization': 'Token 81059a18011fc9659ae432d292c422d2cb4aee37',
-    'Content-Type': 'application/json'
-     }    
-   });
-   console.log('response:', response.data);
- } catch (error) {
-    console.log('error', error.message || response.data);
- }
+    const Token = '...............';
+  try {
+    const response = await axios.get(`https://maskawasubapi.com/api/cablesub`, {
+      headers: {
+        Authorization: `Bearer ${Token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('response:', response.data);
+    Alert.alert('success');
+  } catch (error) {
+    console.log('error', error.message);
+    Alert.alert('error');
+  }
 };
