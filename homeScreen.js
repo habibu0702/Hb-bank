@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { View, ScrollView, Animated, Button, Image, Alert,
  StyleSheet, TextInput, Modal, FlatList } from 'react-native';
  import { verifyIUC, TopUp, verifyMeter, getCable } from './verifyData';
+ import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import axios from 'axios';
 import { Text } from 'react-native';
 import { Plans } from './dataPlans';
@@ -16,10 +17,11 @@ import { cablePlan } from './plantv';
 import { exSynbol } from './exameSynbol';
 import { exam_plan } from './exam';
 
+
  
 const { height, width } = Dimensions.get('window');
 
-export default function HomeScreen () {
+export default function HomeScreen() {
 const [image1, setImage1] = useState(null)
 const { user, deposit, withdraw } = useContext(UserContext);
 const [showBalance, setShowBalance] = useState(true);
@@ -1004,6 +1006,7 @@ const verify2 = (value) => {
 
   <View style={styles.homeAirtime}>
   
+  <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
   <View style={styles.form1}>
   <View style={styles.synbol1Con}>
   {Network.map((n) => (
@@ -1020,10 +1023,11 @@ const verify2 = (value) => {
   <TextInput value={amount1} placeholder='100-5000' keyboardType='numeric' onChangeText={verify1m}
   style={styles.amount1} />
 
-  <TouchableOpacity style={styles.submut1} onPress={() => {buyAirtime()}}>
+  <TouchableOpacity style={styles.submut1} onPress={() => {buyAirtime(), Keyboard.dismiss()}}>
   <Text style={styles.lableSumbut1}>Next</Text>
   </TouchableOpacity>
   </View>
+  </TouchableWithoutFeedback>
   </View>
 
 
@@ -1170,7 +1174,7 @@ const verify2 = (value) => {
     </View>
    )}
 
-   <TouchableOpacity style={styles.submut2} onPress={buyData}>
+   <TouchableOpacity style={styles.submut2} onPress={() => {buyData(); Keyboard.dismiss()}}>
    <Text>Next</Text>
    </TouchableOpacity>
    </View>

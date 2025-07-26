@@ -25,7 +25,8 @@
     "react-native-paper": "^5.14.5",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
-    "react-native-skeleton-placeholder": "^5.2.4"
+    "react-native-skeleton-placeholder": "^5.2.4",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

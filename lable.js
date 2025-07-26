@@ -62,7 +62,7 @@ import { useState, useEffect, useRef } from "react";
         backgroundColor: '#fff',
         justifyContent: 'center',
         borderRadius: 10,
-        height: 50,
+        height: 40,
         padding: 5,
         fontSize: 15,
         fontWeight: 'bold'

@@ -10,7 +10,9 @@ export const UserProvider = ({ children }) => {
         balance: 100000,
     });
 
+    const [Istrue, setIstrue] = useState(false);
 
+    const ToggleRegister = () => setIstrue(prev => !prev)
 
     const deposit = (amount) => {
         if (amount > 0) {
@@ -38,7 +40,7 @@ export const UserProvider = ({ children }) => {
 
 
     return (
-        <UserContext.Provider value={{ user, setUser, deposit, withdraw, uploadImage }}>
+        <UserContext.Provider value={{ user, setUser, deposit, withdraw, uploadImage, ToggleRegister, Istrue }}>
             {children}
         </UserContext.Provider>
     )

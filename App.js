@@ -1,116 +1,111 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { View, Text, Alert, StyleSheet, } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { useState } from "react";
+import Icons from '@expo/vector-icons/FontAwesome';
 import { StatusBar } from "expo-status-bar";
-import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { ScrollView } from "react-native";
-import { useEffect } from "react";
-import { UserProvider } from "./context";
-import HomeScreen from "./homeScreen";
-import HistoryScreen from "./HistoryScreen";
-import Profile from "./SettingScreen";
-import SingUp from "./singup";
-
+import { UserProvider } from "./context.js";
+import HomeScreen from './homeScreen.js';
+import HistoryScreen from "./HistoryScreen.js";
+import Profile from "./SettingScreen.js";
+import Logign from "./login";
+import SignUp from "./singup";
+import { useStore } from "./true.js";
 
 
 
 export default function App() {
 
+  const [IsLogged, setIsLogged] = useState(false);
+  const [Active, setActive] = useState(true);
+  const Istrue = useStore(state => state.Istrue);
+   const Logged = useStore(state => state.Logged);
 
-  const [tabActive, setTabActive] = useState(false);
-  const [APP, setAPP] = useState(false);
-  const [login, setLogin] = useState(false);
-  const [sing, setSing] = useState(true);
 
 
-  const render = () => {
-  
-    switch (tabActive) {
+
+  const Toggle = () => {
+    return () => setActive(false);
+  }
+
+
+  const Render1 = ({ children }) => {
+    return <View style={{flex: 1}}>{children}</View>
+  }
+
+  const Render2 = ({ children }) => {
+    return <View style={{flex: 1}}>{children}</View>
+  }
+
+
+  const Render3 = () => {
+    switch(Active) {
       case 'Home': return <HomeScreen/>
       case 'History': return <HistoryScreen/>
-      case 'Profile': return <Profile/>
+      case 'Settign': return <Profile/>
       default: return <HomeScreen/>
     }
   }
 
-const Render2 = ({ children }) => {
-  return (
-    <ScrollView style={{ backgroundColor: 'royalblue'}}>
-     {children}
-    </ScrollView>
-      )
-  }
-
-
-
-
-  useEffect(() => {
-    if (sing === true) {
-    setTimeout(() => {
-      setAPP(false)
-    }, 100);
-    } else {
-      setTimeout(() => {
-      setAPP(true);
-      setSing(false);
-      }, 100)
-    }
-  }, [sing]);
 
 
   return (
 
+   <UserProvider>
 
+    {!Logged ? (
+      <>
+      {!Istrue ? (
+        
+      
+      <>
+     <Render1><Logign/></Render1>
+     </>
+      ) : (
+        <Render2><SignUp/></Render2>
+      )}
+      
+      
+   
+  </>
+    ) : (
+      
 
+ <View style={styles.App}>
+ <View style={{flex: 1}}>{Render3()}</View>
 
-    <UserProvider>
-    {APP && ( <View style={styles.HomeScreen}>
-      <View styles={{backgroundColor: '#fff', flex: 1, paddingBottom: 10}}>
-        {render()}
-        </View>
+ <View style={styles.tabBottom}>
+ 
+ <TouchableOpacity style={styles.button} onPress={() => setActive('Home')}>
+  <Icons name="home" size={24} color='#000' />
+  <Text>Home</Text>
+ </TouchableOpacity>
 
-      <View style={styles.tabBottom}>
+ <TouchableOpacity style={styles.button} onPress={() => setActive('History')}>
+  <Icons name="history" size={24} color='#000' />
+  <Text>History</Text>
+ </TouchableOpacity>
 
-        <TouchableOpacity style={styles.tab} onPress={() => setTabActive('Home')}>
-          <Ionicons name="home" size={25} color='gray' />
-          <Text style={styles.lableTab}>Home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.tab} onPress={() => setTabActive('History')}>
-          <Icon name="history" size={24} color='gray' />
-          <Text style={styles.lableTab}>History</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.tab} onPress={() => setTabActive('Profile')}>
-          <Ionicons name="person" size={24} color='gray' />
-          <Text style={styles.lableTab}>Profile</Text>
-        </TouchableOpacity>
-
-      </View>
-    </View>)}
-
-
-    {sing && ( <Render2><SingUp/></Render2>)}
-
-
-
-
-    <StatusBar style="auto" />
+ <TouchableOpacity style={styles.button} onPress={() => setActive('Settign')}>
+  <Icons name="user" size={24} color='#000' />
+  <Text>You</Text>
+ </TouchableOpacity>
+ </View>
+ </View>
+    )}
+    <StatusBar hidden={true} />
     </UserProvider>
-  )
+  );
 }
 
-
 const styles = StyleSheet.create({
-  HomeScreen: {flex: 1, position: 'relative', backgroundColor: 'transparent'},
+  register: {flex: 1, position: 'relative', backgroundColor: 'red'},
 
-  tabBottom: {backgroundColor: '#e6f0fa', height: 70, width: '100%', padding: 15, textAlign: 'center',
-  alignItems: 'center', position: 'absolute', bottom: 0, justifyContent: 'space-between', flexDirection: 'row',
-  shadowColor: '#000', shadowOffset: {width: 0, height: 2}, shadowOpacity: 0.5, shadowRadius: 6, elevation: 4,
-  borderTopLeftRadius: 20, borderTopRightRadius: 20},
+  App: {flex: 1, position: 'relative', backgroundColor: '#fff'},
 
-  tab: {height: 50, width: 70, textAlign: 'center', alignItems: 'center', justifyContent: 'center', gap: 5,
-  borderRadius: 10,
-  },
-  lableTab: {fontWeight: 'bold', fontSize: 10, color: 'gray'}
+  tabBottom: { backgroundColor: '#e6f0fa', height: 70, width: '100%', position: 'absolute', left: 0,
+  bottom: 0, textAlign: 'center', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row',
+  padding: 20, borderTopLeftRadius: 20, borderTopRightRadius: 20},
+
+  button: { height: 55, width: 55, borderRadius: 10, textAlign: 'center', alignItems: 'center',
+  justifyContent: 'center', flexDirection: 'column', gap: 2}
 })

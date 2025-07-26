@@ -5,13 +5,14 @@ import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { useContext } from 'react';
 import { UserContext } from './context';
-import { useState  } from 'react';
-import HomeScreen from './homeScreen';
+import { useState, useEffect, useRef  } from 'react';
+import { useStore } from './true';
 
 
 
 export default function Profile() {
  const { user, uploadImage } = useContext(UserContext);
+ const LoggedIn = useStore(state => state.LoggedIn);
   const [image4, setImage4] = useState('');
 
 
@@ -109,7 +110,7 @@ export default function Profile() {
     <Text style={styles.lableChange}>Abaute</Text>
     </TouchableOpacity>
 
-    <TouchableOpacity style={styles.change}>
+    <TouchableOpacity style={styles.change} onPress={LoggedIn}>
     <Icon name='sign-out' size={24} color='gray' />
     <Text style={styles.lableChange}>Log Out</Text>
     </TouchableOpacity>
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
 
 
   homeSettings: {flexDirection: 'column', padding: 20, textAlign: 'center', justifyContent: 'center',
-  gap: 20, alignItems: 'center'},
+  gap: 20, alignItems: 'center', paddingVertical: 10},
  
  
   image4: { height: 100, width: 100, borderRadius: 50, borderWidth: 2, borderColor: 'gray'},
