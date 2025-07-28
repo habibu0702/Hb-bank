@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Linking, Animated } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ImageBackground, ScrollView, Alert  } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useContext } from 'react';
 import { UserContext } from './context';
 import { useState, useEffect, useRef  } from 'react';
+import { Dimensions } from 'react-native';
 import { useStore } from './true';
 
 
@@ -13,7 +14,34 @@ import { useStore } from './true';
 export default function Profile() {
  const { user, uploadImage } = useContext(UserContext);
  const LoggedIn = useStore(state => state.LoggedIn);
-  const [image4, setImage4] = useState('');
+
+
+ const screnWidth = Dimensions.get('window').width;
+ const fadeAnime = useRef(new Animated.Value(screnWidth)).current;
+ const [active, setActive] = useState('');
+
+
+ useEffect(() => {
+  Animated.timing(fadeAnime, {
+    toValue: 0,
+    duration: 300,
+    useNativeDriver: true
+  }).start();
+ }, []);
+
+
+
+ useEffect(() => {
+  Animated.timing(fadeAnime, {
+    toValue: screnWidth,
+    duration: 300,
+    useNativeDriver: true
+  }).start();
+ }, []);
+
+
+
+
 
 
 

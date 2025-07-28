@@ -1,13 +1,16 @@
 import { View, Text, Alert, StyleSheet, TextInput } from "react-native";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, Image, Modal } from "react-native";
 import Icon from '@expo/vector-icons/FontAwesome';
+import { ActivityIndicator } from "react-native";
 import { useState, useEffect } from "react";
+import Swiper from "react-native-swiper";
 import { useStore } from "./true";
 
 
 
 export default function Logign() {
   const Toggle = useStore(state => state.Toggle);
+  const LoggedIn = useStore(state => state.LoggedIn);
 
  const [user_name, setUser_name] = useState('');
  const [password, setPassword] = useState('');
@@ -16,6 +19,18 @@ export default function Logign() {
 
  const [error1, setError1] = useState('');
  const [error2, setError2] = useState('');
+ const [spin, setSpin] = useState(false);
+
+
+  const Handlee = () => {
+    setSpin(true);
+  setTimeout(() => {
+  LoggedIn();
+  setSpin(false);
+  Alert.alert('Login Successfuly');
+  }, 2000);
+  }
+
 
 
  const getLogin = async () => {
@@ -27,6 +42,12 @@ export default function Logign() {
     setError2('Please Enter your password');
     return;
   }
+
+  if (user_name === 'habibu' && password === 'habibu070') {
+  Handlee();
+  } else {
+    Alert.alert('wron password or user name');
+  }
  }
  
  return (
@@ -34,6 +55,14 @@ export default function Logign() {
   <View style={styles.home}>
 
   <View style={styles.slideImageContainer}>
+    <Swiper autoplay={true} autoplayTimeout={4} showsPagination={true} dotColor="#ccc" activeDotStyle='#000' loop={true}
+    style={{height: 300, backgroundColor: 'red', textAlign: 'center', alignItems: 'center', justifyContent: 'space-between'}}>
+
+      <Image source={require('./assets/logo/slide.png')} style={{flex: 1, height: 'auto', width: 'auto', resizeMode: 'cover'}}/>
+      <Image source={require('./assets/logo/slide2.png')} style={{flex: 1, height: 'auto', width: 'auto', resizeMode: 'cover'}} />
+      <Image source={require('./assets/logo/slide3.png')} style={{flex: 1, height: 'auto', width: 'auto', resizeMode: 'contain'}} 
+      resizeMode="cover"/>
+    </Swiper>
 
   </View>
 
@@ -66,6 +95,15 @@ export default function Logign() {
   </TouchableOpacity>
   </View>
   </View>
+
+
+  {spin && (
+    <Modal visible={spin} transparent={false}>
+      <View style={styles.spin}>
+        <ActivityIndicator size={60} color='#00cc99' />
+        <Text style={{fontSize: 30, fontWeight: 'bold', color: 'gray'}}>wait a few munite</Text>
+      </View>
+  </Modal>)}
   </View>
  )
 }
@@ -90,5 +128,11 @@ const styles = StyleSheet.create({
 
     submit: {backgroundColor: '#00cc99', height: 60, width: '100%', padding: 10, borderTopLeftRadius: 20,
     borderBottomRightRadius: 20, textAlign: 'center', alignItems: 'center', justifyContent: 'center'
+    },
+
+    slideImageContainer: {height: '50%', width: '100%'},
+
+    spin: {backgroundColor: '#fff', height: '100%', width: '100%', textAlign: 'center', alignItems: 'center',
+    justifyContent: 'center', fontSize: 50, gap: 10
     }
 })

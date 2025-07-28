@@ -272,23 +272,20 @@ export default function SignUp() {
       return;
     }
     if (first_name && last_name && user_name && phone_number && password && confirm_password) {
-    let data = {first_name, last_name, user_name, phone_number, password};
-    console.log(data);
+    let d = {first_name, last_name, user_name, phone_number, password};
+    
 
     try {
       setSpin(true);
-      const response = await axios.post('http://localhost:5000/api/signUp', {
-        fist_name: first_name,
-        las_name: last_name,
-        use_name: user_name,
-        phone_numbe: phone_number,
-        passwor: password
-      });
+      const response = await axios.get('https://fistlast-api.onrender.com/api/time');
+
+
       console.log('SUCCESS', response.data);
-      Alert.alert('success');
+        Alert.alert('SUCCE');
     } catch (err) {
       console.error('send error:', err.response?.data || err.message);
       Alert.alert('error');
+    } finally {
       setSpin(false);
     }
     

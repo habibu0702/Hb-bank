@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 export const useStore = create(set => ({
     Istrue: false,
-    Logged: true,
+    Logged: false,
     Toggle: () => set(state => ({Istrue: !state.Istrue})),
     LoggedIn: () => set(state => ({Logged: !state.Logged})),
 }));
