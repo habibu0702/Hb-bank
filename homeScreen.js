@@ -7,6 +7,7 @@ import { View, ScrollView, Animated, Button, Image, Alert,
  StyleSheet, TextInput, Modal, FlatList } from 'react-native';
  import { verifyIUC, TopUp, verifyMeter, getCable } from './verifyData';
  import { Keyboard, TouchableWithoutFeedback } from 'react-native';
+ import Swiper from 'react-native-swiper';
 import axios from 'axios';
 import { Text } from 'react-native';
 import { Plans } from './dataPlans';
@@ -899,7 +900,7 @@ const verify2 = (value) => {
     maximumFractionDigits: 2, minimumFractionDigits: 2
    })}` : '........'}</Text>
    <TouchableOpacity style={styles.addMoney} onPress={null}>
-   <Text style={styles.AddText}>add Fund</Text>
+   <Text style={styles.AddText}>Deposit</Text>
    </TouchableOpacity>
    </View>
                   
@@ -940,22 +941,46 @@ const verify2 = (value) => {
                           
    <TouchableOpacity style={styles.btn} onPress={() => {open4(); closeHome()}}>
    <Ionicons style={styles.icons1} name='school' />
-   <Text style={styles.dataText}>Exam</Text>
+   <Text style={styles.dataText}>Exame</Text>
    </TouchableOpacity>
                             
                             
    <TouchableOpacity style={styles.btn} onPress={() => {open5(); closeHome()}}>
    <Ionicons style={styles.icons1} name='bulb' />
-   <Text style={styles.dataText}>Electiry</Text>
+   <Text style={styles.dataText}>Electricity</Text>
    </TouchableOpacity>
                               
    <TouchableOpacity style={styles.btn} onPress={() => {open6(); closeHome()}}>
    <Ionicons style={styles.icons1} name='print' />
    <Text style={styles.dataText}>Sync</Text>
-   </TouchableOpacity></View></ScrollView>
+   </TouchableOpacity></View>
+   
 
 
-</Animated.View> 
+
+
+
+
+  <Swiper autoplay={true} autoplayTimeout={4} showsPagination={true} loop={true}
+  dotColor='#00cc99' style={styles.swiperHome}>
+      <TouchableOpacity style={styles.swiperBtn} onPress={() => {open1(); closeHome()}}>
+        <Text>Buy bulks data now you enjoy cash back</Text>
+      </TouchableOpacity>
+
+       <TouchableOpacity style={styles.swiperBtn} onPress={() => {open2(); closeHome()}}>
+        <Text>Wellcome</Text>
+      </TouchableOpacity>
+
+       <TouchableOpacity style={styles.swiperBtn} onPress={() => {open3(); closeHome()}}>
+        <Text>Wellcome</Text>
+      </TouchableOpacity>
+    
+    
+    
+  </Swiper>
+ 
+ </ScrollView>
+  </Animated.View> 
    )}
 
 
@@ -1668,17 +1693,14 @@ const styles = StyleSheet.create({
  name: {fontSize: 20, fontWeight: 'bold', color: '#000', marginTop: 20, zIndex: 5},
 
  HomeContainer: { backgroundColor: '#fff', flexDirection: 'column', padding: 20,
- textAlign: 'center', padding: 25, position: 'relative', width: '100%'
+ textAlign: 'center', padding: 25, position: 'relative', width: '100%',
  },
 
  wallet1: { backgroundColor: '#E6F0FA', height: 120, width: '100%', flexDirection: 'column', elevation: 8,
  textAlign: 'left', alignitems: 'left', gap: 25, fontSize: 25, borderRadius: 10,
- fontWeight: 'bold', padding: 10, marginBottom: 20, position: 'relative', shadowColor: '#000', shadowOpacity: 0.3,
- shadowOffset: {width: 0, height: 2}, elevation: 3, shadowRadius: 5,
- }, lableBalance: {fontSize: 17, fontWeight: 'bold', color: '#111111'},  balance: { fontSize: 17, fontWeight: 'bold'},
-
- eye: {position: 'absolute', left: '40%', top: 10
- },
+ fontWeight: 'bold', padding: 10, marginBottom: 20, position: 'relative'},
+ lableBalance: {fontSize: 17, fontWeight: 'bold', color: '#111111'},  balance: { fontSize: 17, fontWeight: 'bold'},
+ eye: {position: 'absolute', left: '40%', top: 10},
 
  addMoney: { backgroundColor: 'ransparent', height: 70, width: 100, textAlign: 'center', justifyContent: 'center',
  position: 'absolute', right: 0, borderTopLeftRadius: 20, borderStyle: 'solid', borderWidth: 1, elevation: 4,
@@ -1689,17 +1711,26 @@ const styles = StyleSheet.create({
 
  serviceContainer: { backgroundColor: '#E6F0FA', height: 'auto', width: '100%', borderTopLeftRadius: 20,
  borderBottomRightRadius: 25, flexDirection: 'row', textAlign: 'center', justifyContent: 'space-around',
- rowGap: 15, flexWrap: 'wrap', padding: 10, shadowColor: '#000', shadowOffset: {width: 0, height: 2}, elevation: 3,
-shadowOpacity: 0.3, shadowRadius: 5},
+ rowGap: 15, flexWrap: 'wrap', padding: 10, marginBottom: 10},
 
  btn: { backgroundColor: '#fff', height: 100, width: 90,  justifyContent: 'space-around',
- borderTopLeftRadius: 20, borderBottomRightRadius: 20, alignItems: 'center', fontWeight: 'bold',
- shadowColor: '#000', shadowOffset: {width: 0, height: 1}, shadowOpacity: 1, shadowRadius: 5, elevation: 5
+ borderTopLeftRadius: 20, borderBottomRightRadius: 20, alignItems: 'center', fontWeight: 'bold'
  },
 
  icons1: {backgroundColor: '#00cc99', height: 'auto', width: 'auto', fontSize: 20, color: '#fff', textAlign: 'center',
  borderRadius: 50, alignItems: 'center', flexDirection: 'row', padding: 10
  }, dataText: {fontWeight: 'bold'},
+
+
+
+
+
+ swiperHome: {height: 120, marginBottom: 6, flexDirection: 'row', padding: 5},
+ swiperImage: {height: 'auto', width: '100%', flex: 1, resizeMode: 'cover', borderRadius: 10},
+ swiperBtn: {height: 110, width: '95%', textAlign: 'center', justifyContent: 'center', alignItems: 'center',
+ backgroundColor: '#fff', borderTopLeftRadius: 20, borderBottomRightRadius: 20, shadowColor: '#000',
+ shadowOffset: {width: 0, height: 1}, shadowOpacity: 0.2, shadowRadius: 3, elevation: 4, marginTop: 5,
+ marginBottom: 5},
 
 
 

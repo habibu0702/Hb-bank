@@ -7,14 +7,14 @@ import { TextInput } from "react-native";
 import InputLable from "./lable";
 import { useState, useEffect } from "react";
 import { useRef } from "react";
-import { useStore } from "./true";
+import { userStore } from "./true";
 import axios from "axios";
 
 
 
 
 export default function SignUp() {
-  const Toggle = useStore(state => state.Toggle);
+  const Toggle = userStore(state => state.Toggle);
 
 
  const [first_name, setFirst_name] = useState('');
@@ -277,10 +277,18 @@ export default function SignUp() {
 
     try {
       setSpin(true);
-      const response = await axios.get('https://fistlast-api.onrender.com/api/time');
-
-
-      console.log('SUCCESS', response.data);
+      const response = await axios.post('https://fistlast-api.onrender.com/api/signUp', {
+        "first_name": first_name,
+        "last_name": last_name,
+        "user_name": user_name,
+        "phone_number": phone_number,
+        "password": password
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log(response.data);
         Alert.alert('SUCCE');
     } catch (err) {
       console.error('send error:', err.response?.data || err.message);

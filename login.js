@@ -4,13 +4,13 @@ import Icon from '@expo/vector-icons/FontAwesome';
 import { ActivityIndicator } from "react-native";
 import { useState, useEffect } from "react";
 import Swiper from "react-native-swiper";
-import { useStore } from "./true";
+import { userStore } from "./true";
 
 
 
 export default function Logign() {
-  const Toggle = useStore(state => state.Toggle);
-  const LoggedIn = useStore(state => state.LoggedIn);
+  const Toggle = userStore(state => state.Toggle);
+  const LoggedIn = userStore(state => state.LoggedIn);
 
  const [user_name, setUser_name] = useState('');
  const [password, setPassword] = useState('');

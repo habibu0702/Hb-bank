@@ -9,16 +9,15 @@ import HistoryScreen from "./HistoryScreen.js";
 import Profile from "./SettingScreen.js";
 import Logign from "./login";
 import SignUp from "./singup";
-import { useStore } from "./true.js";
+import { userStore } from "./true.js";
 
 
 
 export default function App() {
-
-  const [IsLogged, setIsLogged] = useState(false);
-  const [Active, setActive] = useState(true);
-  const Istrue = useStore(state => state.Istrue);
-   const Logged = useStore(state => state.Logged);
+  const [Active, setActive] = useState(false);
+  const ToggleTab = userStore(state => state.tabBottom);
+  const Istrue = userStore(state => state.Istrue);
+   const Logged = userStore(state => state.Logged);
 
  const screnWidth = Dimensions.get('window').width;
  const slideSignUp = useRef(new Animated.Value(screnWidth)).current;
@@ -96,7 +95,7 @@ export default function App() {
  <View style={styles.App}>
  <View style={{flex: 1}}>{Render3()}</View>
 
- <View style={styles.tabBottom}>
+ {ToggleTab && ( <View style={styles.tabBottom}>
  
  <TouchableOpacity style={styles.button} onPress={() => setActive('Home')}>
   <Icons name="home" size={24} color='#000' />
@@ -112,7 +111,7 @@ export default function App() {
   <Icons name="user" size={24} color='#000' />
   <Text>You</Text>
  </TouchableOpacity>
- </View>
+ </View>)}
  </View>
     )}
     <StatusBar hidden={true} />
