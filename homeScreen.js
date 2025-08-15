@@ -19,6 +19,7 @@ import { cablePlan } from './plantv';
 import { exSynbol } from './exameSynbol';
 import { exam_plan } from './exam';
 import { userStore } from './true';
+import ToUsers from './to_users';
 
 
  
@@ -896,6 +897,11 @@ const verify2 = (value) => {
 
 
 
+  const handle_to_users = () => {
+    return <View style={{flex: 1}}><ToUsers/></View>
+  }
+
+
  return (
   <View>
    
@@ -940,7 +946,7 @@ const verify2 = (value) => {
 
    <View style={styles.send_container}>
 
-    <TouchableOpacity style={styles.btn_send}  onPress={() => {open1(); closeHome(); ToggleTab()}}>
+    <TouchableOpacity style={styles.btn_send}  onPress={() => {handle_to_users()}}>
     <Ionicons style={styles.icon_send_btn} name='bank' size={15} color='#fff'/>
     <Text style={{fontSize: 12, fontWeight: 'bold'}}>To F</Text>
     </TouchableOpacity> 
