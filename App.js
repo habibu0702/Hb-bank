@@ -15,38 +15,87 @@ import { userStore } from "./true.js";
 
 export default function App() {
   const [Active, setActive] = useState(false);
-  const ToggleTab = userStore(state => state.tabBottom);
+  const tabBottom= userStore(state => state.tabBottom);
   const Istrue = userStore(state => state.Istrue);
    const Logged = userStore(state => state.Logged);
 
  const screnWidth = Dimensions.get('window').width;
- const slideSignUp = useRef(new Animated.Value(screnWidth)).current;
+  const show_tab_btn = useRef(new Animated.Value(screnWidth)).current;
+ const slideSignUp = useRef(new Animated.Value(-screnWidth)).current;
  const slideLogign = useRef(new Animated.Value(screnWidth)).current;
 
+
+
+
+
  useEffect(() => {
-  setTimeout(() => {
-  Animated.timing(slideSignUp, {
-    toValue: Istrue ? 0 : screnWidth,
-    duration: 400,
-    useNativeDriver: true
-  }).start();
+ const timer = setTimeout(() => {
+  if (tabBottom) {
+   Animated.timing(show_tab_btn, {
+     toValue: 0,
+     duration: 250,
+     useNativeDriver: true
+   }).start();
+  } else {
+   Animated.timing(show_tab_btn, {
+     toValue: screnWidth,
+     duration: 250,
+     useNativeDriver: true
+   }).start();
+  }
 }, 100);
- });
+return () => clearTimeout(timer);
+}, [tabBottom]);
+
+
+
+
+useEffect(() => {
+ const timer = setTimeout(() => {
+  if (Istrue) {
+   Animated.timing(slideLogign, {
+     toValue: screnWidth,
+     duration: 250,
+     useNativeDriver: true
+   }).start();
+  } else {
+   Animated.timing(slideLogign, {
+     toValue: 0,
+     duration: 250,
+     useNativeDriver: true
+   }).start();
+  }
+}, 100);
+return () => clearTimeout(timer);
+}, [Istrue]);
+
+
+
+
+
+useEffect(() => {
+ const timer = setTimeout(() => {
+  if (Istrue) {
+   Animated.timing(slideSignUp, {
+     toValue: -0,
+     duration: 250,
+     useNativeDriver: true
+   }).start();
+  } else {
+   Animated.timing(slideSignUp, {
+     toValue: -screnWidth,
+     duration: 250,
+     useNativeDriver: true
+   }).start();
+  }
+}, 100);
+return () => clearTimeout(timer);
+}, [Istrue]);
 
 
  
 
-
- useEffect(() => {
-  setTimeout(() => {
-  Animated.timing(slideLogign, {
-    toValue: Istrue ? screnWidth : -0,
-    duration: 300,
-    useNativeDriver: true
-  }).start();
-}, 100);
- })
-
+ 
 
 
   const Render1 = ({ children }) => {
@@ -71,18 +120,18 @@ export default function App() {
   return (
 
    <UserProvider>
+    <View style={{backgroundColor: 'royalblue', flex: 1}}>
 
     {!Logged ? (
       <>
       {!Istrue ? (
         
-      
       <>
       
      <Render1><Logign/></Render1>
      </>
       ) : (
-        <Render2><ScrollView><SignUp/></ScrollView></Render2>
+        <Render2><SignUp/></Render2>
       )}
     
       
@@ -95,7 +144,7 @@ export default function App() {
  <View style={styles.App}>
  <View style={{flex: 1}}>{Render3()}</View>
 
- {ToggleTab && ( <View style={styles.tabBottom}>
+ {tabBottom && ( <Animated.View style={[styles.tabBottom, [{transform: [{translateY: show_tab_btn}]}]]}>
  
  <TouchableOpacity style={styles.button} onPress={() => setActive('Home')}>
   <Icons name="home" size={24} color='#000' />
@@ -104,16 +153,18 @@ export default function App() {
 
  <TouchableOpacity style={styles.button} onPress={() => setActive('History')}>
   <Icons name="history" size={24} color='#000' />
-  <Text>History</Text>
+  <Text>Recod</Text>
  </TouchableOpacity>
 
  <TouchableOpacity style={styles.button} onPress={() => setActive('Settign')}>
   <Icons name="user" size={24} color='#000' />
   <Text>You</Text>
  </TouchableOpacity>
- </View>)}
+ </Animated.View>)}
  </View>
     )}
+
+    </View>
     <StatusBar hidden={true} />
     </UserProvider>
   );

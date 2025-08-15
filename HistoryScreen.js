@@ -31,8 +31,8 @@ const styles = StyleSheet.create({
     },
 
     historyHeader: {backgroundColor: '#fff', height: 80, width: '100%', textAlign: 'center', alignItems: 'left',
-    justifyContent: 'center', padding: 20, borderBottomRightRadius: 20, borderBottomLeftRadius: 20
-    },   text: {fontSize: 16, fontWeight: 'bold'},
+    justifyContent: 'center', padding: 20, borderBottomRightRadius: 20, borderBottomLeftRadius: 20},
+    text: {fontSize: 16, fontWeight: 'bold'},
 
     listRecord: {height: '100%', width: '100%', flexDirection: 'column', gap: 15, padding: 20},
     recordBtn: {height: 'auto', width: '100%', textAlign: 'center', alignItems: 'center'},

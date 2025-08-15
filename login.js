@@ -24,13 +24,23 @@ export default function Logign() {
 
   const Handlee = () => {
     setSpin(true);
-  setTimeout(() => {
+  const timer = setTimeout(() => {
   LoggedIn();
   setSpin(false);
   Alert.alert('Login Successfuly');
   }, 2000);
-  }
+  return () => clearTimeout(timer);
+}
 
+
+ useEffect(() => {
+  if (user_name) {
+    setError1('');
+  }
+  if (password) {
+    setError2('');
+  }
+ });
 
 
  const getLogin = async () => {
@@ -57,11 +67,23 @@ export default function Logign() {
   <View style={styles.slideImageContainer}>
     <Swiper autoplay={true} autoplayTimeout={4} showsPagination={true} dotColor="#ccc" activeDotStyle='#000' loop={true}
     style={{height: 300, backgroundColor: 'red', textAlign: 'center', alignItems: 'center', justifyContent: 'space-between'}}>
+    <>
+    <View style={styles.wellcome_login}>
+      <Text style={{fontSize: 15, fontWeight: 'bold'}}>Wellcome loging your account continu</Text>
+    </View>
+    </>
 
-      <Image source={require('./assets/logo/slide.png')} style={{flex: 1, height: 'auto', width: 'auto', resizeMode: 'cover'}}/>
-      <Image source={require('./assets/logo/slide2.png')} style={{flex: 1, height: 'auto', width: 'auto', resizeMode: 'cover'}} />
-      <Image source={require('./assets/logo/slide3.png')} style={{flex: 1, height: 'auto', width: 'auto', resizeMode: 'contain'}} 
-      resizeMode="cover"/>
+     <>
+    <View style={styles.wellcome_login}>
+      <Text style={{fontSize: 15, fontWeight: 'bold'}}>Wellcome loging your account continu</Text>
+    </View>
+    </>
+
+     <>
+    <View style={styles.wellcome_login}>
+      <Text style={{fontSize: 15, fontWeight: 'bold'}}>with you well you buy today</Text>
+    </View>
+    </>
     </Swiper>
 
   </View>
@@ -101,7 +123,7 @@ export default function Logign() {
     <Modal visible={spin} transparent={false}>
       <View style={styles.spin}>
         <ActivityIndicator size={60} color='#00cc99' />
-        <Text style={{fontSize: 30, fontWeight: 'bold', color: 'gray'}}>wait a few munite</Text>
+        <Text style={{fontSize: 16, fontWeight: 'bold', color: 'gray'}}>wait a few munite</Text>
       </View>
   </Modal>)}
   </View>
@@ -121,8 +143,8 @@ const styles = StyleSheet.create({
     joinInput: { height: 'auto', width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'center',
     flexDirection: 'row', borderWidth: 2, borderColor: 'gray', padding: 10, gap: 10, borderRadius: 10},
 
-    input: {height: 40, width: '90%', position: 'relative', fontSize: 18, fontWeight: 'bold'},
-    eye: {position: 'absolute', right: 10, zIndex: 2, height: 60, width: 55, backgroundColor: '#e6f0fa',
+    input: {height: 30, width: '90%', position: 'relative', fontSize: 18, fontWeight: 'bold'},
+    eye: {position: 'absolute', right: 10, zIndex: 2, height: 30, width: 55, backgroundColor: '#e6f0fa',
     textAlign: 'center', alignItems: 'center', justifyContent: 'center'
     },
 
@@ -133,6 +155,9 @@ const styles = StyleSheet.create({
     slideImageContainer: {height: '50%', width: '100%'},
 
     spin: {backgroundColor: '#fff', height: '100%', width: '100%', textAlign: 'center', alignItems: 'center',
-    justifyContent: 'center', fontSize: 50, gap: 10
+    justifyContent: 'center', fontSize: 50, gap: 10},
+
+    wellcome_login: {height: '70%', width: '100%', backgroundColor: 'royalblue', textAlign: 'center',
+    alignItems: 'center', justifyContent: 'center'
     }
 })

@@ -20,7 +20,7 @@ export default function SignUp() {
  const [first_name, setFirst_name] = useState('');
  const [last_name, setLast_name] = useState('');
  const [user_name, setUser_name] = useState('');
- const [password, setPasswoed] = useState('');
+ const [password, setPassword] = useState('');
  const [confirm_password, setConfirm_password] = useState('');
  const [phone_number, setPhone_number] = useState('');
  const [pin, setPin] = useState('');
@@ -28,11 +28,11 @@ export default function SignUp() {
 
  const [hidden, setHidden] = useState(true);
 
- const [field, setField] = useState('');
 
 
  
  const [spin, setSpin] = useState(false);
+ const [finish, setFinish] = useState(false);
 
 
  const [err1, setErr1] = useState('');
@@ -57,11 +57,19 @@ export default function SignUp() {
   const ref6 = useRef();
 
 
+
+
   useEffect(() => {
-   setTimeout(() => {
-      setField('');
-   }, 2000)
-  }, [field]);
+    if (first_name === '') {
+      setErr1('');
+    }
+    if (last_name === '') {
+      setErr2('');
+    }
+    if (user_name === '') {
+      setErr3('')
+    }
+  });
 
 
 
@@ -145,7 +153,7 @@ export default function SignUp() {
  
 
   const check_password = (value) => {
-    setPasswoed(value);
+    setPassword(value);
     if (password.length < 8) {
       setErr5('password must be at least 8 characters');
       return false;
@@ -204,142 +212,7 @@ export default function SignUp() {
 
 
 
-
-
-
-
-
-
-
- const register = async () => {
-  
-  if (!first_name || first_name.trim() === '') {
-      setErr1('please enter your first_name?');
-      return;
-    }
-    if (!check_first_name(first_name)) {
-      Alert.alert('wee');
-      return;
-    }
-
-    if (!last_name || last_name.trim() === '') {
-      setErr2('please enter your first_name?');
-      return;
-    }
-
-    if (!check_last_name(last_name)) {
-      Alert.alert('2')
-      return;
-    }
-
-    if (!user_name || user_name.trim() === '') {
-      setErr3('please enter your User_name?');
-      return;
-    }
-
-    if (!check_user_name(user_name)) {
-      Alert.alert('3');
-      return;
-    }
-
-      if (!phone_number || phone_number.trim() === '') {
-      setErr4('please enter your phone_number?');
-      return;
-    }
-
-    if (!check_phone_number(phone_number)) {
-      Alert.alert('4');
-      return;
-    }
-
-     if (!password || password.trim() === '') {
-      setErr5('please enter your password?');
-      return;
-    }
-
-    if (!check_password(password)) {
-      Alert.alert('5');
-      return;
-    }
-
-    if (!confirm_password || confirm_password.trim() === '') {
-      setErr6('please confirm your password?');
-      return;
-    }
-
-    if (!check_confirm_password(confirm_password)) {
-      Alert.alert('6');
-      return;
-    }
-    if (first_name && last_name && user_name && phone_number && password && confirm_password) {
-    let d = {first_name, last_name, user_name, phone_number, password};
-    
-
-    try {
-      setSpin(true);
-      const response = await axios.post('https://fistlast-api.onrender.com/api/signUp', {
-        "first_name": first_name,
-        "last_name": last_name,
-        "user_name": user_name,
-        "phone_number": phone_number,
-        "password": password
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      console.log(response.data);
-        Alert.alert('SUCCE');
-    } catch (err) {
-      console.error('send error:', err.response?.data || err.message);
-      Alert.alert('error');
-    } finally {
-      setSpin(false);
-    }
-    
-    }
- }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
  return (
-
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    style={{ position: 'relative'}}>
     <View style={styles.singUpHome}>
 
     <View style={styles.header}>
@@ -350,54 +223,68 @@ export default function SignUp() {
 
     <View style={styles.singUpContainer}>
     
-    <View style={styles.singUp} keyboardShouldPersistTaps="handled">
-    <InputLable value={first_name} placeholder="First Name" onChangeText={check_first_name}
-    style={styles.input1} textContentType="name" returnKeyType="next" label="Fist Name"
+    <View style={styles.form1} keyboardShouldPersistTaps="handled">
+    <TextInput value={first_name} placeholder="First Name" onChangeText={check_first_name}
+    style={styles.input1} textContentType="name" returnKeyType="go"
     onSubmitEditing={() => ref2.current.focus()} />
     {err1 && (<Text style={{color: 'red', fontSize: 15, fontWeight: 'bold'}}>{err1}</Text>)}
 
-    <InputLable value={last_name} placeholder="Last Name" onChangeText={check_last_name}
-    style={styles.input1} textContentType="name" returnKeyType="next" label="Last Name"
-    ref={ref2} onSubmitEditing={() => ref3.current.focus()} />
+    <TextInput value={last_name} placeholder="Last Name" onChangeText={check_last_name}
+    style={styles.input1} textContentType="name" returnKeyType="go" ref={ref2}
+    onSubmitEditing={() => ref3.current.focus()} />
     {err2 && (<Text style={{color: 'red', fontSize: 15, fontWeight: 'bold'}}>{err2}</Text>)}
     
-    <InputLable value={user_name} placeholder="User name" onChangeText={check_user_name}
-    style={styles.input1} textContentType="name" label="User Name" />
+    <TextInput value={user_name} placeholder="User name" onChangeText={check_user_name} ref={ref3}
+    returnKeyType="done" onSubmitEditing={() => ref3.current.focus()}
+    style={styles.input1} textContentType="name" />
     {err3 && (<Text style={{color: 'red', fontSize: 15, fontWeight: 'bold'}}>{err3}</Text>)}
 
-    <TextInput value={phone_number} placeholder='Mobile Number' onChangeText={check_phone_number} maxLength={11}
-    style={styles.input1} textContentType='pad-phone' keyboardType="numeric" label="Mobile Number" />
-    {err4 && (<Text style={{color: 'red', fontSize: 15, fontWeight: 'bold'}}>{err4}</Text>)}
-
-
-    
-    
-     <View style={styles.joinEye}>
-    <TextInput value={password} placeholder="Password" onChangeText={check_password}
-    style={styles.input1} textContentType="password" returnKeyType="next" ref={ref4}
-    onSubmitEditing={() => ref4.current.focus()} secureTextEntry={hidden} label="password" />
-
-     <TouchableOpacity style={styles.hidePassword} onPress={() => setHidden(!hidden)}>
-    <Icon name={hidden ? 'eye-slash' : 'eye'} size={24} color='gray'/>
-    </TouchableOpacity></View>
-    {err5 && (<Text style={{color: 'red', fontStyle:  15, fontWeight: 'bold'}}>{err5}</Text>)}
-
-    <TextInput value={confirm_password} placeholder="Confirm password" onChangeText={check_confirm_password}
-    style={styles.input1} textContentType="password" returnKeyType="done" ref={ref5} label="Confirm password"
-    onSubmitEditing={() => ref5.current.focus()} secureTextEntry={hidden}/>
-    {err6 && (<Text style={{color: 'red', fontSize: 15, fontWeight: 'bold'}}>{err6}</Text>)}
     
     <TouchableOpacity style={styles.goLogin} onPress={Toggle}>
     <Text style={{color: 'blue'}}>Already have an Account? Log In</Text>
     </TouchableOpacity>
-    <TouchableOpacity style={styles.submit} onPress={register}>
-    <Text style={{fontSize: 20, fontWeight: 'bold', color: '#fff'}}>Sign Up</Text>
+    <TouchableOpacity style={styles.submit} onPress={() => {setFinish(true)}}>
+    <Text style={{fontSize: 20, fontWeight: 'bold', color: '#fff'}}>Next</Text>
     </TouchableOpacity>
     </View>
     </View>
 
 
-    {field && (<View style={styles.field1}><Text>{field}</Text></View>)}
+
+
+
+    {finish && ( <Modal visible={finish} animationType="slide" presentationStyle="pageSheet"
+    onRequestClose={() => setFinish(false)}>
+    {finish && (<View style={styles.singUpContainer2}>
+    <View style={styles.thead}>
+    <Text style={{fontSize: 16, fontWeight: 'bold'}}>Comfirm your SignUp</Text>
+    </View>
+    <View style={styles.singUpHome2}>
+    
+    <View style={styles.form2}>
+    <TextInput value={phone_number} placeholder="Mobile number" textContentType="phone-pad" returnKeyType="go"
+    onChangeText={check_phone_number} style={styles.input2} keyboardType="numeric"/>
+    
+    <View style={styles.input_eye}>
+    <TextInput value={password} placeholder="password" textContentType="password" returnKeyType="go"
+    onChangeText={check_password} style={styles.input2} secureTextEntry={hidden}/>
+    <TouchableOpacity style={styles.eye} onPress={() => setHidden(!hidden)}>
+    <Icon name={hidden ? "eye-slash" : "eye"} size={30} color='#000'/>
+    </TouchableOpacity>
+    </View>
+
+     <TextInput value={confirm_password} placeholder="comfirm password" textContentType="password" returnKeyType="go"
+    onChangeText={check_confirm_password} style={styles.input2} secureTextEntry={hidden}/>
+
+    <TouchableOpacity style={styles.submit2}>
+    <Text style={{fontSize: 16, fontWeight: 'bold'}}>Finish</Text>
+    </TouchableOpacity>
+    </View>
+    </View>
+
+    </View>)}
+    </Modal>)}
+
 
     {spin && (
       <View style={styles.spinContainer}>
@@ -407,33 +294,54 @@ export default function SignUp() {
     )}
 
     </View>
-    </KeyboardAvoidingView>
-    
  )
 }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const styles = StyleSheet.create({
- singUpHome: {backgroundColor: 'royalblue', position: 'relative', height: '100%', width: '100%', padding: Platform.select({
- android: 5, default: 10, ios: 0.1})},
+ singUpHome: {backgroundColor: 'royalblue', position: 'relative', height: '100%', width: '100%'},
  header: {backgroundColor: 'royalblue', height: 100, width: '100%', textAlign: 'center', alignItems: 'center',
  justifyContent: 'center', padding: 20, textAlign: 'center', justifyContent: 'center'},
 
- singUpContainer: {backgroundColor: '#fff', left: 0, zIndex: 20, height: '100%', padding: 20,
- width: '100%', borderTopLeftRadius: 20, borderTopRightRadius: 20
- },
+ singUpContainer: {backgroundColor: '#fff', height: '80%', position: 'absolute', left: 0,
+ right: 0, bottom: 0, padding: 20, width: '100%', borderTopLeftRadius: 20, borderTopRightRadius: 20 },
 
- singUp: {backgroundColor: '#e6f0fa', height: 'auto', width: '100%', padding: 10, borderRadius: 20, gap: 15,
- position: 'relative', shadowColor: '#000', shadowOffset: {width: 0, height: 2}, shadowOpacity: 2,
- shadowRadius: 5, elevation: 5, textAlign: 'center', justifyContent: 'center'},
+ form1: {backgroundColor: '#e6f0fa', height: 'auto', width: '100%', padding: 10, borderRadius: 20, gap: 15,
+ position: 'relative', textAlign: 'center', justifyContent: 'center'},
 
- input1: {backgroundColor: '#fff', padding: 5, height: 40, borderRadius: 10, fontSize: 15, fontWeight: 'bold',
- width: '100%'},
+ input1: {backgroundColor: 'transparent', padding: 5, height: 45, borderRadius: 10, fontSize: 15, fontWeight: 'bold',
+ width: '100%', borderColor: '#000', borderWidth: 2},
 
- joinEye: {height: 'auto', width: '100%', flexDirection: 'row', textAlign: 'center', alignItems: 'center',
-  justifyContent: 'space-between'
- },
  
  submit: {backgroundColor: '#00cc99', height: 60, width: '100%', borderTopLeftRadius: 20, fontSize: 15,
  fontWeight: 'bold',
@@ -442,8 +350,38 @@ const styles = StyleSheet.create({
  hidePassword: {right: 50, height: 40, width: 50, textAlign: 'center', alignItems: 'center', justifyContent: 'center', 
  backgroundColor: '#fff', zIndex: 5, borderRadius: 10},
 
- field1: {backgroundColor: 'red', height: 90, width: '90%', borderRadius: 20, textAlign: 'center',
- alignItems: 'center', justifyContent: 'center', position: 'absolute',  left: 20, right: 20, top: 15, zIndex: 22},
+
+
+
+
+
+
+
+
+
+
+
+
+
+ singUpContainer2: {backgroundColor: '#FFF', flex: 1},
+ thead: {backgroundColor: '#e6f0fa', height: 100, width: '100%', textAlign: 'center', alignItems: 'center',
+ justifyContent: 'center'},
+ singUpHome2: {flex: 1, padding: 20},
+ form2: {backgroundColor: '#e6f0fa', height: 'auto', width: '100%', padding: 10, flexDirection: 'column',
+ gap: 10, borderRadius: 10},
+
+ input2: {height: 45, width: '100%', padding: 10, borderColor: '#000', borderWidth: 2, borderRadius: 10,
+ fontSize: 15, fontWeight: 'bold'},
+
+ input_eye: {height: 45, width: '100%', flexDirection: 'row', textAlign: 'center', alignItems: 'center',
+ justifyContent: 'space-between', position: 'relative'},
+ eye: {height: 40, width: 50, textAlign: 'center', alignItems: 'center', justifyContent: 'center',
+ backgroundColor: '#e6f0fa', position: 'relative', right: 53},
+
+ submit2: {backgroundColor: '#00cc99', height: 50, width: '100%', textAlign: 'center', alignItems: 'center',
+ justifyContent: 'center', borderTopLeftRadius: 20, borderBottomRightRadius: 20},
+
+
 
  spinContainer: {backgroundColor: '#fff', height: '100%', width: '100%', textAlign: 'center', flex: 1,
  alignItems: 'center', justifyContent: 'center', position: 'absolute', left: 0, right: 0, top: 0, zIndex: 20

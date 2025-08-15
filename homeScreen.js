@@ -7,7 +7,8 @@ import { View, ScrollView, Animated, Button, Image, Alert,
  StyleSheet, TextInput, Modal, FlatList } from 'react-native';
  import { verifyIUC, TopUp, verifyMeter, getCable } from './verifyData';
  import { Keyboard, TouchableWithoutFeedback } from 'react-native';
- import Swiper from 'react-native-swiper';
+ import Icon from '@expo/vector-icons/FontAwesome';
+import Swiper from 'react-native-swiper';
 import axios from 'axios';
 import { Text } from 'react-native';
 import { Plans } from './dataPlans';
@@ -17,6 +18,7 @@ import { UserContext } from './context';
 import { cablePlan } from './plantv';
 import { exSynbol } from './exameSynbol';
 import { exam_plan } from './exam';
+import { userStore } from './true';
 
 
  
@@ -25,6 +27,11 @@ const { height, width } = Dimensions.get('window');
 export default function HomeScreen() {
 const [image1, setImage1] = useState(null)
 const { user, deposit, withdraw } = useContext(UserContext);
+const show_notification_page = userStore(state => state.show_notification_page);
+const show_push_page = userStore(state => state.show_push_page);
+const ToggleTab = userStore(state => state.ToggleTab);
+const deposit_container = userStore(state => state.deposit_container);
+const show_container_deposit = userStore(state => state.show_container_deposit);
 const [showBalance, setShowBalance] = useState(true);
 const [pin, setPin] = useState(0);
 
@@ -160,6 +167,7 @@ const AllPlans = network2 && type2 ? Plans[network2][type2] : [];
 
 
 const screnWidth  = Dimensions.get('window').width;
+const push = useRef(new Animated.Value(screnWidth)).current;
 const Home = useRef(new Animated.Value(-screnWidth)).current;
 const slide1 = useRef(new Animated.Value(screnWidth)).current;
 const anims = useRef( new Animated.Value(screnWidth)).current;
@@ -223,6 +231,33 @@ const [activePlans, setActivePlans] = useState(false)
 
 
 
+const openPush = () => {
+  setActiveHome(true);
+  show_notification_page();
+  Animated.timing(push, {
+    toValue: 0,
+    duration: 250,
+    useNativeDriver: true
+  }).start();
+}
+
+
+
+
+const closePush = () => {
+  Animated.timing(push, {
+    toValue: screnWidth,
+    duration: 250,
+    useNativeDriver: true
+  }).start(() => {
+     setActiveHome(true);
+    show_notification_page();
+  });
+};
+
+
+
+
 
 const closeHome = () => {
   Animated.timing(Home, {
@@ -255,7 +290,7 @@ useEffect(() => {
 
 
 const open1 = () => {
-  setActive1(true)
+  setActive1(true);
   Animated.timing(slide1, {
     toValue: 0,
     duration: 250,
@@ -270,7 +305,7 @@ const close1 = () => {
     duration: 250,
     useNativeDriver: true
   }).start(() => {
-    setActive1(false);
+    setActive1(false)
   })
 }
 
@@ -443,6 +478,7 @@ const closePlan2 = () => {
 
 const handlePlan3 = () => {
   verifyShow3();
+  Keyboard.dismiss();
   Animated.timing(side3, {
     toValue: 0,
     duration: 250,
@@ -553,6 +589,7 @@ const verify1 = (value) => {
     return false;
   } else {
     setError2('');
+    Keyboard.dismiss();
   }
 }
 
@@ -581,6 +618,7 @@ const verify2 = (value) => {
     return;
   } else {
     setError2('');
+    Keyboard.dismiss();
   }
 }
 
@@ -852,9 +890,7 @@ const verify2 = (value) => {
 
 
 
-
-
-
+ 
 
 
 
@@ -867,22 +903,15 @@ const verify2 = (value) => {
    <View style={styles.header1}>
 
    <Image source={user.image ? {uri: user.image } : require('./assets/default-profile.png')} style={styles.img1} /> 
-   <Text style={styles.name}>{user.userName || "user23"}</Text>
+   <Text style={styles.name}>Hi. @{user.userName || "user23"}</Text>
 
-   <TouchableOpacity style={styles.bell} onPress={''}>
+   <TouchableOpacity style={styles.bell} onPress={() => {closeHome(); openPush(); ToggleTab();}}>
    <Ionicons style={styles.notification} name='notifications' />
    </TouchableOpacity>
    </View>
         
         
         
-
-
-
-
-
-
-
 
 
 
@@ -899,9 +928,32 @@ const verify2 = (value) => {
    <Text style={styles.balance}>&#8358; {showBalance ? `${user.balance.toLocaleString('de-DE', {
     maximumFractionDigits: 2, minimumFractionDigits: 2
    })}` : '........'}</Text>
-   <TouchableOpacity style={styles.addMoney} onPress={null}>
+   <TouchableOpacity style={styles.addMoney} 
+   onPress={() => {show_container_deposit()}}>
    <Text style={styles.AddText}>Deposit</Text>
    </TouchableOpacity>
+   </View>
+
+
+
+
+
+   <View style={styles.send_container}>
+
+    <TouchableOpacity style={styles.btn_send}  onPress={() => {open1(); closeHome(); ToggleTab()}}>
+    <Ionicons style={styles.icon_send_btn} name='bank' size={15} color='#fff'/>
+    <Text style={{fontSize: 12, fontWeight: 'bold'}}>To F</Text>
+    </TouchableOpacity> 
+              
+    <TouchableOpacity style={styles.btn_send}  onPress={() => {open1(); closeHome(); ToggleTab()}}>
+    <Icon style={styles.icon_send_btn} name='bank'size={15} color='#fff' />
+    <Text style={{fontSize: 12, fontWeight: 'bold'}}>To Bank</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity style={styles.btn_send}  onPress={() => {open1(); closeHome(); ToggleTab()}}>
+    <Icon style={styles.icon_send_btn} name='card'size={15} color='#fff' />
+    <Text style={{fontSize: 12, fontWeight: 'bold'}}>ATM</Text>
+    </TouchableOpacity> 
    </View>
                   
                   
@@ -913,44 +965,35 @@ const verify2 = (value) => {
 
 
 
-
-
-
-
-
-
-
-
-
     <View style={styles.serviceContainer}>
-    <TouchableOpacity style={styles.btn}  onPress={() => {open1(); closeHome()}}>
+    <TouchableOpacity style={styles.btn}  onPress={() => {open1(); closeHome(); ToggleTab()}}>
     <Ionicons style={styles.icons1} name='call' />
     <Text style={styles.dataText}>Airtime</Text>
     </TouchableOpacity> 
                       
-    <TouchableOpacity style={styles.btn} onPress={() => {open2(); closeHome()}}>
+    <TouchableOpacity style={styles.btn} onPress={() => {open2(); closeHome(); ToggleTab()}}>
     <Ionicons style={styles.icons1} name='cellular' />
     <Text style={styles.dataText}>buy Data?</Text>
     </TouchableOpacity>
                         
                         
-   <TouchableOpacity style={styles.btn} onPress={() => {open3(); closeHome()}}>
+   <TouchableOpacity style={styles.btn} onPress={() => {open3(); closeHome(); ToggleTab()}}>
    <Ionicons style={styles.icons1} name='tv' />
    <Text style={styles.dataText}>Cable TV</Text>
    </TouchableOpacity>
                           
-   <TouchableOpacity style={styles.btn} onPress={() => {open4(); closeHome()}}>
+   <TouchableOpacity style={styles.btn} onPress={() => {open4(); closeHome(); ToggleTab()}}>
    <Ionicons style={styles.icons1} name='school' />
    <Text style={styles.dataText}>Exame</Text>
    </TouchableOpacity>
                             
                             
-   <TouchableOpacity style={styles.btn} onPress={() => {open5(); closeHome()}}>
+   <TouchableOpacity style={styles.btn} onPress={() => {open5(); closeHome(); ToggleTab()}}>
    <Ionicons style={styles.icons1} name='bulb' />
    <Text style={styles.dataText}>Electricity</Text>
    </TouchableOpacity>
                               
-   <TouchableOpacity style={styles.btn} onPress={() => {open6(); closeHome()}}>
+   <TouchableOpacity style={styles.btn} onPress={() => {open6(); closeHome(); ToggleTab()}}>
    <Ionicons style={styles.icons1} name='print' />
    <Text style={styles.dataText}>Sync</Text>
    </TouchableOpacity></View>
@@ -963,15 +1006,15 @@ const verify2 = (value) => {
 
   <Swiper autoplay={true} autoplayTimeout={4} showsPagination={true} loop={true}
   dotColor='#00cc99' style={styles.swiperHome}>
-      <TouchableOpacity style={styles.swiperBtn} onPress={() => {open1(); closeHome()}}>
+      <TouchableOpacity style={styles.swiperBtn} onPress={() => {open1(); closeHome(); ToggleTab()}}>
         <Text>Buy bulks data now you enjoy cash back</Text>
       </TouchableOpacity>
 
-       <TouchableOpacity style={styles.swiperBtn} onPress={() => {open2(); closeHome()}}>
+       <TouchableOpacity style={styles.swiperBtn} onPress={() => {open2(); closeHome(); ToggleTab()}}>
         <Text>Wellcome</Text>
       </TouchableOpacity>
 
-       <TouchableOpacity style={styles.swiperBtn} onPress={() => {open3(); closeHome()}}>
+       <TouchableOpacity style={styles.swiperBtn} onPress={() => {open3(); closeHome(); ToggleTab()}}>
         <Text>Wellcome</Text>
       </TouchableOpacity>
     
@@ -997,33 +1040,89 @@ const verify2 = (value) => {
 
 
 
+
+  {/*notifications*/} 
+
+
+
+
+
+
+
+  {show_push_page && (<Animated.View style={[styles.notification_page, [{transform: [{translateX: push}]}]]}>
+  <View style={styles.push_header}>
+  <TouchableOpacity style={styles.back} onPress={() => {openHome(); closePush(); ToggleTab();}}>
+  <Ionicons name='arrow-back-outline' size={30} color='#000' />
+  </TouchableOpacity>
+   </View>
+        <Text>Hello User</Text>
+  </Animated.View>)}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/*deposit/container*/}
+
+
+ {deposit_container && (
+ <Modal visible={deposit_container} animationType='slide'
+ presentationStyle='pageSheet' onRequestClose={() => show_container_deposit()}>
+ {deposit_container && (
+ <View style={styles.deposit_container}>
+  <View style={styles.deposit_container_header}>
+    <TouchableOpacity style={styles.back} onPress={() => {show_container_deposit()}}>
+      <Ionicons name='arrow-back-outline' size={30} color='#000'/>
+    </TouchableOpacity>
+  </View>
+
+      </View>
+    )}
+  </Modal>
+)}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {/*service1*/}
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{active1 && (
-  <Modal visible={active1} transparent={true}>
-  <Animated.View style={[styles.service1, [{transform: [{translateX: slide1 }]}]]}>
+  {active1 && (<Animated.View style={[styles.service1, [{transform: [{translateX: slide1 }]}]]}>
   <View style={styles.thead1}>
-  <TouchableOpacity style={styles.back} onPress={() => {close1(); openHome()}}>
+  <TouchableOpacity style={styles.back} onPress={() => {close1(); openHome(); ToggleTab()}}>
   <Ionicons  name='arrow-back-outline' size={30} color='#000' />
   </TouchableOpacity>
   <Text>Buy Airtime</Text>
@@ -1036,17 +1135,17 @@ const verify2 = (value) => {
   <View style={styles.synbol1Con}>
   {Network.map((n) => (
   <TouchableOpacity key={n.id} style={[styles.network1, network1 === n.id && styles.network1Selected]}
-  onPress={() => {setNework1(n.id); setLogo1(n.logo)}}>
+  onPress={() => {setNework1(n.id); setLogo1(n.logo); Keyboard.dismiss()}}>
   <Image source={n.logo} style={styles.network1Synbol} />
   </TouchableOpacity>
   ))}
   </View>
 
   <TextInput value={phone1} placeholder='Enter your phone number' onChangeText={verify1}
-  keyboardType='numeric' style={styles.input1} maxLength={11} />
+  keyboardType='numeric' style={styles.input1} maxLength={11} returnKeyType='done'/>
 
   <TextInput value={amount1} placeholder='100-5000' keyboardType='numeric' onChangeText={verify1m}
-  style={styles.amount1} />
+  style={styles.amount1} returnKeyType='done'/>
 
   <TouchableOpacity style={styles.submut1} onPress={() => {buyAirtime(), Keyboard.dismiss()}}>
   <Text style={styles.lableSumbut1}>Next</Text>
@@ -1061,9 +1160,9 @@ const verify2 = (value) => {
   <View style={styles.verify1}>
   <View style={styles.group1}>
   <Image source={logo1} style={{height: 40, width: 40, textAlign: 'center', alignItems: 'center',
-  justifyContent: 'center', borderRadius: 50, left: '43%', marginBottom: 10}}/>
+  justifyContent: 'center', borderRadius: 50, left: '43%', marginBottom: 10, borderWidth: 2}}/>
   <Text style={{ textAlign: 'center', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold'}}>
-  Aye you serius you want buy Airtime</Text>
+  Aye you su you want buy Airtime</Text>
   <View style={styles.otherText2}>
   <Text style={styles.lableOther2}>Phone number</Text>
   <Text style={styles.lableOther2}>network</Text>
@@ -1109,9 +1208,7 @@ const verify2 = (value) => {
   <ActivityIndicator size="large" color='#00cc99' />
   </View>
 )}
-    </Animated.View>
-  </Modal>
-)}
+    </Animated.View>)}
 
 
 
@@ -1153,12 +1250,11 @@ const verify2 = (value) => {
    
    
 
-   {active2 && (<Modal visible={active2} transparent={true}>
-   <Animated.View style={[styles.service2, [{transform: [{translateX: anims}]}]]}>
+   {active2 && (<Animated.View style={[styles.service2, [{transform: [{translateX: anims}]}]]}>
    <View styles={styles.lable2}>
 
    <View style={styles.thead2}>
-   <TouchableOpacity style={styles.back} onPress={() => {close2(); openHome()}}>
+   <TouchableOpacity style={styles.back} onPress={() => {close2(); openHome(); ToggleTab()}}>
    <Ionicons name='arrow-back-outline' size={30} color='#333' />
    </TouchableOpacity>
    <Text style={styles.lable2}>Buy Data</Text>
@@ -1171,21 +1267,22 @@ const verify2 = (value) => {
    <View style={styles.homeSynbol}>
    {Network.map((net) => ( 
    <TouchableOpacity key={net.id} onPress={() => {
-   setNetwork2(net.id); setLogo2(net.logo); setType2(null); closePlan2(); setPlan2('')}}
+   setNetwork2(net.id); setLogo2(net.logo); setType2(null); closePlan2(); setPlan2(''); Keyboard.dismiss()}}
    style={[styles.network, network2 === net.id && styles.selected]}>
    <Image source={net.logo} style={styles.images} />
    </TouchableOpacity>))}
    </View>
 
    <TextInput value={phone2} onChangeText={verify2} placeholder='Enter your phone number'
-   keyboardType='numeric' style={[styles.input2, phone2 ===  styles.error2]} maxLength={11} />
+   keyboardType='numeric' style={[styles.input2, phone2 ===  styles.error2]} maxLength={11} 
+   returnKeyType='done'/>
 
 
 
    {network2 && phone2 && ( 
    <View style={styles.homeType}>
    {Object.keys(Plans[network2]).map((type) => (
-   <TouchableOpacity key={type} onPress={() => {setType2(type); handlePlan2()}}
+   <TouchableOpacity key={type} onPress={() => {setType2(type); handlePlan2(); Keyboard.dismiss()}}
    style={[styles.planType, type2 === type && styles.type]}>
    <Text>{type}</Text>
    </TouchableOpacity> ))}
@@ -1243,11 +1340,7 @@ const verify2 = (value) => {
   <Text style={styles.otherPlan2}>{plan2.size}</Text>
   <Text style={styles.otherPlan2}>{plan2.price}</Text>
      </View>
-  </View>
-
-
-
-
+     </View>
 
   <View style={styles.agre2}>
   <TouchableOpacity style={styles.agre2Btn} onPress={() => {setView(false)}}>
@@ -1258,7 +1351,6 @@ const verify2 = (value) => {
   onPress={() => {sendData(); setView()}}>
   <Text style={styles.lableAgre2}>Yes</Text>
   </TouchableOpacity>
-  
   </View>
   </View> 
   </Modal>)}
@@ -1279,8 +1371,7 @@ const verify2 = (value) => {
   <Text style={{fontSize: 15, fontWeight: 'bold', color: '#fff'}}>wait In progress...</Text>
   </View>
 )}
-    </Animated.View>
- </Modal>)}
+    </Animated.View>)}
 
 
 
@@ -1347,16 +1438,13 @@ const verify2 = (value) => {
 
 
 
-
-  {active3 && ( 
-    <Modal visible={active3} transparent={true}>
-    <Animated.View style={[styles.service3, [{transform: [{translateX: slide3}]}]]}>
+    {active3 && (<Animated.View style={[styles.service3, [{transform: [{translateX: slide3}]}]]}>
     <View style={styles.thead3}>
 
     <Text style={{fontSize: 15, fontWeight: 'bold'}}>Cable TV Subscription Now</Text>
 
-    <TouchableOpacity style={styles.back}>
-    <Ionicons name='arrow-back-outline' size={30} color='333' onPress={() => {close3(); openHome()}}/>
+    <TouchableOpacity style={styles.back} onPress={() => {close3(); openHome(); ToggleTab()}}>
+    <Ionicons name='arrow-back-outline' size={30} color='333'/>
     </TouchableOpacity>
     </View>
 
@@ -1367,14 +1455,14 @@ const verify2 = (value) => {
     {Object.keys(exSynbol).map((ky) => (
     exSynbol[ky].map(exLogo => (
     <TouchableOpacity key={ky} style={[styles.smartBtn, typetv === ky && styles.selectNameTV]} onPress={() => {
-    setTypetv(ky); setOther3(null); setLogo3(exLogo.logo)}}>
+    setTypetv(ky); setOther3(null); setLogo3(exLogo.logo); Keyboard.dismiss()}}>
     <Image source={exLogo.logo} resizeMode='cover' style={styles.tvImage} />
     </TouchableOpacity>
     ))))}
     </View>
 
     <TextInput value={smart} placeholder='SmartCard / IUC Number Decoder...' keyboardType='numeric'
-    onChangeText={setSmart} style={styles.smart} maxLength={11} />
+    onChangeText={setSmart} style={styles.smart} maxLength={11} returnKeyType='done'/>
 
     <TouchableOpacity style={styles.selectTV} onPress={handlePlan3}>
     {lableOther3 && ( <Text style={{fontWeight: 'bold', padding: 10}}>Select Cable Name</Text>)}
@@ -1388,7 +1476,7 @@ const verify2 = (value) => {
      )}
     </TouchableOpacity>
 
-    <TouchableOpacity style={styles.buySmart} onPress={verifyCableTV}>
+    <TouchableOpacity style={styles.buySmart} onPress={() => {verifyCableTV(); Keyboard.dismiss();}}>
       <Text style={styles.lableSmart}>purchase</Text>
     </TouchableOpacity>
 
@@ -1412,6 +1500,7 @@ const verify2 = (value) => {
 
 
     {cableComfing && ( <Modal visible={cableComfing} transparent={true}>
+    <View style={styles.other_cable_container}>
     <View style={styles.cableAgre}>
 
     <Image source={logo3} style={styles.cableLogo3} resizeMode='cover' />
@@ -1448,6 +1537,7 @@ const verify2 = (value) => {
     </TouchableOpacity>
     </View>
     </View>
+    </View>
     </Modal>)}
 
 
@@ -1459,9 +1549,7 @@ const verify2 = (value) => {
   </View> 
 )}
 
-    </Animated.View>
-    </Modal>
-  )}
+    </Animated.View>)}
 
 
 
@@ -1502,16 +1590,13 @@ const verify2 = (value) => {
 
 
 
-
-  {active4 && ( 
-    <Modal visible={active4} transparent={true}>
-    <Animated.View style={[styles.service4, [{transform: [{translateX: slide4}]}]]}>
+    {active4 && (<Animated.View style={[styles.service4, [{transform: [{translateX: slide4}]}]]}>
     <View style={styles.thead4}>
 
     <Text style={{fontWeight: 'bold', fontSize: 18}}>Buy Exame</Text>
 
-    <TouchableOpacity style={styles.back}>
-    <Ionicons name='arrow-back-outline' size={30} color='333' onPress={() => {close4(); openHome()}}/>
+    <TouchableOpacity style={styles.back} onPress={() => {close4(); openHome(); ToggleTab()}}>
+    <Ionicons name='arrow-back-outline' size={30} color='333'/>
     </TouchableOpacity>
     </View>
 
@@ -1526,7 +1611,7 @@ const verify2 = (value) => {
     ))))}
     </View>
     <TextInput value={exam} onChangeText={setExam} keyboardType='numeric' placeholder='quantity'
-    style={styles.input4} />
+    style={styles.input4} returnKeyType='done'/>
 
     <TouchableOpacity style={styles.buyExame}>
     <Text style={{textAlign: 'center', alignItems: 'center', fontSize: 18,
@@ -1536,9 +1621,7 @@ const verify2 = (value) => {
 
     </View>
     </View>
-    </Animated.View>
-    </Modal>
-  )}
+    </Animated.View>)}
 
 
 
@@ -1567,19 +1650,13 @@ const verify2 = (value) => {
 
 
 
-
-
-
-
-{active5 && ( 
-    <Modal visible={active5} transparent={true}>
-    <Animated.View style={[styles.service5, [{transform: [{translateX: slide5}]}]]}>
+    {active5 && (<Animated.View style={[styles.service5, [{transform: [{translateX: slide5}]}]]}>
     <View style={styles.thead5}>
 
     <Text style={{fontSize: 15, fontWeight: 'bold'}}>Buy Bill Electricity</Text>
 
-    <TouchableOpacity style={styles.back}>
-    <Ionicons name='arrow-back-outline' size={30} color='333' onPress={() => {close5(); openHome()}}/>
+    <TouchableOpacity style={styles.back} onPress={() => {close5(); openHome(); ToggleTab()}}>
+    <Ionicons name='arrow-back-outline' size={30} color='333'/>
     </TouchableOpacity>
     </View>
 
@@ -1588,12 +1665,11 @@ const verify2 = (value) => {
     <TouchableOpacity style={styles.selectBiller}>
     <Text style={{fontSize: 15, fontWeight: 'bold'}}>select Disco</Text>
     </TouchableOpacity>
-    <TextInput value={null} keyboardType='numeric' placeholder='Meter Number' style={styles.input5} />
+    <TextInput value={null} keyboardType='numeric' placeholder='Meter Number' style={styles.input5} 
+    returnKeyType='done'/>
     </View>
     </View>
-    </Animated.View>
-    </Modal>
-)}
+    </Animated.View>)}
 
 
 
@@ -1621,27 +1697,22 @@ const verify2 = (value) => {
 
 
 
-
-
-{active6 && ( 
-    <Modal visible={active6} transparent={true}>
-    <Animated.View style={[styles.service6, [{transform: [{translateX: slide6}]}]]}>
+    {active6 && (<Animated.View style={[styles.service6, [{transform: [{translateX: slide6}]}]]}>
     <View style={styles.thead6}>
 
-    <TouchableOpacity style={styles.back}>
-    <Ionicons name='arrow-back-outline' size={30} color='333' onPress={() => {close6(); openHome()}}/>
+    <TouchableOpacity style={styles.back} onPress={() => {close6(); openHome(); ToggleTab()}}>
+    <Ionicons name='arrow-back-outline' size={30} color='333'/>
     </TouchableOpacity>
     </View>
 
     <View style={styles.comveteHome}>
     <View style={styles.form6}>
     <TextInput value={null} onChangeText={null} keyboardType='numeric' placeholder='soon' 
-    style={styles.input6} />
+    style={styles.input6} returnKeyType='done'/>
     </View>
     
     </View>
-    </Animated.View>
-    </Modal>)}
+    </Animated.View>)}
 
 
 
@@ -1709,6 +1780,22 @@ const styles = StyleSheet.create({
  
  AddText: {fontSize: 17, fontWeight: 'bold' },
 
+
+ send_container: {backgroundColor: '#e6f0fa', height: 'auto', width: '100%', textAlign: 'center',
+ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', padding: 10,
+ marginBottom: 10, borderTopLeftRadius: 20, borderBottomRightRadius: 20},
+
+ btn_send: {height: 'auto', width: 65, backgroundColor: '#fff', textAlign: 'center', alignItems: 'center',
+ flexDirection: 'column', borderTopLeftRadius: 10, borderBottomRightRadius: 10, gap: 5,
+ justifyContent: 'space-between', padding: 5},
+ 
+ icon_send_btn: {backgroundColor: '#00cc99', height: 30, width: 30, borderRadius: 10,
+ textAlign: 'center', alignItems: 'center', justifyContent: 'center', padding: 5},
+
+
+
+
+
  serviceContainer: { backgroundColor: '#E6F0FA', height: 'auto', width: '100%', borderTopLeftRadius: 20,
  borderBottomRightRadius: 25, flexDirection: 'row', textAlign: 'center', justifyContent: 'space-around',
  rowGap: 15, flexWrap: 'wrap', padding: 10, marginBottom: 10},
@@ -1751,6 +1838,29 @@ const styles = StyleSheet.create({
 
 
 
+notification_page: {backgroundColor: '#FFF', flex: 1, position: 'absolute', left: 0, right: 0, bottom: 0,
+height: '100%', width: '100%'},
+push_header: {backgroundColor: '#e6f0fa', height: 80, width: '100%', textAlign: 'center', alignItems: 'center',
+justifyContent: 'center'},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+deposit_container: { backgroundColor: '#fff', flex: 1, borderTopLeftRadius: 20},
+deposit_container_header: {backgroundColor: '#e6f0fa', height: 70, width: '100%', textAlign: 'center',
+ alignItems: 'center', justifyContent: 'center'},
 
 
 
@@ -1769,13 +1879,34 @@ const styles = StyleSheet.create({
 
 
 
- service1: {backgroundColor: '#dddddd', flex: 1,},
- thead1: {backgroundColor: '#fff', height: 85, width: '100%', textAlign: 'center', alignItems: 'center',
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ service1: {backgroundColor: '#fff', height: '100%', width: '100%', position: 'absolute',
+ left: 0, right: 0, bottom: 0, flex: 1},
+ thead1: {backgroundColor: '#e6f0fa', height: 85, width: '100%', textAlign: 'center', alignItems: 'center',
   justifyContent: 'center', padding: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20, top: 0
  },
 
  homeAirtime: {flexDirection: 'column', padding: 20, height: '100%'},
- form1: {backgroundColor: '#fff', height: 'auto', width: '100%', textAlign: 'left', justifyContent: 'center',
+ form1: {backgroundColor: '#e6f0fa', height: 'auto', width: '100%', textAlign: 'left', justifyContent: 'center',
   flexDirection: 'column', shadowColor: '#000', shadowOffset: { width: 0, height: 1}, shadowOpacity: 2,
   shadowRadius: 4, elevation: 5, borderTopLeftRadius: 20, borderBottomRightRadius: 20, padding: 10, gap: 20
  },
@@ -1788,10 +1919,10 @@ const styles = StyleSheet.create({
  network1: {height: 70, width: 70, borderRadius: 20},
  network1Synbol: {height: 70, width: 70, borderRadius: 20},
 
- input1: {backgroundColor: '#fff', borderWidth: 2, shadowRadius: 5, elevation: 5, height: 50, width: '100%',
+ input1: {backgroundColor: '#ddd', shadowRadius: 5, elevation: 5, height: 50, width: '100%',
    fontSize: 16, borderRadius: 10, padding: 10, fontWeight: 'bold', borderColor: 'gray'},
 
-amount1: {backgroundColor: '#fff', height: 50, width: '100%', elevation: 5, borderWidth: 2, padding: 10,
+amount1: {backgroundColor: '#ddd', height: 50, width: '100%', elevation: 5, padding: 10,
   borderRadius: 10, fontWeight: 'bold', borderColor: 'gray'},
 
 submut1: {backgroundColor: '#1dcc97ff', height: 55, width: '100%', borderTopLeftRadius: 20, textAlign: 'center',
@@ -1803,7 +1934,8 @@ submut1: {backgroundColor: '#1dcc97ff', height: 55, width: '100%', borderTopLeft
   justifyContent: 'center', padding: 20, height: '100%', width: '100%', position: 'absolute',
  left: 0, right: 0, top: 0, zIndex: 5},
 
-  group1: {backgroundColor: '#fff', height: 200, width: '100%', borderRadius: 20},
+  group1: {backgroundColor: '#e5f0fa', height: 200, width: '100%', padding: 10, borderTopLeftRadius: 10,
+  borderTopRightRadius: 10},
 
 
 
@@ -1848,8 +1980,9 @@ submut1: {backgroundColor: '#1dcc97ff', height: 55, width: '100%', borderTopLeft
 
 
 
- service2: {backgroundColor: '#ddd', flex: 1, position: 'relative', height: '100%'},
- thead2: {backgroundColor: '#fff', height: 80, width: '100%', textAlign: 'center', alignItems: 'center', maxHeight: 80, top: 0,
+ service2: {backgroundColor: '#fff', flex: 1, position: 'absolute', left: 0, right: 0,
+ bottom: 0, height: '100%', width: '100%'},
+ thead2: {backgroundColor: '#e6f0fa', height: 80, width: '100%', textAlign: 'center', alignItems: 'center', maxHeight: 80, top: 0,
   justifyContent: 'center', padding: 10, borderBottomLeftRadius: 20, borderBottomRightRadius: 20, position: 'relative'
  },
 
@@ -1863,7 +1996,7 @@ submut1: {backgroundColor: '#1dcc97ff', height: 55, width: '100%', borderTopLeft
 
   homeData: { padding: 20, gap: 10, position: 'relative', height: '100%'},
 
-  form2: {backgroundColor: '#fff', width: '100%', padding: 10, shadowColor: '#000',
+  form2: {backgroundColor: '#e6f0fa', width: '100%', padding: 10, shadowColor: '#000',
     shadowOffset: {width: 0, height: 1}, shadowOpacity: 0.5, shadowRadius: 5, elevation: 5, flexDirection: 'column',
     textAlign: 'left', justifyContent: 'center', gap: 15, borderRadius: 15
   },
@@ -1881,15 +2014,15 @@ submut1: {backgroundColor: '#1dcc97ff', height: 55, width: '100%', borderTopLeft
   images: {height: 70, width: 70, borderRadius: 20},
 
 
-  input2: {backgroundColor: '#fff', height: 50, width: '100%', padding: 10, fontSize: 15, fontWeight: 'bold',
-  borderWidth: 2, shadowColor: 'gray', shadowOffset: {width: 0, height: 1}, shadowOpacity: 0.2, shadowRadius: 5,
+  input2: {backgroundColor: '#ddd', height: 50, width: '100%', padding: 10, fontSize: 15, fontWeight: 'bold',
+  shadowColor: 'gray', shadowOffset: {width: 0, height: 1}, shadowOpacity: 0.2, shadowRadius: 5,
   elevation: 2, borderRadius: 10, borderColor: 'gray'},
   error2: {color: 'red', fontSize: 12, fontWeight: 'bold', padding: 5},
 
 
 
   homeType: {flexDirection: 'row', gap: 20, textAlign: 'left', alignItems: 'center'},
-  planType: {backgroundColor: '#ddd', height: 40, width: 70, padding: 5, shadowOffset: {width: 0, height: 1}, textAlign: 'center',
+  planType: {backgroundColor: '#e6f0fa', height: 40, width: 70, padding: 5, shadowOffset: {width: 0, height: 1}, textAlign: 'center',
   alignItems: 'center', fontWeight: 'bold', justifyContent: 'center', borderWidth: 1, borderRadius: 5},
 
  type: {backgroundColor: '#00cc99', color: 'white', fontWeight: 'bold'},
@@ -1904,13 +2037,13 @@ planContainer: {backgroundColor: '#fff', flexDirection: 'column', padding: 20, h
   shadowOpacity: 1, shadowRadius: 10, elevation: 10
 },
 
-plans: {backgroundColor: '#ddd', height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between',
- padding: 10, borderWidth: 1, shadowRadius: 4, elevation: 10, marginBottom: 10, alignItems: 'center', borderRadius: 10
+plans: {backgroundColor: '#e6f0fa', height: 60, width: '100%', flexDirection: 'row', justifyContent: 'space-between',
+ padding: 10, shadowRadius: 4, elevation: 10, marginBottom: 10, alignItems: 'center', borderRadius: 10
 },
 
 selectedData: {backgroundColor: '#ddd', height: 50, width: '100%', textAlign: 'center', alignContent: 'center',
    justifyContent: 'space-between', padding: 10, shadowColor: '#000', shadowOffset: {width: 0, height: 1},
-  shadowOpacity: 0.5, borderWidth: 1, elevation: 10, flexDirection: 'row', borderRadius: 10, fontWeight: 'bold'},
+  shadowOpacity: 0.2, elevation: 4, flexDirection: 'row', borderRadius: 5, fontWeight: 'bold'},
 
 
 
@@ -1922,15 +2055,16 @@ selectedData: {backgroundColor: '#ddd', height: 50, width: '100%', textAlign: 'c
 
 
 
-  fistNext: { backgroundColor: 'rgba(165, 152, 152, 0.60)', height: '100%', width: '100%', zIndex: 999,
+  fistNext: { backgroundColor: 'rgba(25, 25, 25, 0.80)', height: '100%', width: '100%', zIndex: 999,
  textAlign: 'center', justifyContent: 'center', flexDirection: 'column', alignItems: 'center',
  position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, padding: 20},
 
- group2: {backgroundColor: '#fff', height: 270, width: '100%', borderRadius: 20, padding: 10, textAlign: 'center',
- alignItems: 'center', position: 'relative', shadowColor: '#000', shadowOffset: {width: 0, height: 2}, 
- shadowOpacity: 2, shadowRadius: 6, elevation: 6},
+ group2: {backgroundColor: '#e6f0fa', height: 270, width: '100%', padding: 10, textAlign: 'center', alignItems: 'center',
+ position: 'relative', shadowColor: '#000', shadowOffset: {width: 0, height: 2}, shadowOpacity: 2, shadowRadius: 6, 
+ elevation: 6, borderTopLeftRadius: 10, borderTopRightRadius: 10},
 
- synbol2: {height: 40, width: 40, borderRadius: 50, marginBottom: 10},
+ synbol2: {height: 50, width: 50, borderRadius: 50, marginBottom: 10, borderWidth: 2, 
+ shadowColor: '#000', shadowOffset: {width: 0, height: 2}, shadowOpacity: 2, shadowRadius: 5, elevation: 5},
 
  otherText2: {height: 'auto', width: '50%', flexDirection: 'column', gap: 15, position: 'absolute', left: 15,
  bottom: 15, padding: 10},
@@ -1941,8 +2075,9 @@ selectedData: {backgroundColor: '#ddd', height: 50, width: '100%', textAlign: 'c
  otherPlan2: {textAlign: 'right', fontWeight: 'bold'},
 
 
- agre2: {height: 'auto', width: '100%', textAlign: 'center', alignItems: 'center',
- justifyContent: 'space-between', flexDirection: 'row', padding: 20},
+ agre2: {backgroundColor: '#e6f0fa', height: 'auto', width: '100%', textAlign: 'center',
+ alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', padding: 20,
+ borderBottomLeftRadius: 10, borderBottomRightRadius: 10},
 
  agre2Btn: {backgroundColor: '#00cc99', textAlign: 'center', alignItems: 'center', justifyContent: 'center',
  height: 50, width: 100, borderRadius: 10},
@@ -2034,14 +2169,15 @@ selectedData: {backgroundColor: '#ddd', height: 50, width: '100%', textAlign: 'c
 
 
 
-  service3: {backgroundColor: '#ddd', flex: 1, position: 'relative'},
-  thead3: {backgroundColor: '#fff', height: 80, width: '100%', textAlign: 'center', alignItems: 'center',
+  service3: {backgroundColor: '#fff', flex: 1, position: 'absolute', left: 0, right: 0, bottom: 0,
+  height: '100%', width: '100%'},
+  thead3: {backgroundColor: '#e6f0fa', height: 80, width: '100%', textAlign: 'center', alignItems: 'center',
   justifyContent: 'center', padding: 15
   },
 
   homeCable: {height: '100%', width: '100%', flexDirection: 'column', padding: 20, gap: 15},
 
-  form3: {backgroundColor: '#fff', height: 'auto', width: '100%', borderRadius: 20, flexDirection: 'column',
+  form3: {backgroundColor: '#e6f0fa', height: 'auto', width: '100%', borderRadius: 20, flexDirection: 'column',
   textAlign: 'center', alignItems: 'center', justifyContent: 'center', padding: 10, gap: 15, shadowColor: '#000',
   shadowOffset: {width: 0, height: 2}, shadowOpacity: 2, shadowRadius: 5, elevation: 5
   },
@@ -2049,7 +2185,7 @@ selectedData: {backgroundColor: '#ddd', height: 50, width: '100%', textAlign: 'c
   smartHome: {height: 80, width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'space-between',
   flexDirection: 'row', borderRadius: 10},
 
-  smartBtn: {height: 70, width: 85, textAlign: 'center', justifyContent: 'center', backgroundColor: '#ddd',
+  smartBtn: {height: 70, width: 85, textAlign: 'center', justifyContent: 'center', backgroundColor: '#fff',
   textAlign: 'center', alignItems: 'center', borderRadius: 10, fontWeight: 'bold', fontSize: 15},
 
   tvImage: {height: 68, width: 83, borderRadius: 10},
@@ -2076,15 +2212,16 @@ selectedData: {backgroundColor: '#ddd', height: 50, width: '100%', textAlign: 'c
  borderTopRightRadius: 20, shadowColor: '#000', shadowOffset: {width: 0, height: 2}, shadowOpacity: 3,
  shadowRadius: 10, elevation: 8},
 
-  typetv: {backgroundColor: '#ddd', height: 50, width: '100%', borderRadius: 10, textAlign: 'center',
+  typetv: {backgroundColor: '#e6f0fa', height: 60, width: '100%', borderRadius: 10, textAlign: 'center',
   alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', padding: 10, marginBottom: 20},
 
 
-  
-  cableAgre: {backgroundColor: '#fff', height: '60%', width: '100%', flexDirection: 'column', textAlign:'center',
-  borderTopLeftRadius: 20, borderTopRightRadius: 20, position: 'absolute', left: 0, bottom: 0, zIndex: 5,
-  padding: 20, shadowColor: '#000', shadowOffset: {width: 0, height: 2}, shadowOpacity: 3, shadowRadius: 6,
-  elevation: 5, alignItems: 'center', gap: 15},
+  other_cable_container: {backgroundColor: 'rgba(25,25,25,0.80)', flex: 1, textAlign: 'center', alignItems: 'center',
+  justifyContent: 'center', padding: 20},
+
+  cableAgre: {backgroundColor: '#e6f0fa', height: '60%', width: '100%', flexDirection: 'column', textAlign:'center',
+  borderRadius: 10, zIndex: 5, padding: 10, shadowColor: '#000', shadowOffset: {width: 0, height: 2}, 
+  shadowOpacity: 3, shadowRadius: 6, elevation: 5, alignItems: 'center', gap: 15},
 
   cableLogo3: {height: 70, width: 70, borderRadius: 50, shadowColor: '#000', shadowOffset: {width: 1, height: 5},
   shadowOpacity: 10, shadowRadius: 5, elevation: 5, borderWidth: 2},
@@ -2097,7 +2234,7 @@ selectedData: {backgroundColor: '#ddd', height: 50, width: '100%', textAlign: 'c
   agre3: {height: 'auto', width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'space-between',
   flexDirection: 'row', bottom: 10, position: 'absolute', left: 20, right: 20, padding: 10},
 
-  agre3Btn: {backgroundColor: '#00cc99', height: 60, width: 100, textAlign: 'center', justifyContent: 'center',
+  agre3Btn: {backgroundColor: '#00cc99', height: 50, width: 100, textAlign: 'center', justifyContent: 'center',
   borderRadius: 15},
 
 
@@ -2147,21 +2284,22 @@ selectedData: {backgroundColor: '#ddd', height: 50, width: '100%', textAlign: 'c
 
 
 
-   service4: {backgroundColor: '#ddd', flex: 1},
-  thead4: {backgroundColor: '#fff', height: 80, width: '100%', textAlign: 'center', alignItems: 'center',
+  service4: {backgroundColor: '#fff', flex: 1, position: 'absolute', left: 0, right: 0, bottom: 0,
+  height: '100%', width: '100%'},
+  thead4: {backgroundColor: '#e6f0fa', height: 80, width: '100%', textAlign: 'center', alignItems: 'center',
   justifyContent: 'center', padding: 15},
 
   examHome: {height: 'auto', width: '100%', flexDirection: 'column', textAlign: 'center', alignItems: 'center',
   padding: 20},
 
-  form4: {backgroundColor: '#fff', height: 'auto', width: '100%', shadowColor: '#000', shadowOpacity: 21,
+  form4: {backgroundColor: '#e6f0fa', height: 'auto', width: '100%', shadowColor: '#000', shadowOpacity: 21,
   shadowOffset: {width: 0, height: 2}, shadowRadius: 5, elevation: 5, borderRadius: 20, padding: 10,
   flexDirection: 'column', textAlign: 'center', alignItems: 'center', gap: 15},
 
   exameCon: {height: 'auto', width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'space-between',
   flexDirection: 'row'},
 
-  exameBtn: {backgroundColor: '#ddd', height: 72, width: 86, borderRadius: 10, textAlign: 'center',
+  exameBtn: {backgroundColor: '#fff', height: 72, width: 86, borderRadius: 10, textAlign: 'center',
   alignItems: 'center', justifyContent: 'center'},
 
   exameLogo: {height: 70, width: 85, borderRadius: 10},
@@ -2237,13 +2375,14 @@ selectedData: {backgroundColor: '#ddd', height: 50, width: '100%', textAlign: 'c
 
 
 
-  service5: {backgroundColor: '#ddd', flex: 1},
-  thead5: {backgroundColor: '#fff', height: 80, width: '100%',  padding: 15, textAlign: 'center',
+  service5: {backgroundColor: '#fff', flex: 1, position: 'absolute', left: 0, right: 0, bottom: 0,
+  height: '100%', width: '100%'},
+  thead5: {backgroundColor: '#e6f0fa', height: 80, width: '100%',  padding: 15, textAlign: 'center',
   alignItems: 'center', justifyContent: 'center'},
 
   electiryHome: {height: 'auto', width: '100%', flexDirection: 'column', padding: 20},
 
-  form5: {backgroundColor: '#fff', height: 'auto', width: '100%', shadowColor: '#000', shadowOpacity: 2,
+  form5: {backgroundColor: '#e6f0fa', height: 'auto', width: '100%', shadowColor: '#000', shadowOpacity: 2,
   shadowOffset: {width: 0, height: 2,}, shadowRadius: 5, elevation: 5, padding: 10, borderRadius: 20, gap: 20},
 
   selectBiller: {height: 60, width: '100%', borderWidth: 2, borderColor: 'gray', borderRadius: 10,
@@ -2276,13 +2415,14 @@ selectedData: {backgroundColor: '#ddd', height: 50, width: '100%', textAlign: 'c
 
 
 
-   service6: {backgroundColor: '#ddd', flex: 1},
-  thead6: {backgroundColor: '#fff', height: 80, width: '100%', textAlign: 'center', alignItems: 'center',
+  service6: {backgroundColor: '#fff', flex: 1, height: '100%', width: '100%', position: 'absolute',
+  left: 0, right: 0, bottom: 0},
+  thead6: {backgroundColor: '#e6f0fa', height: 80, width: '100%', textAlign: 'center', alignItems: 'center',
   justifyContent: 'center', padding: 15},
 
   comveteHome: {height: 'auto', width: '100%', flexDirection: 'column', padding: 20},
 
-  form6: {backgroundColor: '#fff', height: 100, width: '100%', shadowColor: '#000', shadowOpacity: 2,
+  form6: {backgroundColor: '#e6f0fa', height: 100, width: '100%', shadowColor: '#000', shadowOpacity: 2,
   shadowOffset: {width: 0, height: 2,}, shadowRadius: 5, elevation: 5, padding: 10, borderRadius: 20},
 
   input6: {height: 50, width: '100%', borderWidth: 2, borderColor: 'gray', padding: 10, borderRadius: 10}
