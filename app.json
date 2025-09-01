@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "First Last",
+    "name": "BSPAY",
     "slug": "fstApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/screen.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -13,7 +13,11 @@
       "backgroundColor": "#00cc99"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.fistlastn",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -30,6 +34,14 @@
       "eas": {
         "projectId": "82cea3fd-a8ea-4f43-b28b-eb61f9525823"
       }
+    },
+    "updates": {
+      "enabled": true,
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/82cea3fd-a8ea-4f43-b28b-eb61f9525823"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }

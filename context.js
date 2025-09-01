@@ -7,12 +7,34 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState({
         userName: 'habibu',
-        balance: 100000,
+        balance: 17006000,
     });
 
-    const [Istrue, setIstrue] = useState(false);
+    const [render, setRender] = useState('');
 
-    const ToggleRegister = () => setIstrue(prev => !prev)
+
+
+
+
+    const [Logign, setLogign] = useState(false);
+    const [SignUp, setSignUp] = useState(false);
+    const [syncForm, setSyncForm] = useState(false);
+    const [Lock, setLock] = useState(true);
+
+
+
+
+
+    const [render3, setRender3] = useState('');
+
+
+
+    
+
+
+     const ToggleRegister = () => setIstrue(prev => !prev);
+
+     
 
     const deposit = (amount) => {
         if (amount > 0) {
@@ -40,7 +62,9 @@ export const UserProvider = ({ children }) => {
 
 
     return (
-        <UserContext.Provider value={{ user, setUser, deposit, withdraw, uploadImage, ToggleRegister, Istrue }}>
+        <UserContext.Provider value={{ user, setUser, deposit, withdraw, uploadImage, ToggleRegister, render, 
+         setRender,  Logign, setLogign, SignUp, setSignUp, Lock, setLock, syncForm, setSyncForm,
+         render3, setRender3}}>
             {children}
         </UserContext.Provider>
     )

@@ -1,20 +1,36 @@
 import { create } from "zustand";
 
 export const userStore = create(set => ({
-    deposit_container: false,
-    profile_container: false,
-    password_container: false,
-    show_push_page: false,
-    show_website: false,
-    Istrue: false,
-    Logged: false,
-    tabBottom: true,
-    show_container_deposit: () => set(state => ({deposit_container: !state.deposit_container})),
-    show_notification_page: () => set(state => ({show_push_page: !state.show_push_page})),
-    show_password_container: () => set(state => ({password_container: !state.password_container})),
-    show_profile_container: () => set(state => ({profile_container: !state.profile_container})),
-    show_website_container: () => set(state => ({show_website: !state.show_website})),
-    ToggleTab: () => set(state => ({tabBottom: !state.tabBottom})),
-    Toggle: () => set(state => ({Istrue: !state.Istrue})),
+    homeScreen: false, renderOut: true, showRender: false,
+
+
+    Logged: false, Logign: false, SignUp: true, syncForm: false,
+
+
+    STRender: true, showSTRender: false,
+
+
+    loading: true, isLoading: false,
+    
+
+    setHomeScreen: () => set(state => ({homeScreen: !state.homeScreen})),
+    setRenderOut: () => set(state => ({renderOut: !state.renderOut})),
+    setShowRender: () => set(state => ({showRender: !state.showRender})),
+    setSyncForm: () => set(state => ({syncForm: !state.syncForm})),
+
+
+    setLogign: () => set(state => ({Logign: !state.Logign})),
+    setSignUp: () => set(state => ({SignUp: !state.SignUp})),
     LoggedIn: () => set(state => ({Logged: !state.Logged})),
+
+
+
+    setSTRender: () => set(state => ({STRender: !state.STRender})),
+    setShowSTRender: () => set(state => ({showSTRender: !state.showSTRender})),
+
+
+
+
+    setLoading: () => set(state => ({loading: !state.loading})),
+    setIsloading: () => set(state => ({isLoading: !state.isLoading}))
 }));
