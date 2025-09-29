@@ -1,19 +1,25 @@
-import { View, Text, TextInput, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, useColorScheme, Alert } from 'react-native';
 import { TouchableOpacity, Keyboard, Dimensions } from 'react-native';
-import { Animated, Platform } from 'react-native';
+import { Animated, Platform, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRef, useEffect, useState } from 'react';
+import NetInfo from '@react-native-community/netinfo';
+import { AppLoading } from './s_load_spin';
 import { Ionicons } from '@expo/vector-icons';
 import { useContext } from 'react';
 import { UserContext } from './context';
 import { userStore } from './true';
 import { Network } from './t_network';
+import moment from 'moment';
+import axios from 'axios';
 
 
 
 export const Service1 = () => {
    const setShowRender = userStore(state => state.setShowRender);
-   const { user } = useContext(UserContext);
+   const { user, setIsSpin, darkMode } = useContext(UserContext);
    const { setShow_render } = useContext(UserContext);
+   const [active, setActive] = useState('');
 
 
    const [network_id, setNetwork_id] = useState('');
@@ -24,17 +30,42 @@ export const Service1 = () => {
    const [error3, setError3] = useState('');
    const [visible, setVisible] = useState(false);
    const [vis, setVis] = useState(false);
+   
+   const [data, setData] = useState(null);
+   const [err, setErr] = useState(null);
+   const [spin, setSpin] = useState(false);
+
+   const date = Date.now();
+
+
+   
 
 
 
    const check_phone = (value) => {
-      setPhone_number(value);
-      if (!/^(?:\+234|0)[789][01]\d{8}$/.test(value)) {
+      const clean = value.replace(/\s/g, '')
+      setPhone_number(clean);
+      if (!/^(?:\+234|0)[789][01]\d{8}$/.test(clean)) {
          return setError2('please Enter a valid Phone Number')
       }
       setError2('');
       Keyboard.dismiss();
       return;
+   }
+
+   const check_amount = (value) => {
+      setAmount(value);
+      const max = 5000;
+      const min = 100;
+      if (value < min) {
+         return setError3('amount must be at less than 100 naira')
+      }
+      if (value > max) {
+         return setError3('maximum amount 5k');
+      }
+
+      setError3('');
+      return true;
    }
 
 
@@ -62,8 +93,11 @@ export const Service1 = () => {
       if (amount > 5500) {
          return setError3('Amount Hight Limit 5000k');
       }
+      if (!/^(?:\+234|0)[789][01]\d{8}$/.test(phone_number)) {
+         return setError2('please Enter a valid Phone Number')
+      }
       if (network_id && phone_number && amount) {
-         open();
+         setVis(true);
       }
       setError1('');
       setError2('');
@@ -75,19 +109,63 @@ export const Service1 = () => {
 
 
 
+
+
+   const buy_now = async () => {
+      const net = await NetInfo.fetch();
+      if (!net.isConnected || !net.isInternetReachable) {
+         setVis(true); setActive('2'); setErr('Unable to connect Please try again later');
+         return;
+      }
+
+      setSpin(true); setVis(false);
+
+      try {
+         const response = await axios.post('https://maskawasubapi.com/buy/data', {
+            "network_id": network_id.id,
+            "phone_number": phone_number,
+            "type": "vtu"
+         },
+      {
+         timeout: 8000,
+         headers: {
+            "Content-Type": "application/json"
+         }
+      });
+      if (response.data) {
+         setData(response.data); setActive('2'); setVis(true);
+      }
+      return;
+      } catch (err) {
+         if (err) {
+            setErr(err.message); setActive('2'); setVis(true);
+         }
+         return;
+      } finally {
+         setSpin(false);
+      }
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    useEffect(() => {
       if (network_id) {
          return setError1('');
-      } else if (phone_number) {
-         return setError2('');
-      } else if (amount) {
-         return setError3('');
       }
       return;
-   });
-
-
-
+   }, [network_id]);
 
 
 
@@ -96,14 +174,9 @@ export const Service1 = () => {
 
  const screnWidth = Dimensions.get('window').width;
  const slide = useRef(new Animated.Value(screnWidth)).current;
- 
- const open = () => {
-   setVis(true);
- }
- const close = () => {
-   setVis(false);
- }
+
    useEffect(() => {
+      const timer = setTimeout(() => {
       if (vis) {
          setVisible(true);
          Animated.timing(slide, {
@@ -120,25 +193,27 @@ export const Service1 = () => {
             setVisible(false);
          })
       }
+   }, 100);
+   return () => clearTimeout(timer);
    }, [vis]);
  
 
 
  return (
-    <View style={styles.Home}>
+    <View style={[styles.Home, {backgroundColor: darkMode ? '#ddd' : '#000'}]}>
     <View style={styles.header}>
     <TouchableOpacity style={styles.back} onPress={() =>
-    {setShowRender()}}>
-    <Ionicons name='arrow-back-outline' size={30} color='gray'/>
+    {setShowRender(false)}}>
+    <Ionicons name='chevron-back-outline' size={30} color={darkMode ? 'gray' : 'ivory'}/>
     </TouchableOpacity>
-    <Text style={{fontSize: 15, fontWeight: 'bold'}}>Buy Airtime</Text>
+    <Text style={{fontSize: 15, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>Buy Airtime</Text>
     </View>
 
-    <View style={styles.home_container}>
-    <View style={styles.form1}>
+    <View style={[styles.home_container]}>
+    <View style={[styles.form1, {backgroundColor: darkMode ? '#fff' : '#2a2a2a'}]}>
     <View style={styles.image_container}>
    {Network.map((item) => (
-    <TouchableOpacity key={item.id} style={[styles.synbol]}
+    <TouchableOpacity key={item.id} style={[styles.synbol, {backgroundColor: darkMode ? '#fff' : '#2a2a2a'}]}
     onPress={() => setNetwork_id(item)}>
     <Image source={item.logo} style={styles.image} resizeMode='cover'/>
 
@@ -152,36 +227,143 @@ export const Service1 = () => {
     {error1 && (<Text style={{fontSize: 10, fontWeight: 'bold', color: 'red'}}>{error1}</Text>)}
 
     <TextInput value={phone_number} placeholder='Mobile Phone' onChangeText={check_phone} returnKeyType='done'
-    keyboardType={Platform.OS === 'android' ? 'number-pad' : 'numeric'}
-    textContentType={Platform.OS === 'android' ? 'telephoneNumber' : 'telephoneNumber'} style={styles.input}/>
+    inputMode={Platform.OS === 'android' ? 'number-pad' : 'numeric'} placeholderTextColor='gray'
+    textContentType={Platform.OS === 'android' ? 'telephoneNumber' : 'telephoneNumber'}
+    style={[styles.input, {color: darkMode ? '#000' : 'ivory'}]}/>
     {error2 && (<Text style={{fontSize: 10, fontWeight: 'bold', color: 'red'}}>{error2}</Text>)}
 
-    <TextInput value={amount} placeholder='100-5000' onChangeText={setAmount} returnKeyType='done'
-    keyboardType={Platform.OS === 'android' ? 'number-pad' : 'numeric'}
-    textContentType='flightNumber' style={styles.input}/>
+
+
+
+    <TextInput value={amount} placeholder='100-5000' onChangeText={check_amount} returnKeyType='done'
+    inputMode={Platform.OS === 'android' ? 'number-pad' : 'numeric'} placeholderTextColor='gray'
+    textContentType='flightNumber' style={[styles.input, {color: darkMode ? '#000' : 'ivory'}]}/>
     {error3 && (<Text style={{fontSize: 10, fontWeight: 'bold', color: 'red'}}>{error3}</Text>)}
 
-    <TouchableOpacity style={styles.submit} onPress={() => {Keyboard.dismiss(); check_other();}}>
+    <TouchableOpacity style={styles.submit} onPress={() =>
+    {Keyboard.dismiss(); check_other(); setActive('1')}}>
     <Text style={{fontSize: 20, fontWeight: 'bold', color: '#fff'}}>Pay</Text>
     </TouchableOpacity>
     </View>
     </View>
 
 
+
+
+
+
+
+
+    {/*---------------------------ovar-lay---------------------------*/}
     {visible && (
     <View style={styles.overLay}>
-    <Animated.View style={[styles.other_container, {transform: [{translateY: slide}]}]}>
-    <View style={styles.thead1}>
-    <TouchableOpacity style={styles.close1} onPress={() => {close()}}>
-    <Text style={{fontSize: 16, fontWeight: 'bold', color: '#00cc99'}}>Close</Text>
-    </TouchableOpacity>
-    <Text style={{fontSize: 15, fontWeight: 'bold', color: '#00cc99'}}>Other</Text>
+     
+    <TouchableWithoutFeedback onPress={() => setVis(false)}>
+      <View style={{height: '50%', width: '100%'}}></View>
+    </TouchableWithoutFeedback>
+    
+
+
+    {/*-------------------------------active-1--------------------------*/}
+    {active === '1' && (
+    <Animated.View style={[styles.other_container, {transform: [{translateY: slide}],
+    backgroundColor: darkMode ? '#fff' : '#000', textAlign: 'center', alignItems: 'center', padding: 10}]}>
+
+    <Image source={network_id.logo} resizeMode="cover" style={styles.image1}/>
+    
+    
+
+
+    {/*------------------------------other----------------------------*/}
+    <View style={{textAlign: 'left', justifyContent: 'space-between', flexDirection: 'row', width: '100%', padding: 20,
+    marginBottom: 30}}>
+
+    <View style={{height: 'auto', width: 'auto', flexDirection: 'column', justifyContent: 'space-evenly',
+    textAlign: 'left', gap: 15}}>
+    <Text style={{fontSize: 12, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>Network</Text>
+    <Text style={{fontSize: 12, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>Phone Number</Text>
+    <Text style={{fontSize: 12, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>Amount</Text>
+    <Text style={{fontSize: 12, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>time</Text>
     </View>
 
+
+    <View style={{height: 'auto', width: 'auto', flexDirection: 'column', justifyContent: 'space-evenly',
+    gap: 15}}>
+    <Text style={{fontSize: 12, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>{network_id.id}</Text>
+    <Text style={{fontSize: 12, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>{phone_number}</Text>
+    <Text style={{fontSize: 12, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>&#8358;{amount} NGN</Text>
+    <Text style={{fontSize: 12, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>{moment(date).format('hh:mm A, MMM D')}</Text>
+    </View>
+    </View>
+
+
+    {/*------------------------------bottom----------------------------------*/}
+    <TouchableOpacity style={{height: 50, width: '90%', textAlign: 'center', alignItems: 'center', 
+    justifyContent: 'center', backgroundColor: '#00cc99', borderTopLeftRadius: 20,
+    borderBottomRightRadius: 20}} onPress={() => {buy_now()}}>
+    <Text style={{fontSize: 15, fontWeight: 'bold', color: '#fff'}}>Pay</Text>
+    </TouchableOpacity>
+
     </Animated.View>
+    )}
+
+
+
+
+
+
+    {/*--------------------------active-2-----------------------------*/}
+    {active === '2' && (
+    <Animated.View style={{height: '100%', width: '100%', backgroundColor: darkMode ? '#ddd' : '#000',
+    flexDirection: 'column', transform: [{translateX: slide}]}}>
+
+    {/*--------------------------------------thead-----------------------------------*/}
+    <View style={{height: 100, width: '100%', position: 'relative', textAlign: 'center', alignItems: 'center',
+    justifyContent: 'center'}}>
+      <TouchableOpacity style={{position: 'absolute', right: 20}} onPress={() => {setVis(false)}}>
+         <Text style={{fontSize: 20, fontWeight: 'bold', color: 'blue'}}>Done</Text>
+      </TouchableOpacity>
+    </View>
+
+
+
+
+    {/*----------------------------home-error------------------------------*/}
+    {err && (<View style={{height: '60%', width: '100%', textAlign: 'center', alignItems: 'center',
+    justifyContent: 'center', flexDirection: 'column', gap: 20}}>
+    <Ionicons name='warning-outline' size={50} color='red'/>
+
+    <View style={{height: 'auto', width: 100, backgroundColor: darkMode ? 'rgba(25,25,25,0.20)' : '#2a2a2a',
+    borderRadius: 10, flexDirection: 'column', textAlign: 'center', alignItems: 'center', flexWrap: 'wrap', padding: 10}}>
+    <Text style={{fontSize: 15, fontWeight: 'bold', color: 'red', textAlign: 'center', alignItems: 'center',
+    justifyContent: 'center', gap: 10}}>{err}</Text>
+    </View>
+
+    <TouchableOpacity style={{backgroundColor: darkMode ? 'rgba(29, 63, 53, 0.2)' : '#2a2a2a',
+    textAlign: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 10, height: 40,
+    width: 100}} onPress={() => {buy_now()}}>
+    <Text style={{fontSize: 15, fontWeight: 'bold', color: '#fff'}}>On Refresh</Text>
+    </TouchableOpacity>
+    </View>)}
+    
+    
+
+
+    {/*---------------------------home-success------------------------------*/}
+    {data && (<View></View>)}
+    </Animated.View>
+    )}
     </View>
     )}
 
+
+
+
+
+
+    {spin && (<View style={styles.spin}><AppLoading/></View>)}
+
+    <SafeAreaView edges={['bottom']} style={{backgroundColor: '#ddd'}}/>
     </View>
  )
 }
@@ -189,14 +371,18 @@ export const Service1 = () => {
 
 
 const styles = StyleSheet.create({
- Home: {backgroundColor: '#fff', position: 'relative', height: '100%', width: '100%'},
- header: {backgroundColor: '#e6f0fa', height: 70, width: '100%', textAlign: 'center', alignItems: 'center',
+ Home: {backgroundColor: '#ddd', position: 'relative', height: '100%', width: '100%', zIndex: 4},
+ header: {height: 70, width: '100%', textAlign: 'center', alignItems: 'center',
  justifyContent: 'flex-end', position: 'relative', borderRadius: 10, padding: 15},
 
  back: {height: 30, width: 30, position: 'absolute', left: 20, bottom: 8},
 
+
+
+
+
  home_container: {flexDirection: 'column', padding: 20, gap: 5, textAlign: 'center', alignItems: 'center'},
- form1: {backgroundColor: '#e6f0fa', height: 'auto', width: '100%', textAlign: 'left',
+ form1: {backgroundColor: '#fff', height: 'auto', width: '100%', textAlign: 'left',
  padding: 10, borderRadius: 10, justifyContent: 'center', gap: 10},
 
  image_container: {height: 'auto', width: '100%', flexDirection: 'row', textAlign: 'center', alignItems: 'center',
@@ -211,20 +397,34 @@ const styles = StyleSheet.create({
  justifyContent: 'center', padding: 10},
 
 
- input: {height: 50, width: '100%', padding: 10, fontSize: 15, fontWeight: 'bold',
+ input: {height: 50, width: '100%', padding: 10, fontSize: 12, fontWeight: 'bold',
  borderColor: 'gray', borderWidth: 2, borderRadius: 10},
 
  submit: {backgroundColor: '#00cc99', height: 60, width: '100%', textAlign: 'center', alignItems: 'center',
- justifyContent: 'center', padding: 10, borderRadius: 10},
+ justifyContent: 'center', padding: 10, borderTopLeftRadius: 20, borderBottomRightRadius: 20},
+
+
+
+
+
+
+
+
  
 
  overLay: {backgroundColor: 'rgba(25,25,25,0.80)', position: 'absolute', left: 0, right: 0, bottom: 0,
- top: 0, justifyContent: 'flex-end', height: '100%', width: '100%'},
+ top: 0, justifyContent: 'flex-end', height: '100%', width: '100%', zIndex: 5, flexDirection: 'column'},
 
- other_container: {backgroundColor: '#fff', height: '60%', flexDirection: 'column', borderTopLeftRadius: 20,
- borderTopRightRadius: 20, padding: 10},
+ other_container: {backgroundColor: '#fff', height: 'auto', flexDirection: 'column', borderTopLeftRadius: 20,
+ borderTopRightRadius: 20, position: 'relative', zIndex: 5},
 
- thead1: {height: 40, width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'center',
- padding: 5, position: 'relative', borderBottomColor: '#00cc99', borderBottomWidth: 1, borderRadius: 20},
- close1: {position: 'absolute', left: 20}
+
+ image1: {height: 40, width: 40, borderRadius: 50, marginBottom: 10},
+
+
+
+
+
+
+ spin: {position: 'absolute', left: 0, right: 0, bottom: 0, top: 0, flex: 1, zIndex: 100}
 })

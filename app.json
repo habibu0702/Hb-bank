@@ -1,15 +1,16 @@
 {
   "expo": {
-    "name": "BSPAY",
+    "name": "MoPay",
     "slug": "fstApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/screen.png",
+    "icon": "./assets/logo/splash-ios.png",
+    "resizeMode": "contain",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "cover",
+      "image": "./assets/logo/splash-ios.png",
+      "resizeMode": "contain",
       "backgroundColor": "#00cc99"
     },
     "ios": {
@@ -22,7 +23,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#00cc99"
       },
       "edgeToEdgeEnabled": true,
       "package": "com.fistlast"
@@ -42,6 +43,9 @@
     },
     "runtimeVersion": {
       "policy": "appVersion"
-    }
+    },
+    "plugins": [
+      "expo-secure-store"
+    ]
   }
 }

@@ -1,6 +1,8 @@
-import { View, Text, TextInput, StyleSheet, ScrollView, Alert } from "react-native";
-import { TouchableOpacity, Platform, Animated, Dimensions } from "react-native";
+import { View, Text, TextInput, StyleSheet, ScrollView, Alert, Keyboard } from "react-native";
+import { TouchableOpacity, Platform, Animated, Dimensions, ActivityIndicator } from "react-native";
+import { Vibration } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { KeyboardAvoidingView } from "react-native";
 import Icon from '@expo/vector-icons/FontAwesome';
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useEffect, useState } from "react";
@@ -8,6 +10,10 @@ import { useContext } from "react";
 import { UserContext } from "./context";
 import { userStore } from "./true";
 import { SignUpForm } from "./f_singup";
+import * as Haptics from 'expo-haptics';
+import * as Speech from 'expo-speech';
+import axios from "axios";
+import i18n from './a_l-swap-lan';
 
 
 
@@ -19,25 +25,48 @@ export const LoginForms = () => {
   const [error1, setError1] = useState('');
   const [error2, setError2] = useState('');
   const LoggedIn = userStore(state => state.LoggedIn);
+  const [visible, setVisible] = useState(false);
+  const [loadin, setLoading] = useState(false);
 
 
 
-  
- const name = 'habibu';
- const pass = 'habibu070@A';
 
-  const logIn = () => {
-    if (user_name !== name) {
-      return setError1('wrown username');
-    }
-    if (password !== pass) {
-      return setError2('wrown password');
-    }
-    if (user_name && password) {
-    LoggedIn(); setError1(''); setError2('');
-    return;
+
+  const haptic = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (Platform.OS === 'android') {
+      Vibration.vibrate(10);
     }
   }
+
+
+
+  const speak = () => {
+      const text = "congratilation Log in successfully";
+      Speech.speak(text, {
+        language: 'ha-EN',
+        pitch: 1.0,
+        rate: 0.9
+      });
+    }
+
+
+
+
+
+
+  useEffect(() => {
+    if (visible) {
+      setTimeout(() => {
+        LoggedIn();
+      }, 3000)
+    }
+  }, [visible]);
+
+
+
+
+
 
 
   useEffect(() => {
@@ -60,12 +89,9 @@ export const LoginForms = () => {
 
 
 
- const Logign = userStore(state => state.Logign);
- const SignUp = userStore(state => state.SignUp);
- const setLogign = userStore(state => state.setLogign);
- const setSignUp = userStore(state => state.setSignUp);
- const syncForm = userStore(state => state.syncForm);
- const setSyncForm = userStore(state => state.setSyncForm);
+ const { Logign, SignUp, user } = useContext(UserContext);
+ const { setLogign, setSignUp } = useContext(UserContext);
+ const { syncForm, setSyncForm } = useContext(UserContext);
  const [eye, setEye] = useState(true);
 
 
@@ -73,8 +99,8 @@ export const LoginForms = () => {
   useEffect(() => {
     Animated.spring(slide_lock, {
       toValue: 1,
-      friction: 1,
-      tension: 200,
+      friction: 2,
+      tension: 100,
       useNativeDriver: false
     }).start();
   })
@@ -91,8 +117,8 @@ export const LoginForms = () => {
 
   useEffect(() => {
     const timer1 = setTimeout(() => {
-    if(!syncForm) {
-      setLogign();
+    if(syncForm) {
+      setLogign(true);
       Animated.timing(slide1, {
         toValue: 1,
         duration: 300,
@@ -104,7 +130,7 @@ export const LoginForms = () => {
         duration: 300,
         useNativeDriver: true
       }).start(() => {
-        setLogign();
+        setLogign(false);
       })
     }
   }, 100);
@@ -119,8 +145,8 @@ export const LoginForms = () => {
 
   useEffect(() => {
     const timer2 = setTimeout(() => {
-    if(syncForm) {
-      setSignUp();
+    if(!syncForm) {
+      setSignUp(true);
       Animated.timing(slide2, {
         toValue: 0,
         duration: 300,
@@ -132,7 +158,7 @@ export const LoginForms = () => {
         duration: 300,
         useNativeDriver: false
       }).start(() => {
-        setSignUp();
+        setSignUp(false);
       })
     }
   }, 100);
@@ -142,9 +168,59 @@ export const LoginForms = () => {
 
 
 
+
+
+
+
+const name = 'habibu';
+const pass = "habibu070@A";
+  const LogIn = async () => {
+    if (!user_name || user_name.trim() === '') {
+      return setError1('username Is required');
+    }
+
+    if (!password || password.trim() === '') {
+      return setError2('password Is required');
+    }
+    if (user_name !== name) {
+      return setError1('Invalid username');
+    }
+    if (password !== pass) {
+      return setError2('Invalid password');
+    }
+    setLoading(true);
+    Keyboard.dismiss();
+    haptic();
+
+    try {
+      const response = await axios.post('https://172.20.3:5000/008812/login', {
+        "user_name": user_name,
+        "password": password
+      },
+    {
+      timeout: 2000,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('successufly', response.data);
+    return true
+    } catch (err) {
+      console.log('somethign wont wronw please try again letter');
+      return false;
+    } finally {
+      setLoading(false);
+      LoggedIn(true);
+      speak();
+    }
+  }
+
+
+
+
   return (
     <SafeAreaView edges={[]} style={{flex: 1, position: 'relative'}}>
-      <LinearGradient colors={['#000', '#00cc99']} start={{x: 0, y: 0}} end={{x: 0, y: 1}}
+      <LinearGradient colors={['royalblue', '#00cc99']} start={{x: 0, y: 0}} end={{x: 0, y: 1}}
       style={{height: '100%', width: '100%'}}>
 
       {SignUp && (
@@ -159,19 +235,17 @@ export const LoginForms = () => {
       <View style={styles.header}>
 
         <Animated.View style={[styles.lock_container, {transform: [{scale: slide_lock}]}]}>
-          <Icon name="lock" size={40} color='#fff'/>
+          {visible ? <Icon name="unlock" size={40} color='#fff'/> : <Icon name="lock" size={40} color='#fff'/>}
         </Animated.View>
           <Text style={{fontSize: 15, fontWeight: 'bold', color: '#fff'}}>
-            Unlock Your Account
+            {i18n.t('welcome_back')}
           </Text>
-          <Text style={{fontSize: 14, fontWeight: 'bold', color: '#fff'}}>Regain Full Access</Text>
+          <Text style={{fontSize: 14, fontWeight: 'bold', color: '#fff'}}></Text>
       </View>
 
-
-      <LinearGradient colors={['ivory', '#000']} style={styles.Home}
-      start={{x: 1, y: 0.2}} end={{x: 1, y: 1}}>
+      <LinearGradient colors={['ivory', '#e1bee7']} style={styles.Home}
+      start={{x: 1, y: 0}} end={{x: 0, y: 1}}>
         <View style={styles.form1}>
-
 
         <View style={styles.role}>
         <Icon name="user" size={24} color='#000'/>
@@ -184,6 +258,9 @@ export const LoginForms = () => {
           <Icon name="lock" size={24} color='#000'/>
          <TextInput value={password} placeholder="Password" keyboardType='visible-password' returnKeyType="done"
          textContentType='password' onChangeText={setPassword} secureTextEntry={eye}  style={styles.input}/>
+         <TouchableOpacity style={styles.eye} onPress={() => setEye(!eye)}>
+          <Icon name={eye ? 'eye-slash' : 'eye'} size={20} color='#000'/>
+         </TouchableOpacity>
          </View>
          {error2 && (<Text style={{fontSize: 10, fontWeight: 'bold', color: 'red'}}>{error2}</Text>)}
 
@@ -193,16 +270,22 @@ export const LoginForms = () => {
           </TouchableOpacity>
 
       
-         <TouchableOpacity style={styles.submit_btn} onPress={logIn}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', color: '#fff'}}>Log In</Text>
+         <TouchableOpacity style={styles.submit_btn} onPress={() => {LogIn()}}>
+         {loadin ?
+         <>
+         <Text style={{fontSize: 15, fontWeight: 'bold', color: '#fff'}}>please wait...</Text>
+         <ActivityIndicator size={20} color='#000'/>
+         </>
+         :
+         <Text style={{fontSize: 20, fontWeight: 'bold', color: '#fff'}}>{i18n.t('login')}</Text>}
          </TouchableOpacity>
          </View>
 
         
 
         <View style={styles.role_go}>
-        <Text style={{fontSize: 15}}>No Account Yet?</Text>
-        <TouchableOpacity onPress={() => {setSyncForm()}}>
+        <Text style={{fontSize: 15, fontWeight: 'bold'}}>No Account Yet?</Text>
+        <TouchableOpacity onPress={() => {setSyncForm(false); haptic()}}>
             <Text style={{fontSize: 15, fontWeight: 'bold', color: '#00cc99'}}>Register Now</Text>
           </TouchableOpacity>
           </View>
@@ -224,7 +307,7 @@ const styles = StyleSheet.create({
   shadowOffset: {width: 0, height: 2}, shadowRadius: 10, elevation: 8, borderRadius: 50},
 
 
-  Home: {height: '70%', width: '100%', position: 'absolute', left: 0, right: 0,
+  Home: {height: '70%', width: '100%', position: 'absolute', left: 0, right: 0, zIndex: 5,
   bottom: 0, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20},
 
 
@@ -232,20 +315,24 @@ const styles = StyleSheet.create({
   flexDirection: 'column', gap: 10, borderRadius: 10, marginBottom: 20},
 
   role: {height: 50, width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'space-between',
-  flexDirection:'row', gap: 5, borderWidth: 2, borderColor: '#fff', borderRadius: 10, padding: 10},
+  flexDirection:'row', gap: 5, borderWidth: 2, borderColor: '#fff', borderRadius: 10, padding: 10, position: 'relative'},
+
+  input: {height: 50, width: '100%', padding: 10, fontSize: 15, fontWeight: 'bold'},
+
+  eye: {position: 'absolute', right: 8, height: 50, width: 40, zIndex: 2, textAlign: 'center', alignItems: 'center',
+  justifyContent: 'center'},
 
   role_go: {height: 'auto', width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'center',
   flexDirection: 'row', padding: 5, gap: 10},
   
-  input: {height: 50, width: '100%', padding: 10, fontSize: 15, fontWeight: 'bold'},
 
-  submit_btn: {backgroundColor: '#00cc99', height: 60, width: '100%', textAlign: 'center', alignItems: 'center',
-  justifyContent: 'center', padding: 10, borderTopLeftRadius: 20, borderBottomRightRadius: 20},
-
+  submit_btn: {backgroundColor: '#00cc99', height: 55, width: '100%', textAlign: 'center', alignItems: 'center', gap: 10,
+  flexDirection: 'row', justifyContent: 'center', padding: 10, borderTopLeftRadius: 20, borderBottomRightRadius: 20},
 
 
 
 
-  App2: {height: '100%', width: '100%', position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 199,
+
+  App2: {height: '100%', width: '100%', position: 'absolute', left: 0, right: 0, bottom: 0, top: 0, zIndex: 2,
   borderRadius: 20}
 })

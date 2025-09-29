@@ -1,28 +1,41 @@
 import { View, Text, StyleSheet, Animated } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import Icon from '@expo/vector-icons/FontAwesome';
-import { LoginForm } from './f_login';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useContext } from 'react';
+import { UserContext } from './context';
+import { LoginForms } from './f_login';
 
 
 
 
 
 export const Forms = () => {
+    const { visible1, setVisible1 } = useContext(UserContext);
 
 
 
  return (
-    <View style={styles.Home}>
-        <LoginForm/>
-    </View>
+    <LinearGradient style={styles.App} colors={['#000', 'royalblue']}>
+        {visible1 ?
+        <View style={{height: '100%', width: '100%'}}>
+            <LoginForms/>
+        </View>
+        :
+        <View style={styles.container1}>
+
+        </View>}
+    </LinearGradient>
  )
 }
 
 const styles = StyleSheet.create({
-    Home: {backgroundColor: '#000', flex: 1},
-    header1: {height: '20%', width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'center',
-    padding: 10},
+    App: {flex: 1, position: 'relative'},
 
-    lock_container: {backgroundColor: 'rgba(25,25,25,0.60)', height: 60, width: 60, borderRadius: 50,
-    textAlign: 'center', shadowColor: '#fff', shadowOffset: {width: 0, height: 2}, shadowOpacity: 4,
-    shadowRadius: 8, elevation: 8, textAlign: 'center', alignItems: 'center', justifyContent: 'center'}
+    container1: {padding: 20, flexDirection: 'column'},
+   
+    container2: {padding: 20, flexDirection: 'column', position: 'absolute', left: 0, right: 0, bottom: 0, height: 100},
+
+    getStarted: {backgroundColor: '#00cc99', height: 60, width: '100%', borderRadius: 10, textAlign: 'center',
+    alignItems: 'center', justifyContent: 'center'}
 })

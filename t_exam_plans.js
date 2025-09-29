@@ -1,22 +1,6 @@
 
-export const exam_plan = {
-    NECO: [
-        {
-            id: 1,
-            logo: require('./assets/logo/neco.png')
-
-        }
-    ],
-    weaco: [
-        { 
-            id: 2,
-            logo: require('./assets/logo/weac.png.jpg')
-        }
-    ],
-    jamb: [
-        {
-            id: 3,
-            logo: require('./assets/logo/jamb.png')
-        }
-    ]
-}
+export const exam_plan = [
+        {id: "NECO", price: 1300, logo: require('./assets/logo/neco.png')},
+        {id: "WAEC", price: 3700, logo: require('./assets/logo/weac.png.jpg')},
+        {id: "NABTEB", price: 900, logo: require('./assets/logo/jamb.png')}
+]

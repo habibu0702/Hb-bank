@@ -10,7 +10,7 @@ export  const Plans = {
                name: "SME",
                size: "1GB",
                price: 300,
-               validity: "24h"
+               validity: "7-days"
             },
             {
                 id: 2,
@@ -18,7 +18,7 @@ export  const Plans = {
                 name: "SME",
                 size: '2GB',
                 price: 600,
-                validity: '24h'
+                validity: '7-days'
             },
             {
                 id: 3,
@@ -26,7 +26,7 @@ export  const Plans = {
                 name: "SME",
                 size: '3GB',
                 price: 900,
-                validity: '7days'
+                validity: '7-days'
             },
             {
                 id: 4,
@@ -34,7 +34,17 @@ export  const Plans = {
                 name: "SME",
                 size: '4GB',
                 price: 1200,
-                validity: '14day'
+                validity: '14-day'
+            }
+        ],
+        CORPORATE: [
+            {
+                id: 5,
+                network: "MTN",
+                name: "CORPORATE",
+                size: "2GB",
+                price: 700,
+                validity: "7-days"
             }
         ],
         GIFTING: [
@@ -44,7 +54,7 @@ export  const Plans = {
                 name: "GIFTING",
                 size: '1GB',
                 price: 280,
-                validity: '24h'
+                validity: '24-h'
             },
             {
                 id: 2,
@@ -52,7 +62,7 @@ export  const Plans = {
                 name: "GIFTING",
                 size: '2GB',
                 price: 360,
-                validity: '7day'
+                validity: '7-day'
             },
             {
                 id: 3,
@@ -60,7 +70,7 @@ export  const Plans = {
                 name: "GIFTING",
                 size: '3GB',
                 price: 560,
-                validity: '7day'
+                validity: '7-day'
             }
         ]
     },
@@ -72,7 +82,7 @@ export  const Plans = {
                 name: "SME",
                 size: '1GB',
                 price: 250,
-                validity: '24h'
+                validity: '1-day'
             },
             {
                 id: 2,
@@ -80,7 +90,7 @@ export  const Plans = {
                 name: "SME",
                 size: '2GB',
                 price: 500,
-                validity: '7days'
+                validity: '7-days'
             }
         ]
     },
@@ -92,7 +102,7 @@ export  const Plans = {
                 name: "GIFTING",
                 size: '1GB',
                 price: 350,
-                validity: '24'
+                validity: '1-day'
             },
             {
                 id: 2,
@@ -100,7 +110,7 @@ export  const Plans = {
                 name: "GIFTING",
                 size: '2GB',
                 price: 700,
-                validity: '7days'
+                validity: '7-days'
             }
         ]
     },
@@ -112,7 +122,7 @@ export  const Plans = {
                 name: "SME",
                 size: '1GB',
                 price: 200,
-                validity: '24h'
+                validity: '1-day'
             },
             {
                 id: 2,
@@ -120,7 +130,7 @@ export  const Plans = {
                 name: "SME",
                 size: '2GB',
                 price: 400,
-                validity: '2days'
+                validity: '2-days'
             }
         ]
     }

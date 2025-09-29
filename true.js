@@ -1,27 +1,28 @@
 import { create } from "zustand";
 
 export const userStore = create(set => ({
-    homeScreen: false, renderOut: true, showRender: false,
+    homeScreen: true, renderOut: true, showRender: false,
 
 
-    Logged: false, Logign: false, SignUp: true, syncForm: false,
+    Logged: false, Logign: false, SignUp: true, syncForm: true,
 
 
     STRender: true, showSTRender: false,
 
 
-    loading: true, isLoading: false,
+    IsSecurity: false,
     
 
-    setHomeScreen: () => set(state => ({homeScreen: !state.homeScreen})),
-    setRenderOut: () => set(state => ({renderOut: !state.renderOut})),
-    setShowRender: () => set(state => ({showRender: !state.showRender})),
-    setSyncForm: () => set(state => ({syncForm: !state.syncForm})),
+    setHomeScreen: (value) => set({homeScreen: value}),
+
+    setRenderOut: (value) => set({renderOut: value}),
+    setShowRender: (value) => set({showRender: value}),
+    setSyncForm: (value) => set({syncForm: value}),
 
 
-    setLogign: () => set(state => ({Logign: !state.Logign})),
-    setSignUp: () => set(state => ({SignUp: !state.SignUp})),
-    LoggedIn: () => set(state => ({Logged: !state.Logged})),
+    setLogign: (value) => set({Logign: value}),
+    setSignUp: (value) => set({SignUp: value}),
+    LoggedIn: (value) => set({Logged: value}),
 
 
 
@@ -29,8 +30,5 @@ export const userStore = create(set => ({
     setShowSTRender: () => set(state => ({showSTRender: !state.showSTRender})),
 
 
-
-
-    setLoading: () => set(state => ({loading: !state.loading})),
-    setIsloading: () => set(state => ({isLoading: !state.isLoading}))
+    setIsOpenSecurity: (value) => set({IsSecurity: value}),
 }));
