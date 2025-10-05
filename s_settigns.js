@@ -7,6 +7,7 @@ import { ImageBackground, ScrollView, Alert, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useContext } from 'react';
 import { UserContext } from './context';
@@ -20,13 +21,10 @@ import i18n from './a_l-swap-lan';
 
 
 
-export const Profile = () => {
+export const SettingsScreen = () => {
  const { user, updateImage, darkMode, setIsSpin  } = useContext(UserContext);
- const showSTRender = userStore(state => state.showSTRender);
- const setShowSTRender = userStore(state => state.setShowSTRender);
  const setSyncForm = userStore(state => state.setSyncForm);
  const LoggedIn = userStore(state => state.LoggedIn);
- const { setRender3 } = useContext(UserContext);
  const [hash, setHash] = useState(false);
  const [modal, setModal] = useState(false);
  const [showModal, setShowModal] = useState(false);
@@ -59,20 +57,6 @@ export const Profile = () => {
   }
  }
 
-
-
- 
-
- 
-
-
- const OPEN = () => {
-  if (!showSTRender) {
-    setShowSTRender();
-  } else {
-    return null;
-  }
- }
 
 
 
@@ -124,21 +108,6 @@ export const Profile = () => {
 
 
 
- useEffect(() => {
-  const listen = scrollY.addListener(({ value }) => {
-    if (value >= 100 && !hash) {
-      trigger();
-      setHash(true);
-    } else if (value < 100 && hash) {
-    setHash(false);
-    trigger();
-    }
-  });
-  return () => scrollY.removeListener(listen);
- }, [hash]);
-
-
-
 
 
 
@@ -174,71 +143,14 @@ export const Profile = () => {
 
 
 
-  const scrollY = useRef(new Animated.Value(0)).current;
-
-  const headerHeight = scrollY.interpolate({
-    inputRange: [0, 150],
-    outputRange: [200, 70],
-    extrapolate: 'clamp'
-  });
-
-
-
-  const opacity = scrollY.interpolate({
-    inputRange: [0, 100],
-    outputRange: [1, 0],
-    extrapolate: 'clamp'
-  });
-
-  const scaleImage = scrollY.interpolate({
-    inputRange: [0, 100],
-    outputRange: [1, 0],
-    extrapolate: 'clamp'
-  });
-
-  const scaleLablee = scrollY.interpolate({
-    inputRange: [0, 100],
-    outputRange: [0, 1],
-    extrapolate: 'clamp'
-  });
-
-  const headerRadius = scrollY.interpolate({
-    inputRange: [0, 100],
-    outputRange: [20, 3],
-    extrapolate: 'clamp'
-  });
-
-  const backgroundY1 = scrollY.interpolate({
-    inputRange: [0, 100],
-    outputRange: ['#fff', '#fff'],
-    extrapolate: 'clamp'
-  });
-
-
-
-  const backgroundY2 = scrollY.interpolate({
-    inputRange: [0, 100],
-    outputRange: ['#121212', '#2a2a2a'],
-    extrapolate: 'clamp'
-  });
-
-
-
-
-
-
-
-
-
+ const navigator = useNavigation();
   const handler = (value) => {
     if (value === 'camera') {
       upload();
     } else if (value === 'logout') {
       LogOut();
-    } else if (value === 'lang') {
-      setShowModal(true);
     } else if (value) {
-      setRender3(value); OPEN();
+    navigator.navigate(value);
     } else {
       return null;
     }
@@ -250,28 +162,13 @@ export const Profile = () => {
 
 
   return (
-    <View style={{flex: 1, position: 'relative', backgroundColor: darkMode ? '#ddd' : '#000', gap: 10,
-    paddingBottom: insets.bottom + 62}}>
+    <View style={{flex: 1, position: 'relative', backgroundColor: darkMode ? '#ddd' : '#000'}}>
 
-    <BlurView intensity={2} style={{flex: 1}}>
-    <Animated.View style={[{flex: 1}]}>
-    <View style={styles.homeScreens}>
-
-
-    <Animated.View style={[styles.header4, {height: headerHeight, borderBottomLeftRadius: headerRadius,
-    borderBottomRightRadius: headerRadius, backgroundColor: darkMode ? backgroundY1 : backgroundY2}]}>
-    
-    <Animated.View style={[styles.headerLable, {transform: [{scale: scaleLablee}]}]}>
-    <Text style={{fontSize: 16, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>{i18n.t('settings')}</Text>
-    </Animated.View>
-  
-    <Animated.View style={[{transform: [{scale: scaleImage}]}, {textAlign: 'center', alignItems: 'center',
-    justifyContent: 'center', flexDirection: 'column', gap: 10}, {opacity: opacity}]}>
-    <Image source={user.image ? {uri: user.image} : require('./assets/apple.png')}
-    style={[styles.image4]}/>
-    <Text style={{fontSize: 15, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>@{user.fullName || 'Guest'}</Text>
-    </Animated.View>
-    </Animated.View>
+    {/*------------------------header-----------------------------------------*/}
+    <View style={[styles.header, {backgroundColor: darkMode ? '#ddd' : '#2a2a2a'}]}>
+    <Text style={{fontSize: 15, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory',
+    marginLeft: 20, padding: 2}}>{i18n.t('settings')}</Text>
+    </View>
 
 
 
@@ -281,17 +178,31 @@ export const Profile = () => {
     
 
     {/*------------------------------------------home-----------------------------------*/}
-    <Animated.ScrollView onScroll={Animated.event(
-    [{ nativeEvent: { contentOffset: {y: scrollY}}}], { useNativeDriver: false})} scrollEventThrottle={16}
-    style={{backgroundColor: darkMode ? '#fff' : '#121212'}} overScrollMode="never">
-    <View style={[styles.homeSettings]}>
+    <ScrollView style={{backgroundColor: darkMode ? '#ddd' : '#2a2a2a', padding: 20}}>
+
+
+    {/*--------------------------------user-info----------------------------------------*/}
+    <View style={[styles.user_info, {backgroundColor: darkMode ? '#fff' : 'black'}]}>
+    <Image source={user.image ? {uri: user.image} : require('./assets/apple.png')} style={styles.image}/>
+
+    <View style={styles.user_button}>
+    <Text style={{fontSize: 15, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory', marginTop: 5}}>
+    {user.fullName}</Text>
+
+    <TouchableOpacity style={styles.user_btn}>
+    <Text style={{fontSize: 12, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>
+    Go To Your Profile</Text>
+    <Ionicons name="chevron-forward-outline" size={20} color='gray' style={{position: 'absolute', right: 10}}/>
+    </TouchableOpacity>
+    </View>
+    </View>
 
 
 
-
-    <View style={[styles.settin_container_btn, {backgroundColor: darkMode ? '#fff' : '#2a2a2a'}]}>
+    {/*------------------------------------bottom----------------------------------------*/}
+    <View style={[styles.button_container, {backgroundColor: darkMode ? '#fff' : 'black'}]}>
     {s_navigation.map((key) => (
-    <TouchableOpacity key={key.name} onPress={() => {handler(key.screen)}} style={styles.change}>
+    <TouchableOpacity key={key.name} onPress={() => {handler(key.screen)}} style={styles.button}>
     {key.name ? <Ionicons name={key.name} size={20} color='#fff' style={styles.icon}/> :
     <Icon name={key.name} size={20} color='#fff' style={styles.icon}/>}
     <Text style={{fontSize: 14, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>{key.lable}</Text>
@@ -299,11 +210,7 @@ export const Profile = () => {
     </TouchableOpacity>
     ))}
     </View>
-
- </View>
-   </Animated.ScrollView>
-</View>
-</Animated.View>
+   </ScrollView>
 
 
     
@@ -330,8 +237,6 @@ export const Profile = () => {
     </Animated.View>
     </View>
     </Modal>)}
-
-</BlurView>
 </View>
   )
 }
@@ -346,22 +251,22 @@ export const Profile = () => {
 
 
 const styles = StyleSheet.create({
-  homeScreens: { backgroundColor: 'transparent', flex: 1},
 
-  header4: { backgroundColor: '#e6f0fa', height: 70, width: '100%', padding: 15, textAlign: 'center',
-  alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 15, position: 'relative',
-  marginBottom: 10},
-
-  headerLable: {position: 'absolute', left: 20, right: 0},
+  header: { backgroundColor: '#e6f0fa', height: 50, width: '100%', justifyContent: 'flex-end'},
 
 
-  homeSettings: {flexDirection: 'column', padding: 15, textAlign: 'center', justifyContent: 'center',
-  gap: 20, alignItems: 'center', paddingVertical: 10},
- 
-  image4: {height: 80, width: 80, borderRadius: 50, borderWidth: 2, borderColor: 'gray'},
+  user_info: {height: 70, width: '100%', textAlign: 'center', alignItems: 'center', position: 'relative',
+  flexDirection: 'row', padding: 10, gap: 10, borderRadius: 10, marginBottom: 10},
+  image: {height: 60, width: 60, borderRadius: 50, borderWidth: 2, borderColor: 'gray', resizeMode: 'contain'},
+
+  user_button: {textAlign: 'center', justifyContent: 'center', flexDirection: 'column', gap: 10,
+  height: 70, width: '80%'},
+
+  user_btn: {height: 30, width: '100%', borderTopWidth: 1, borderTopColor: 'gray', position: 'relative',
+  textAlign: 'center', justifyContent: 'center'},
 
 
-  uploadImage: {backgroundColor: '#ddd', height: 50, width: '100%', borderRadius: 10, gap: 10,
+  uploadImage: {backgroundColor: '#180101ff', height: 50, width: '100%', borderRadius: 10, gap: 10,
   padding: 10, textAlign: 'left',  flexDirection: 'row', alignItems: 'center', elevation: 4},
 
 
@@ -371,10 +276,10 @@ const styles = StyleSheet.create({
 
 
 
-  settin_container_btn: {backgroundColor: '#fff', height: 'auto', width: '100%', flexDirection: 'column', 
-  elevation: 4, padding: 10, borderRadius: 10, gap: 15},
+  button_container: {backgroundColor: '#fff', height: 'auto', width: '100%', flexDirection: 'column', 
+  elevation: 4, borderRadius: 10, padding: 10, gap: 15},
   
-  change: {height: 50, width: '100%', textAlign: 'left', justifyContent: 'left', flexDirection: 'row',
+  button: {height: 50, width: '100%', textAlign: 'left', justifyContent: 'left', flexDirection: 'row',
   gap: 20, alignItems: 'center', paddingVertical: 1, position: 'relative'},
   lableChange: {fontWeight: 'bold'},
 
@@ -384,13 +289,6 @@ const styles = StyleSheet.create({
   
 
   icon: {backgroundColor: 'rgba(25, 25, 25, 0.30)', height: 30, width: 30, textAlign: 'center', alignItems: 'center',
-  justifyContent: 'center', padding: 5, borderRadius: 5},
-
-
-
-
-
-  Render: {backgroundColor: '#fff', height: '100%', width: '100%', position: 'absolute',
-  left: 0, right: 0, bottom: 0, zIndex: 199, borderRadius: 10}
+  justifyContent: 'center', padding: 5, borderRadius: 5}
 
  })

@@ -72,9 +72,10 @@ export const Service6 = () => {
     <View style={styles.header1}>
     <TouchableOpacity style={styles.back} onPress={() =>
     {setShowRender(false)}}>
-    <Ionicons name='chevron-back-outline' size={30} color='gray'/>
+    <Ionicons name='arrow-back-outline' size={30} color='gray'/>
     </TouchableOpacity>
-    <Text style={{fontSize: 15, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>Convert Airtime To cash</Text>
+    <Text style={{fontSize: 15, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>
+    Convert Airtime To cash</Text>
     </View>
 
 
@@ -164,17 +165,17 @@ export const Service6 = () => {
 const styles = StyleSheet.create({
     App: {height: '100%', width: '100%', backgroundColor: '#ddd', borderRadius: 10, position: 'relative'},
 
-    header1: {height: 70, width: '100%', textAlign: 'center', alignItems: 'center',
-    justifyContent: 'flex-end', padding: 15, position: 'relative', borderRadius: 10},
+    header1: {height: 60, width: '100%', textAlign: 'center', alignItems: 'center',
+    justifyContent: 'flex-end', padding: 5, position: 'relative', borderRadius: 10},
 
-    back: {height: 30, width: 30, position: 'absolute', left: 20, bottom: 8},
-
-
+    back: {height: 25, width: 30, position: 'absolute', left: 20, bottom: 2},
 
 
 
 
-    home: {flexDirection: 'column', padding: 20, gap: 15},
+
+
+    home: {flexDirection: 'column', padding: 30, gap: 15},
 
     form: {backgroundColor: '#fff', height: 'auto', width: '100%', flexDirection: 'column',
     borderRadius: 10, padding: 10},

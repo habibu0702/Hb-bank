@@ -1,6 +1,8 @@
 import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native';
 import { TouchableOpacity, Platform, Image, Animated } from 'react-native';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Icon from '@expo/vector-icons/FontAwesome';
 import { useRef, useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { userStore } from './true';
@@ -28,6 +30,21 @@ export const Service5 = () => {
 
  const [error1, setError1] = useState('');
  const [error2, setError2] = useState('');
+
+
+
+
+ const navigator = useNavigation();
+ const go = () => {
+    navigator.navigate('MoPay', {screen: 'History'});
+ }
+
+
+
+
+
+
+
 
 
  const open = () => {
@@ -74,7 +91,10 @@ export const Service5 = () => {
     {setShowRender(false)}}>
     <Ionicons name='chevron-back-outline' size={30} color='gray'/>
     </TouchableOpacity>
-    <Text style={{fontSize: 12, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>Exam</Text>
+    <Text style={{fontSize: 14, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>Exam</Text>
+    <TouchableOpacity style={styles.transaction} onPress={() => go()}>
+    <Icon name='book' size={20} color={darkMode ? '#000' : 'ivory'}/>
+    </TouchableOpacity>
     </View>
 
 
@@ -128,7 +148,7 @@ export const Service5 = () => {
         {active === '1' && (
             <Animated.View style={{backgroundColor: darkMode ? '#fff' : '#2a2a2a', height: 'auto', width: '100%',
             borderTopLeftRadius: 20, borderTopRightRadius: 20, textAlign: 'center', alignItems: 'center', padding: 10,
-            flexDirection: 'column', gap: 10, transform: [{translateY: slide}]}}>
+            flexDirection: 'column', gap: 10, transform: [{translateY: slide}], maxHeight: '40%'}}>
             
             <Image source={exam.logo} resizeMode="cover" style={{height: 40, width: 40, borderRadius: 50,
             borderWidth: 1, borderColor: 'gray'}}/>
@@ -173,12 +193,20 @@ export const Service5 = () => {
 
 const styles = StyleSheet.create({
     App: {backgroundColor: '#fff', height: '100%', width: '100%', borderRadius: 10},
-    header1: {height: 70, width: '100%', textAlign: 'center', alignItems: 'center',
-    justifyContent: 'flex-end', padding: 15, position: 'relative', borderRadius: 10},
+    header1: {height: 60, width: '100%', textAlign: 'center', alignItems: 'center',
+    justifyContent: 'flex-end', padding: 2, position: 'relative', borderRadius: 10},
 
-    back: {height: 30, width: 30, position: 'absolute', left: 20, bottom: 8},
+    back: {height: 25, width: 30, position: 'absolute', left: 20, bottom: 2},
 
-    home: {flexDirection: 'column', padding: 20},
+    transaction: {height: 'auto', width: 'auto', position: 'absolute', right: 20},
+
+
+
+
+
+
+
+    home: {flexDirection: 'column', padding: 30},
 
     form: {backgroundColor: '#e6f0fa', height: 'auto', width: '100%', flexDirection: 'column', gap: 10,
     borderRadius: 10, padding: 10},

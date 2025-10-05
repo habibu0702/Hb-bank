@@ -1,7 +1,9 @@
 import { View, Text, TextInput, StyleSheet, ScrollView, Animated } from 'react-native';
 import { TouchableOpacity, Platform, Image, Dimensions, Keyboard } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native';
 import { useRef, useEffect, useState } from 'react';
+import Icon from '@expo/vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
 import { AppLoading } from './s_load_spin';
 import { userStore } from './true';
@@ -38,6 +40,20 @@ export const Service4 = () => {
  const [error4, setError4] = useState('');
 
  const time = Date.now();
+
+
+
+ const navigator = useNavigation();
+ const back = () => {
+    navigator.goBack();
+ }
+
+ const go = () => {
+    navigator.navigate('MoPay', {screen: 'History'});
+ }
+
+
+
 
 
  let last = 0;
@@ -132,12 +148,18 @@ export const Service4 = () => {
 
  return (
     <View style={[styles.App1, {backgroundColor: darkMode ? '#ddd' : '#000'}]}>
-    <View style={styles.header1}>
-    <TouchableOpacity style={styles.back} onPress={(() =>
-    {setShowRender(false)})}>
-    <Ionicons name='chevron-back-outline' size={30} color='gray'/>
+
+    {/*---------------------------------header----------------------*/}
+    <View style={styles.header}>
+    <TouchableOpacity style={styles.back} onPress={() => back()}>
+    <Ionicons name="arrow-back-outline" size={30} color='blue'/>
     </TouchableOpacity>
-    <Text style={{fontSize: 15, fontWeight: 'bold', color: 'gray'}}>Pay Electricity Bill Now</Text>
+    <Text style={{fontSize: 15, fontWeight: 'bold', color: 'gray', color: darkMode ? '#000' : 'ivory'}}>
+    Pay Electricity Bill Now</Text>
+
+    <TouchableOpacity style={styles.transaction} onPress={() => go()}>
+     <Icon name="book" size={20} color={darkMode ? '#000' : 'ivory'}/>
+    </TouchableOpacity>
     </View>
 
 
@@ -186,14 +208,14 @@ export const Service4 = () => {
 
 
     <TextInput value={number} placeholder='meter number' onChangeText={setNumber} returnKeyType='Done'
-    inputMode={Platform.OS === 'android' ? 'number-pad' : 'numeric'} placeholderTextColor="gray"
+    inputMode={Platform.OS === 'android' ? 'numeric' : 'numeric'} placeholderTextColor="gray"
     style={[styles.input, {color: darkMode ? '#000' : 'ivory'}]}/>
     {error2 && (<Text style={{fontSize: 10, fontWeight: 'bold', color: 'red'}}>{error2}</Text>)}
 
 
 
     <TextInput value={amount} placeholder='amount' onChangeText={setAmount} returnKeyType='done'
-    inputMode={Platform.OS === 'android' ? 'number-pad' : 'numeric'} placeholderTextColor="gray"
+    inputMode={Platform.OS === 'android' ? 'numeric' : 'numeric'} placeholderTextColor="gray"
     style={[styles.input, {color: darkMode ? '#000' : 'ivory'}]}/>
     {error3 && (<Text style={{fontSize: 10, fontWeight: 'bold', color: 'red'}}>{error3}</Text>)}
     
@@ -338,18 +360,21 @@ export const Service4 = () => {
 
 const styles = StyleSheet.create({
     App1: {backgroundColor: '#ddd', height: '100%', width: '100%', position: 'relative'},
-    header1: {height: 70, width: '100%', textAlign: 'center', alignItems: 'center',
-    justifyContent: 'flex-end', padding: 15, position: 'relative', borderRadius: 10},
 
-    back: {height: 30, width: 30, position: 'absolute', left: 20, bottom: 8},
+    header: {height: 55, width: '100%', textAlign: 'center', alignItems: 'center',
+    justifyContent: 'flex-end', padding: 2, positon: 'relative', borderRadius: 10},
 
+    back: {height: 25, width: 30, position: 'absolute', left: 20, bottom: 2},
 
-
-
-
+    transaction: {height: 'auto', width: 'auto', position: 'absolute', right: 20},
 
 
-    home_container: {flexDirection: 'column', padding: 20},
+
+
+
+
+
+    home_container: {flexDirection: 'column', padding: 30},
 
     form1: {backgroundColor: '#fff', height: 'auto', width: '100%', flexDirection: 'column', gap: 15,
     padding: 10, borderRadius: 10},

@@ -10,7 +10,6 @@ import { userStore } from './true';
 
 
 export const Wallet =  () => {
- const setShowSTRender = userStore(state => state.setShowSTRender);
  const { user, getLanguage } = useContext(UserContext);
 
 
@@ -20,17 +19,7 @@ export const Wallet =  () => {
 }
  return (
  <View style={styles.App}>
- <View style={styles.header1}>
-  <TouchableOpacity style={styles.back} onPress={() =>
-    {setShowSTRender()}}>
-    <Ionicons name='chevron-back-outline' size={30} color='#000'/>
-  </TouchableOpacity>
- <Text style={{fontSize: 15, fontWeight: 'bold'}}>Wallet</Text>
- </View>
-
-
-
-
+ 
 
  {/*-----------------------home-----------------------------*/}
 
@@ -38,9 +27,7 @@ export const Wallet =  () => {
 
  <View style={styles.wallet}>
   <Text style={{fontSize: 15, fontWeight: 'bold'}}>My Balance</Text>
- <Text style={{fontSize: 15, fontWeight: 'bold'}}>&#8358; {user.balance.toLocaleString('en-NG', {
-  maximumFractionDigits: 2, minimumFractionDigits: 2
- })}</Text>
+ <Text style={{fontSize: 15, fontWeight: 'bold'}}>uuu</Text>
  </View>
 
 

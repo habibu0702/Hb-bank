@@ -7,7 +7,6 @@ import { userStore } from './true';
 
 
 export const AppFaq = () => {
- const setShowSTRender = userStore(state => state.setShowSTRender);
 
 
 
@@ -17,17 +16,10 @@ export const AppFaq = () => {
 
     return (
         <View style={{flex: 1, backgroundColor: '#fff'}}>
-            <View style={styles.header1}>
-                <TouchableOpacity style={styles.back} onPress={() =>
-                {setShowSTRender()}}>
-                    <Ionicons name='arrow-back-outline' size={30} color='#000'/>
-                </TouchableOpacity>
-                <Text style={{fontSize: 16, fontWeight: 'bold'}}>FAQ</Text>
-            </View>
 
-            <ScrollView>
+        <ScrollView>
 
-            </ScrollView>
+        </ScrollView>
         </View>
     )
 }

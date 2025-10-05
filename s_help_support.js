@@ -181,11 +181,8 @@ export const AppSupport = () => {
 
     return (
         <Animated.View style={{backgroundColor: darkMode ? '#fff' : '#000', height: '100%', width: '100%',
-            position: 'relative', transform: [{scale: scale}], borderRadius: 20}}>
+            position: 'relative', transform: [{scale: scale}]}}>
             <LinearGradient style={styles.header} colors={['royalblue', '#000']}>
-                <TouchableOpacity style={styles.back} onPress={() => {setShowSTRender()}}>
-                <Ionicons name='chevron-back-outline' size={30} color='#fff'/>
-                </TouchableOpacity>
 
                 <Animated.View style={[styles.headphones]}>
                     <Icon name='headphones' size={24} color='#fff'/>
@@ -324,11 +321,10 @@ export const AppSupport = () => {
 
 
 const styles = StyleSheet.create({
-    header: {height: 200, width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'center',
-    padding: 15, borderBottomLeftRadius: 20, borderBottomRightRadius: 20, position: 'relative', gap: 10,
-    flexDirection: 'column', borderRadius: 10},
+    header: {height: 100, width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'center',
+    padding: 15, bposition: 'relative', gap: 10, flexDirection: 'column'},
 
-    back: {position: 'absolute', left: 18, top: 25},
+
 
     headphones: {backgroundColor: 'rgba(255,255,255,0.30)', height: 50, width: 50, borderRadius: 50,
     textAlign: 'center', alignItems: 'center', justifyContent: 'center', padding: 10},

@@ -49,8 +49,8 @@ import * as Haptics from 'expo-haptics';
 
 
  return (
- <View style={[styles.App, {backgroundColor: darkMode ? '#ddd' : '#000', paddingBottom: insets.bottom + 60}]}>
-  <BlurView intensity={100} tint='transparent' style={{flex: 1}}>
+ <View style={[styles.App, {backgroundColor: darkMode ? '#ddd' : '#000'}]}>
+  
  <View style={styles.header}>
   <View style={styles.table}>
   <TouchableOpacity style={[styles.btn, active === '1' && {backgroundColor: '#fff'}]}
@@ -77,7 +77,6 @@ import * as Haptics from 'expo-haptics';
  <Text style={{fontSize: 15, fontWeight: 'bold', color: 'gray'}}>No Transaction Yet</Text>
  </View>}
  </ScrollView>
- </BlurView>
  </View>
  );
 }

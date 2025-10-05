@@ -1,4 +1,5 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 import { ActivityIndicator, Vibration } from 'react-native';
 import { useRef, useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,9 +12,8 @@ import * as Haptics from 'expo-haptics';
 
 
 export const App_pass = () => {
-    const setIsOpenSecurity = userStore((state) => state.setIsOpenSecurity);
-    const { setIsPrivacy1 } = useContext(UserContext);
     const [eye, setEye] = useState(true);
+    const { darkMode } = useContext(UserContext);
 
 
 
@@ -84,35 +84,25 @@ export const App_pass = () => {
 
 
     return (
-        <View style={styles.App}>
-        <View style={styles.header1}>
-            <TouchableOpacity style={styles.back} onPress={() =>
-                {setIsOpenSecurity(false)}}>
-                <Ionicons name='chevron-back-outline' size={30} color='#000'/>
-            </TouchableOpacity>
-
-            <View style={styles.style}>
-                <Text style={{fontSize: 16, fontWeight: 'bold'}}>Update Password</Text>
-                <Text style={{fontSize: 16, fontWeight: 'bold'}}>*****</Text>
-            </View>
-        </View>
-
-        <View style={styles.Home}>
-            <View style={styles.form}>
-                <TextInput value={last_password} placeholder='Enter Last Passsord' onChangeText={setLast_password}
+        <View style={[styles.App, {backgroundColor: darkMode ? '#ddd' : '#000'}]}>
+        
+        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
+        style={styles.Home}>
+            <View style={[styles.form, {backgroundColor: darkMode ? '#fff' : '#2a2a2a'}]}>
+                <TextInput value={last_password} placeholder='Enter Last Password' onChangeText={setLast_password}
                 returnKeyType='go' textContentType="password" keyboardType="visible-password"
                 style={styles.input}/>
                 {error1 && (<Text style={{fontSize: 10, fontWeight: 'bold', color: 'red'}}>{error1}</Text>)}
                 
                 <View style={styles.eye_btn}>
-                <TextInput value={new_password} placeholder='New Passsord' onChangeText={setNew_password}
+                <TextInput value={new_password} placeholder='New Password' onChangeText={setNew_password}
                 returnKeyType='go' textContentType="password" keyboardType="visible-password"
                 secureTextEntry={eye}
                 style={{height: 50, width: '90%'}}/>
                 </View>
                 {error2 && (<Text style={{fontSize: 10, fontWeight: 'bold', color: 'red'}}>{error2}</Text>)}
 
-                <TextInput value={try_password} placeholder='Try Passsord' onChangeText={setTry_password}
+                <TextInput value={try_password} placeholder='Re-Enter Passsord' onChangeText={setTry_password}
                 returnKeyType='go' textContentType="password" keyboardType="visible-password"
                 secureTextEntry={eye}
                 style={styles.input}/>
@@ -128,26 +118,22 @@ export const App_pass = () => {
                     <Text style={{fontSize: 16, fontWeight: 'bold', color: '#fff'}}>Update</Text>}
                 </TouchableOpacity>
             </View>
-        </View>
+            </KeyboardAvoidingView>
         </View>
     )
 }
 
 
 const styles = StyleSheet.create({
-    App: {backgroundColor: '#fff', height: '100%', width: '100%', borderRadius: 10},
-    header1: {backgroundColor: '#fff', height: 130, width: '100%', textAlign: 'center', alignItems: 'center',
-    justifyContent: 'center', position: 'relative', borderRadius: 10},
+    App: {height: '100%', width: '100%'},
+    
 
-    back: {position: 'absolute', left: 16, top: 25},
 
-    style: {backgroundColor: '#e6f0fa', height: 60, width: '80%', textAlign: 'center', alignItems: 'center',
-    justifyContent: 'center', flexDirection: 'column', borderRadius: 10, padding: 10, gap: 5,
-    position: 'absolute', bottom: 0},
+   
+    Home: {flexDirection: 'column', textAlign: 'center', alignItems: 'center', justifyContent: 'center',
+    padding: 20, height: '60%'},
 
-    Home: {flexDirection: 'column', padding: 20},
-
-    form: {backgroundColor: '#e6f0fa', height: 'auto', width: '100%', borderRadius: 10, padding: 10, gap: 10},
+    form: {backgroundColor: '#e6f0fa', height: 'auto', width: '100%', borderRadius: 20, padding: 10, gap: 10},
 
     eye_btn: {height: 50, width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'space-between',
     flexDirection: 'row', padding: 10, borderRadius: 10, borderWidth: 2, borderColor: '#fff'},

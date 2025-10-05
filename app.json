@@ -31,11 +31,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "82cea3fd-a8ea-4f43-b28b-eb61f9525823"
-      }
-    },
     "updates": {
       "enabled": true,
       "fallbackToCacheTimeout": 0,
@@ -46,6 +41,12 @@
     },
     "plugins": [
       "expo-secure-store"
-    ]
+    ],
+    "owner": "habibu0846",
+    "extra": {
+      "eas": {
+        "projectId": "82cea3fd-a8ea-4f43-b28b-eb61f9525823"
+      }
+    }
   }
 }

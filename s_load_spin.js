@@ -29,7 +29,7 @@ export const AppLoading = () => {
 
     const spin = slide.interpolate({
         inputRange: [0, 1],
-        outputRange: ['0deg', '360deg']
+        outputRange: [0, 10]
     });
 
 
@@ -45,8 +45,8 @@ export const AppLoading = () => {
     }, []);
 
     const spin2 = slide2.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '360deg']
+        inputRange: [0, 50],
+        outputRange: [0, 50]
     });
 
 
@@ -69,11 +69,22 @@ export const AppLoading = () => {
     return (
         <View style={[styles.AppL, {backgroundColor: !Logged ? '#fff' : 'rgba(25,25,25,0.60)'}]}>
             <Animated.View style={[styles.container, {transform: [{scale: scale}]}]}>
-                <Animated.View style={[styles.spin, {transform: [{rotate: spin}]}]}></Animated.View>
 
-                <Animated.View style={[styles.spin2, {transform: [{rotate: spin2}]}]}></Animated.View>
+                <Animated.View style={[styles.spin, {transform: [{translateY: spin}]}]}></Animated.View>
+
+                <Animated.View style={[styles.spin2, {transform: [{translateY: spin2}]}]}>
                 <Text style={{fontSize: 20, fontWeight: 'bold', color: '#00cc99'}}>M</Text>
-            </Animated.View>
+                </Animated.View>
+
+                <Animated.View style={[styles.spin2, {transform: [{translateY: spin2}]}]}>
+                <Text style={{fontSize: 20, fontWeight: 'bold', color: '#00cc99'}}>o</Text>
+                </Animated.View>
+
+                <Animated.View style={[styles.spin2, {transform: [{translateY: spin2}]}]}>
+                <Text style={{fontSize: 20, fontWeight: 'bold', color: '#00cc99'}}>P</Text>
+                </Animated.View>
+
+                </Animated.View>
         </View>
     )
 }
@@ -88,6 +99,5 @@ const styles = StyleSheet.create({
     right: 0, bottom: 0, top: 0, borderRadius: 50},
 
     spin2: {height: 80, width: 80, borderWidth: 6, borderColor: 'transparent', position: 'absolute', left: 0,
-    right: 0, bottom: 0, top: 0, borderRadius: 50, shadowColor: '#fff', shadowOffset: {width: 0, height: 0},
-    shadowOpacity: 3, shadowRadius: 5, elevation: 10, borderTopColor: 'rgba(255,255,255,0.50)'}
+    right: 0, bottom: 0, top: 0, borderRadius: 50, borderTopColor: 'rgba(255,255,255,0.50)'}
 })

@@ -1,5 +1,6 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { ScrollView, Animated, RefreshControl, Modal } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useEffect, useRef, useState } from 'react';
 import { Dimensions } from 'react-native';
@@ -7,18 +8,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useContext } from 'react';
 import { UserContext } from './context';
 import { userStore } from './true';
-import { App_pass } from './s_change_pass';
-import { App_pin } from './s_change_pin';
 
 
 
 
 export const Privacy = () => {
- const setShowSTRender = userStore(state => state.setShowSTRender);
- const IsSecurity = userStore((state) => state.IsSecurity);
- const setIsOpenSecurity = userStore((state) => state.setIsOpenSecurity);
- const { IsPrivacy1, IsPrivacy2, IsRender } = useContext(UserContext);
- const { setIsPrivacy1, setIsPrivacy2, setIsRender } = useContext(UserContext);
  const [active1, setActive1] = useState(true);
  const [active2, setActive2] = useState(false);
 
@@ -35,80 +29,13 @@ export const Privacy = () => {
  }
 
 
-
-
-
- const screen = Dimensions.get('window').width;
- const slide1 = useRef(new Animated.Value(1)).current;
- const slide2 = useRef(new Animated.Value(screen)).current;
-
-
- useEffect(() => {
-    const timer1 = setTimeout(() => {
-    if (!IsSecurity) {
-        Animated.timing(slide1, {
-            toValue: 1,
-            duration: 200,
-            useNativeDriver: true
-        }).start();
-    } else {
-        Animated.timing(slide1, {
-            toValue: screen * -0.40,
-            duration: 200,
-            useNativeDriver: true
-        }).start();
-    }
-}, 100);
-return () => clearTimeout(timer1);
- }, [IsSecurity]);
-
-
-
-
-
-
-
-
-
-  useEffect(() => {
-    const timer1 = setTimeout(() => {
-    if (IsSecurity) {
-        setActive2(true);
-        Animated.timing(slide2, {
-            toValue: 0,
-            duration: 200,
-            useNativeDriver: false
-        }).start();
-    } else {
-        Animated.timing(slide2, {
-            toValue: screen,
-            duration: 200,
-            useNativeDriver: false
-        }).start(() => {
-            setActive2(false);
-        })
-    }
-}, 100);
-return () => clearTimeout(timer1);
- }, [IsSecurity]);
-
-
-
-
-
-
-
-
-
-
-
- const Render1 = () => {
-  switch(IsRender) {
-   case 'App_pass': return <App_pass/>
-   case 'reset_pin': return <App_pin/>
-   default: return null;
-  }
+ const navigator = useNavigation();
+ const open = (value) => {
+    navigator.navigate(value);
  }
+
+
+
 
 
 
@@ -116,36 +43,19 @@ return () => clearTimeout(timer1);
     <View style={{flex: 1, position: 'relative', backgroundColor: '#e6f0fa'}}>
 
 
-    
-    {active2 && (<Animated.View style={[styles.render, {transform: [{translateX: slide2}]}]}>
-            <Render1/>
-        </Animated.View>)}
-
-
-
-
-
-    {active1 && (
-    <Animated.View style={[styles.Home, {transform: [{translateX: slide1}]}]}>
-    <View style={styles.header1}>
-    <TouchableOpacity style={styles.back} onPress={() =>
-    {setShowSTRender()}}>
-    <Ionicons name='arrow-back-outline' size={30} color='#000'/>
-    </TouchableOpacity>
-    </View>
+    <Animated.View style={[styles.Home]}>
+   
 
     <ScrollView style={styles.container} 
     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
     <View style={styles.table1}>
 
-    <TouchableOpacity style={styles.change} onPress={() =>
-    {setIsRender('App_pass'); setIsOpenSecurity(true)}}>
+    <TouchableOpacity style={styles.change} onPress={() => open('UpdatePassword')}>
     <Icon name='lock' size={20} color='#fff' style={styles.lock}/>
     <Text style={{fontSize: 15, fontWeight: 'bold'}}>Change Password</Text>
     </TouchableOpacity>
 
-    <TouchableOpacity style={styles.change} onPress={() =>
-    {setIsRender('reset_pin'); setIsOpenSecurity(true)}}>
+    <TouchableOpacity style={styles.change} onPress={() => open('UpdatePin')}>
     <Ionicons name='key-outline' size={20} color='#fff' style={styles.key}/>
     <Text style={{fontSize: 15, fontWeight: 'bold'}}>Transactions PIN</Text>
     </TouchableOpacity>
@@ -153,7 +63,6 @@ return () => clearTimeout(timer1);
     </View>
     </ScrollView>
     </Animated.View>
-    )}
     </View>
  )
 }

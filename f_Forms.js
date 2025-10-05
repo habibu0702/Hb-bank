@@ -1,30 +1,43 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import { CardStyleInterpolators } from "@react-navigation/stack";
+import { NavigationContainer } from '@react-navigation/native';
 import { View, Text, StyleSheet, Animated } from 'react-native';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Platform } from 'react-native';
 import Icon from '@expo/vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useContext } from 'react';
 import { UserContext } from './context';
 import { LoginForms } from './f_login';
+import { SignUpForm } from './f_singup';
 
 
 
 
-
+const Stack = Platform.OS === 'android' ? createStackNavigator() : createNativeStackNavigator();
 export const Forms = () => {
-    const { visible1, setVisible1 } = useContext(UserContext);
 
 
 
  return (
     <LinearGradient style={styles.App} colors={['#000', 'royalblue']}>
-        {visible1 ?
-        <View style={{height: '100%', width: '100%'}}>
-            <LoginForms/>
-        </View>
-        :
-        <View style={styles.container1}>
-
-        </View>}
+    <NavigationContainer>
+    <Stack.Navigator screenOptions={{
+    gestureEnabled: true,
+    gestureDirection: 'horizontal'
+    }}>
+        <Stack.Screen name='LogIn' component={LoginForms} options={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerStyle: {backgroundColor: 'royalblue', height: 60},
+        headerShadowVisible: false
+        }}/>
+        <Stack.Screen name='SignUp' component={SignUpForm} options={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        headerStyle: {backgroundColor: 'ivory', height: 60},
+        headerShadowVisible: false
+        }}/>
+    </Stack.Navigator>
+    </NavigationContainer>
     </LinearGradient>
  )
 }

@@ -1,7 +1,10 @@
 import { View, Text, TextInput, StyleSheet, Image, useColorScheme, Alert } from 'react-native';
-import { TouchableOpacity, Keyboard, Dimensions } from 'react-native';
+import { TouchableOpacity, Keyboard, Dimensions, StatusBar } from 'react-native';
 import { Animated, Platform, TouchableWithoutFeedback } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from '@expo/vector-icons/FontAwesome';
 import { useRef, useEffect, useState } from 'react';
 import NetInfo from '@react-native-community/netinfo';
 import { AppLoading } from './s_load_spin';
@@ -36,6 +39,18 @@ export const Service1 = () => {
    const [spin, setSpin] = useState(false);
 
    const date = Date.now();
+
+
+
+
+   const navigator = useNavigation();
+   const back = () => {
+      navigator.goBack();
+   }
+
+   const go = () => {
+      navigator.navigate('MoPay', {screen: 'History'});
+   }
 
 
    
@@ -199,16 +214,31 @@ export const Service1 = () => {
  
 
 
+
+
  return (
-    <View style={[styles.Home, {backgroundColor: darkMode ? '#ddd' : '#000'}]}>
-    <View style={styles.header}>
-    <TouchableOpacity style={styles.back} onPress={() =>
-    {setShowRender(false)}}>
-    <Ionicons name='chevron-back-outline' size={30} color={darkMode ? 'gray' : 'ivory'}/>
+    <View style={[styles.App, {backgroundColor: darkMode ? '#ddd' : '#000'}]}>
+
+    {/*---------------------------------header---------------------------*/}
+    <View style={[styles.header, {backgroundColor: darkMode ? '#ddd' : '#000'}]}>
+    <TouchableOpacity style={styles.back} onPress={() => back()}>
+    <Ionicons name="arrow-back-outline" size={30} color='blue'/>
     </TouchableOpacity>
-    <Text style={{fontSize: 15, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>Buy Airtime</Text>
+    <Text style={{fontSize: 13, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>
+    Buy Airtime</Text>
+
+    <TouchableOpacity style={styles.transaction} onPress={() => go()}>
+    <Icon name="book" size={20} color={darkMode ? '#000' : 'ivory'}/>
+    </TouchableOpacity>
     </View>
 
+
+
+
+
+
+   
+   {/*-------------------------------------home----------------------------*/}
     <View style={[styles.home_container]}>
     <View style={[styles.form1, {backgroundColor: darkMode ? '#fff' : '#2a2a2a'}]}>
     <View style={styles.image_container}>
@@ -227,8 +257,7 @@ export const Service1 = () => {
     {error1 && (<Text style={{fontSize: 10, fontWeight: 'bold', color: 'red'}}>{error1}</Text>)}
 
     <TextInput value={phone_number} placeholder='Mobile Phone' onChangeText={check_phone} returnKeyType='done'
-    inputMode={Platform.OS === 'android' ? 'number-pad' : 'numeric'} placeholderTextColor='gray'
-    textContentType={Platform.OS === 'android' ? 'telephoneNumber' : 'telephoneNumber'}
+    inputMode="numeric" keyboardType='numeric' textContentType='number' placeholderTextColor='gray'
     style={[styles.input, {color: darkMode ? '#000' : 'ivory'}]}/>
     {error2 && (<Text style={{fontSize: 10, fontWeight: 'bold', color: 'red'}}>{error2}</Text>)}
 
@@ -236,8 +265,8 @@ export const Service1 = () => {
 
 
     <TextInput value={amount} placeholder='100-5000' onChangeText={check_amount} returnKeyType='done'
-    inputMode={Platform.OS === 'android' ? 'number-pad' : 'numeric'} placeholderTextColor='gray'
-    textContentType='flightNumber' style={[styles.input, {color: darkMode ? '#000' : 'ivory'}]}/>
+    keyboardType='numeric' placeholderTextColor='gray' style={[styles.input,
+    {color: darkMode ? '#000' : 'ivory'}]}/>
     {error3 && (<Text style={{fontSize: 10, fontWeight: 'bold', color: 'red'}}>{error3}</Text>)}
 
     <TouchableOpacity style={styles.submit} onPress={() =>
@@ -276,7 +305,7 @@ export const Service1 = () => {
 
     {/*------------------------------other----------------------------*/}
     <View style={{textAlign: 'left', justifyContent: 'space-between', flexDirection: 'row', width: '100%', padding: 20,
-    marginBottom: 30}}>
+    marginBottom: 10}}>
 
     <View style={{height: 'auto', width: 'auto', flexDirection: 'column', justifyContent: 'space-evenly',
     textAlign: 'left', gap: 15}}>
@@ -363,7 +392,7 @@ export const Service1 = () => {
 
     {spin && (<View style={styles.spin}><AppLoading/></View>)}
 
-    <SafeAreaView edges={['bottom']} style={{backgroundColor: '#ddd'}}/>
+
     </View>
  )
 }
@@ -371,17 +400,20 @@ export const Service1 = () => {
 
 
 const styles = StyleSheet.create({
- Home: {backgroundColor: '#ddd', position: 'relative', height: '100%', width: '100%', zIndex: 4},
- header: {height: 70, width: '100%', textAlign: 'center', alignItems: 'center',
- justifyContent: 'flex-end', position: 'relative', borderRadius: 10, padding: 15},
+ App: {backgroundColor: '#ddd', position: 'relative', flex: 1, zIndex: 4},
 
- back: {height: 30, width: 30, position: 'absolute', left: 20, bottom: 8},
+ header: {height: 55, width: '100%', textAlign: 'center', alignItems: 'center',
+ justifyContent: 'flex-end', position: 'relative', borderRadius: 10, padding: 5},
+
+ back: {height: 25, width: 30, position: 'absolute', left: 20, bottom: 2},
+
+ transaction: {height: 'auto', width: 'auto', position: 'absolute', right: 20},
 
 
 
 
 
- home_container: {flexDirection: 'column', padding: 20, gap: 5, textAlign: 'center', alignItems: 'center'},
+ home_container: {flexDirection: 'column', padding: 30, gap: 5, textAlign: 'center', alignItems: 'center'},
  form1: {backgroundColor: '#fff', height: 'auto', width: '100%', textAlign: 'left',
  padding: 10, borderRadius: 10, justifyContent: 'center', gap: 10},
 
@@ -400,7 +432,7 @@ const styles = StyleSheet.create({
  input: {height: 50, width: '100%', padding: 10, fontSize: 12, fontWeight: 'bold',
  borderColor: 'gray', borderWidth: 2, borderRadius: 10},
 
- submit: {backgroundColor: '#00cc99', height: 60, width: '100%', textAlign: 'center', alignItems: 'center',
+ submit: {backgroundColor: '#00cc99', height: 50, width:'100%', textAlign: 'center', alignItems: 'center',
  justifyContent: 'center', padding: 10, borderTopLeftRadius: 20, borderBottomRightRadius: 20},
 
 
@@ -415,11 +447,11 @@ const styles = StyleSheet.create({
  overLay: {backgroundColor: 'rgba(25,25,25,0.80)', position: 'absolute', left: 0, right: 0, bottom: 0,
  top: 0, justifyContent: 'flex-end', height: '100%', width: '100%', zIndex: 5, flexDirection: 'column'},
 
- other_container: {backgroundColor: '#fff', height: 'auto', flexDirection: 'column', borderTopLeftRadius: 20,
- borderTopRightRadius: 20, position: 'relative', zIndex: 5},
+ other_container: {backgroundColor: '#fff', height: 'auto', flexDirection: 'column', borderTopLeftRadius: 40,
+ borderTopRightRadius: 40, position: 'relative', zIndex: 5, maxHeight: '50%'},
 
 
- image1: {height: 40, width: 40, borderRadius: 50, marginBottom: 10},
+ image1: {height: 40, width: 40, borderRadius: 50, marginBottom: 5},
 
 
 

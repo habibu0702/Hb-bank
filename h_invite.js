@@ -5,25 +5,24 @@ import { userStore } from './true';
 
 
 export const InviteApp = () => {
-    const setShowRender = userStore(state => state.setShowRender);
 
 
 
     return (
         <View style={styles.App}>
-            <View style={styles.header}>
-                <TouchableOpacity style={styles.back} onPress={() =>
-                    {setShowRender()}}>
-                    <Ionicons name='chevron-back-outline' size={30} color='#000'/>
-                </TouchableOpacity>
-                <Text style={{fontSize: 15, fontWeight: 'bold'}}>Refer & Earn</Text>
-            </View>
+        <View style={styles.header}>
+        <TouchableOpacity style={styles.back} onPress={() =>
+        {setShowRender()}}>
+        <Ionicons name='chevron-back-outline' size={30} color='#000'/>
+        </TouchableOpacity>
+        <Text style={{fontSize: 15, fontWeight: 'bold'}}>Refer & Earn</Text>
+        </View>
 
-            <View style={styles.home}>
-                <View style={styles.container}>
+        <View style={styles.home}>
+        <View style={styles.container}>
 
-                </View>
-            </View>
+        </View>
+        </View>
         </View>
     )
 }

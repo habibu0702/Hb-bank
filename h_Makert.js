@@ -14,7 +14,6 @@ import { UserContext } from './context';
 
 export const Makert = () => {
     const [refreshing, setRefreshing] = useState(false);
-    const setShowRender = userStore(state => state.setShowRender);
 
 
 
@@ -53,8 +52,7 @@ export const Makert = () => {
     <View style={{textAlign: 'center', alignItems: 'center', justifyContent: 'space-between',
     flexDirection: 'row', padding: 10}}>
 
-    <TouchableOpacity style={styles.back} onPress={() =>
-    {setShowRender()}}>
+    <TouchableOpacity style={styles.back} onPress={() => null}>
     <Ionicons name='chevron-back-outline' size={30} color='#276440ff'/>
     </TouchableOpacity>
     <Text style={{fontSize: 16, fontWeight: 'bold', color: '#00cc99'}}>Shop</Text>

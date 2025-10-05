@@ -27,13 +27,6 @@ export const DarkApp = () => {
 
     return (
         <View style={[styles.App, {backgroundColor: darkMode ? '#ddd' : '#000'}]}>
-            <View style={styles.header}>
-                <Text style={{fontSize: 15, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>Dark Mode</Text>
-                <TouchableOpacity style={styles.back} onPress={() =>
-                {setShowSTRender()}}>
-                    <Ionicons name='chevron-back-outline' size={30} color='gray'/>
-                </TouchableOpacity>
-            </View>
 
             <View style={styles.home}>
 
@@ -65,12 +58,6 @@ export const DarkApp = () => {
 
 const styles = StyleSheet.create({
     App: {height: '100%', width: '100%'},
-
-    header: { height: 70, width: '100%', textAlign: 'center', alignItems: 'center',
-    justifyContent: 'flex-end', padding: 15, position: 'relative'},
-
-    back: {position: 'absolute', left: 20, bottom: 8},
-
 
     
     home: {flexDirection: 'column', padding: 20, gap: 20},

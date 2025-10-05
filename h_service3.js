@@ -1,9 +1,11 @@
 import { View, Text, TextInput, StyleSheet, Modal } from 'react-native';
 import { TouchableOpacity, Image, Alert, Keyboard } from 'react-native';
 import { ScrollView, Platform, Dimensions, Animated } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
-import { Ionicons } from '@expo/vector-icons';4
+import Icon from '@expo/vector-icons/FontAwesome';
+import { Ionicons } from '@expo/vector-icons';
 import { AppLoading } from './s_load_spin';
 import { useContext } from 'react';
 import { UserContext } from './context';
@@ -31,6 +33,16 @@ export const Service3 = () => {
 
 
  const time = Date.now();
+
+
+ const navigator = useNavigation();
+    const back = () => {
+      navigator.goBack();
+    }
+
+    const go = () => {
+        navigator.navigate('MoPay', {screen: 'History'});
+    }
 
 
 
@@ -152,12 +164,15 @@ export const Service3 = () => {
  return (
     <View style={[styles.App, {backgroundColor: darkMode ? '#ddd' : '#000'}]}>
     <View style={styles.header1}>
-    <TouchableOpacity style={styles.back} onPress={() =>
-    {setShowRender(false)}}>
-    <Ionicons name='chevron-back-outline' size={30} color='gray'/>
+    <TouchableOpacity style={styles.back} onPress={() => back()}>
+    <Ionicons name="arrow-back-outline" size={30} color='blue'/>
     </TouchableOpacity>
     <Text style={{fontSize: 15, fontWeight: 'bold', color: 'gray', color: darkMode ? '#000' : 'ivory'}}>
     Supscription TV Now</Text>
+
+    <TouchableOpacity style={styles.transaction} onPress={() => go()}>
+    <Icon name="book" size={20} color={darkMode ? '#000' : 'ivory'}/>
+    </TouchableOpacity>
     </View>
 
 
@@ -179,7 +194,7 @@ export const Service3 = () => {
 
 
     <TextInput value={smartNumber} placeholder='SmartCard Number' onChangeText={setSmartNumber}
-    inputMode={Platform.OS === 'android' ? 'number-pad' : 'numeric'} returnKeyType='done'
+    inputMode={Platform.OS === 'android' ? 'numeric' : 'numeric'} textContentType='number'
     style={[styles.input1, {color: darkMode ? '#000' : 'ivory'}]} placeholderTextColor='gray'/>
     {error2 && (<Text style={{fontSize: 12, fontWeight: 'bold', color: 'red'}}>{error2}</Text>)}
 
@@ -241,8 +256,8 @@ export const Service3 = () => {
 
     <ScrollView style={{padding: 20, flexDirection: 'column', gap: 10}}>
     {TV_plans[network_id.id].map((item) => (
-    <TouchableOpacity key={item.name} style={[styles.item, plan === item && [{backgroundColor: '#00cc99'}]]}
-    onPress={() => {setPlan(item); close()}}>
+    <TouchableOpacity key={item.name} style={[styles.item, plan === item && [{backgroundColor: '#00cc99',
+    padding: 5}]]} onPress={() => {setPlan(item); close()}}>
     <Ionicons name="wifi-outline" size={20} color="#fff" style={{height: 30, width: 30, borderRadius: 50,
     backgroundColor: 'rgba(25,25,25,0.30)', textAlign: 'center', alignItems:'center', padding: 5,
     justifyContent: 'center'}}/>
@@ -269,7 +284,7 @@ export const Service3 = () => {
     {active === '2' && (
     <Animated.View style={{backgroundColor: darkMode ? '#fff' : '#212121', height: 'auto', width: '100%',
     borderTopLeftRadius: 20, borderTopRightRadius: 20, textAlign: 'center', alignItems: 'center',
-    flexDirection: 'column', gap: 10, padding: 10, transform: [{translateY: slide}]}}>
+    flexDirection: 'column', gap: 10, padding: 10, transform: [{translateY: slide}], maxHeight: '50%'}}>
 
     <Image source={network_id.logo} resizeMode="cover" style={{height: 40, width: 40, borderRadius: 50,
     borderWidth: 1, borderColor: 'gray'}}/>
@@ -365,18 +380,20 @@ export const Service3 = () => {
 const styles = StyleSheet.create({
     App: {backgroundColor: '#DDD', position: 'relative', height: '100%', width: '100%'},
 
-    header1: {height: 70, width: '100%', textAlign: 'center', alignItems: 'center',
-    justifyContent: 'flex-end', position: 'relative', borderRadius: 10, padding: 15},
+    header1: {height: 60, width: '100%', textAlign: 'center', alignItems: 'center',
+    justifyContent: 'flex-end', position: 'relative', borderRadius: 10, padding: 5},
 
-    back: {height: 30, width: 30, position: 'absolute', left: 20, bottom: 8},
+    back: {height: 25, width: 30, position: 'absolute', left: 20, bottom: 2},
 
-
-
-
+    transaction: {height: 'auto', width: 'auto', position: 'absolute', right: 20},
 
 
 
-    Home: {padding: 20, position: 'relative'},
+
+
+
+
+    Home: {padding: 30, position: 'relative'},
 
     form1: {backgroundColor: '#FFF', height: 'auto', width: '100%', gap: 15, borderRadius: 10, padding: 10},
 

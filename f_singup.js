@@ -1,11 +1,12 @@
 import { View, Text, TextInput, StyleSheet, Dimensions, Alert } from 'react-native';
 import { ScrollView, TouchableOpacity, Platform, Animated } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator, Vibration } from 'react-native';
 import Icon from '@expo/vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRef, useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { userStore } from './true';
 import { useContext } from 'react';
 import { UserContext } from './context';
 import axios from 'axios';
@@ -45,6 +46,14 @@ export const SignUpForm = () => {
  const ref3 = useRef();
  const ref4 = useRef();
  const ref5 = useRef();
+
+
+
+ const navigator = useNavigation();
+ const GOBACK = () => {
+    navigator.goBack();
+    haptic();
+ }
 
 
 
@@ -141,7 +150,8 @@ export const SignUpForm = () => {
         return;
     }
     const image = '' || '';
-    const data = {full_name: full_name, userName: user_name, phone: phone_number, password: password, image: image};
+    const balance = 1000;
+    const data = {full_name: full_name, userName: user_name, phone: phone_number, password: password, balance: balance, image: image};
     setLoadin(true); 
         if (data) {
             register(data);
@@ -182,16 +192,12 @@ export const SignUpForm = () => {
  
 
  return (
-    <Animated.View style={[styles.Home, {transform: [{scale: bounce}]}]}>
-    <LinearGradient style={{height: '100%', width: '100%', borderRadius: 20}} colors={['ivory', '#000']}>
-    <View style={styles.header1}>
-    <Text style={{fontSize: 15, fontWeight: 'bold', color: '#000'}}>
-    Create Account
-    </Text>
-    </View>
+    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+    style={{flex: 1, padding: 20}}>
 
-    <ScrollView style={{flex: 1, padding: 20}}>
-        <View style={styles.form1}>
+    <Animated.View style={{height: 'auto', width: 'auto', transform: [{scale: bounce}]}}>
+    <LinearGradient style={{height: '100%', width: '100%', borderRadius: 20}} colors={['ivory', '#000']}>
+        <View style={[styles.form1]}>
 
             <View style={styles.join}>
             <Icon name='user' size={20} color='#000'/>
@@ -210,8 +216,7 @@ export const SignUpForm = () => {
             <View style={styles.join}>
             <Icon name='phone' size={20} color='#000'/>
             <TextInput value={phone_number} placeholder='Mobile Phone Number' onChangeText={checkNum} returnKeyType='go'
-            textContentType={Platform.OS === 'android' ? 'telephoneNumber' : 'telephoneNumber'} maxLength={11}
-            inputMode={Platform.OS === 'android' ? 'number-pad' : 'numeric'} style={styles.input1} ref={ref3}
+            maxLength={11} keyboardType="phone-pad" style={styles.input1} ref={ref3}
             onSubmitEditing={() => ref4.current.focus()}/>
             </View>
             {error3 && (<Text style={{fontSize: 10, fontWeight: 'bold', color: 'red'}}>{error3}</Text>)}
@@ -244,20 +249,19 @@ export const SignUpForm = () => {
             <View style={{height: 'auto', width: '100%', textAlign: 'center', alignItems: 'center', 
             flexDirection: 'row', justifyContent: 'center', padding: 10, gap: 10}}>
             <Text style={{fontSize: 16, fontWeight: 'bold', color: 'ivory'}}>Already Have An Account?</Text>
-            <TouchableOpacity style={styles.back} onPress={() => {setSyncForm(true); haptic()}}>
+            <TouchableOpacity style={styles.back} onPress={() => GOBACK()}>
             <Text style={{fontSize: 15, fontWeight: 'bold', color: '#00cc99'}}>Login Now</Text>
             </TouchableOpacity>
             </View>
-    </ScrollView>
-    </LinearGradient>
-    </Animated.View>
+            </LinearGradient>
+            </Animated.View>
+    </KeyboardAvoidingView>
  )
 }
 
 
 
 const styles = StyleSheet.create({
-    Home: {backgroundColor: 'transparent', flex: 1, borderRadius: 20},
 
     header1: {backgroundColor: 'transparent', height: 70, width: '100%', textAlign: 'center', alignItems: 'center',
     justifyContent: 'flex-end', padding: 15, position: 'relative', borderRadius: 20},

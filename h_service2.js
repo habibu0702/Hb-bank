@@ -1,8 +1,9 @@
 import { View, Text, TextInput, StyleSheet, Animated } from 'react-native';
 import { TouchableOpacity, Image, Modal, FlatList } from 'react-native';
 import { ScrollView, Keyboard, Platform, Dimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native';
+import Icon from '@expo/vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
 import { useRef, useEffect, useState } from 'react';
 import { AppLoading } from './s_load_spin';
@@ -33,6 +34,15 @@ export const Service2 = () => {
 
 
     const time = Date.now();
+
+    const navigator = useNavigation();
+    const back = () => {
+      navigator.goBack();
+    }
+
+    const go = () => {
+      navigator.navigate('MoPay', {screen: 'History'});
+    }
 
 
 
@@ -221,14 +231,28 @@ export const Service2 = () => {
 
  return (
     <View style={[styles.Home, {backgroundColor: darkMode ? '#ddd' : '#000'}]}>
-    <View style={styles.header1}>
-    <TouchableOpacity style={styles.back} onPress={() =>
-    {setShowRender(false)}}>
-    <Ionicons name='chevron-back-outline' size={30} color='gray'/>
+
+    {/*-------------------------------------HEADER---------------------------*/}
+    <View style={[styles.header, {backgroundColor: darkMode ? '#ddd' : '#000'}]}>
+    <TouchableOpacity style={styles.back} onPress={() => back()}>
+    <Ionicons name="arrow-back-outline" size={30} color="blue"/>
     </TouchableOpacity>
-    <Text style={{fontSize: 15, fontWeight: 'bold', color: 'gray'}}>Buy Data</Text>
+    <Text style={{fontSize: 13, fontWeight: 'bold', color: darkMode ? '000' : 'ivory'}}>Buy Data</Text>
+
+    <TouchableOpacity style={styles.transaction} onPress={() => go()}>
+      <Icon name='book' size={20} color={darkMode ? '#000' : 'ivory'}/>
+    </TouchableOpacity>
     </View>
 
+
+
+
+
+
+
+
+    
+    {/*------------------------------------home--------------------------------*/}
     <View style={[styles.home_container]}>
     <Animated.View style={[styles.form1, {backgroundColor: darkMode ? '#fff' : '#2a2a2a'}]}>
     <View style={styles.image_container}>
@@ -242,7 +266,7 @@ export const Service2 = () => {
     {error1 && (<Text style={{fontSize: 10, fontWeight: 'bold', color: 'red'}}>{error1}</Text>)}
 
     <TextInput value={phone_number} placeholder='Mobile Number' onChangeText={check_number} returnKeyType='done'
-    inputMode={Platform.OS === 'android' ? 'number-pad' : 'numeric'} placeholderTextColor='gray'
+    inputMode={Platform.OS === 'android' ? 'numeric' : 'numeric'} placeholderTextColor='gray'
     textContentType={Platform.OS === 'android' ? 'telephoneNumber' : 'telephoneNumber'}
     style={[styles.input, {color: darkMode ? '#000' : 'ivory'}]}/>
     {error2 && (<Text style={{fontSize: 10, fontWeight: 'bold', color: 'red'}}>{error2}</Text>)}
@@ -394,13 +418,13 @@ export const Service2 = () => {
     {active === '3' && (
       <Animated.View style={{height: 'auto', width: '100%', borderTopLeftRadius: 20, borderTopRightRadius: 20,
       flexDirection: 'column', textAlign: 'center', alignItems: 'center', padding: 10, position: 'relative',
-      transform: [{translateY: slide}], backgroundColor: darkMode ? '#fff' : '#2a2a2a'}}>
+      transform: [{translateY: slide}], backgroundColor: darkMode ? '#fff' : '#2a2a2a', maxHeight: '58%'}}>
 
       <Image source={network_id.logo}  resizeMode="cover" style={{height: 50, width: 50, borderRadius: 50,
       marginBottom: 5}}/>
 
       <View style={{height: 'auto', width: '100%', textAlign: 'center', alignItems: 'center', flexDirection: 'row',
-       justifyContent: 'space-between', padding: 20, marginBottom: 20}}>
+       justifyContent: 'space-between', maxHeight: '58%', padding: 20, marginBottom: 20}}>
 
       <View style={{height: 'auto', width: 'auto', flexDirection: 'column', justifyContent: 'space-between', gap: 15}}>
       <Text style={{fontSize: 12, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>Network</Text>
@@ -482,8 +506,6 @@ export const Service2 = () => {
     {spin && (<View style={{height: '100%', width: '100%', position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 10}}>
     <AppLoading/>
     </View>)}
-
-    <SafeAreaView edges={['bottom']} style={{backgroundColor: '#ddd'}}/>
     </View>
  )
 }
@@ -492,18 +514,20 @@ export const Service2 = () => {
 
 
 const styles = StyleSheet.create({
-    Home: {backgroundColor: '#ddd', height: '100%', width: '100%', position: 'relative'},
-    header1: {height: 70, width: '100%', textAlign: 'center', alignItems: 'center',
-    justifyContent: 'flex-end', position: 'relative', borderRadius: 10, padding: 15},
+    Home: {height: '100%', width: '100%', position: 'relative'},
+    header: {height: 55, width: '100%', textAlign: 'center', alignItems: 'center',
+    justifyContent: 'flex-end', position: 'relative', padding: 5},
 
-    back: {height: 30, width: 30, position: 'absolute', left: 20, bottom: 8},
+    back: {height: 25, width: 30, position: 'absolute', left: 20},
 
-
-
-
+    transaction: {height: 'auto', width: 'auto', position: 'absolute', right: 20},
 
 
-    home_container: {flexDirection: 'column', padding: 20, gap: 10, position: 'relative'},
+
+
+
+
+    home_container: {flexDirection: 'column', padding: 30, gap: 10, position: 'relative'},
     form1: {backgroundColor: '#fff', height: 'auto', width: '100%', borderRadius: 10,
     padding: 10, gap: 15},
 

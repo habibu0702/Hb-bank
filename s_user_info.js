@@ -7,20 +7,12 @@ import { UserContext } from './context';
 
 
 export const User_Info = () => {
- const setShowSTRender = userStore(state => state.setShowSTRender);
  const { user, darkMode } = useContext(UserContext);
 
 
 
  return (
-    <View style={[styles.Home, {backgroundColor: darkMode ? '#ddd' : '#000'}]}>
-    <View style={styles.header1}>
-    <TouchableOpacity style={styles.back} onPress={() =>
-    {setShowSTRender()}}>
-    <Ionicons name='chevron-back-outline' size={30} color={darkMode ? '#000' : 'ivory'}/>
-    </TouchableOpacity>
-    <Text style={{fontSize: 14, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>Profile</Text>
-    </View>
+    <View style={[styles.Home, {backgroundColor: darkMode ? '#ddd' : '#000', zIndex: 200}]}>
 
     
     {/*--------------------------------home-------------------------------*/}
@@ -55,10 +47,5 @@ export const User_Info = () => {
 
 
 const styles = StyleSheet.create({
-    Home: {backgroundColor: '#fff', flex: 1, borderRadius: 10},
-
-    header1: {height: 70, width: '100%', textAlign: 'center', alignItems: 'center',
-    justifyContent: 'flex-end', position: 'relative', borderRadius: 10, padding: 15},
-
-    back: {height: 30, width: 30, position: 'absolute', left: 20, bottom: 8}
+    Home: {backgroundColor: '#fff', flex: 1}
 })

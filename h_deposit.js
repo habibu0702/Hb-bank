@@ -1,43 +1,50 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { userStore } from './true';
 
 
 export const DepositApp = () => {
-    const setShowRender = userStore(state => state.setShowRender);
+    
+
+
+ const navigator = useNavigation();
+ const back = () => {
+    navigator.goBack();
+ }
 
 
 
 
 
 
-    return (
-        <View style={styles.App}>
-            <View style={styles.header}>
-                <TouchableOpacity style={styles.back} onPress={() =>
-                    {setShowRender()}}>
-                    <Ionicons name='chevron-back-outline' size={30} color='#000'/>
-                </TouchableOpacity>
-                <Text style={{fontSize: 16, fontWeight: 'bold'}}>Add Money</Text>
-            </View>
-            <View style={styles.home}>
-                <View style={styles.wallet}>
-                    <View style={styles.num}>
-                        <Text style={{fontSize: 15, fontWeight: 'bold'}}>acc: Soon</Text>
-                    </View>
+ return (
+   <View style={styles.App}>
+   <View style={styles.header}>
+   <TouchableOpacity style={styles.back} onPress={() => back()}>
+   <Ionicons name='chevron-back-outline' size={30} color='#000'/>
+   </TouchableOpacity>
+   <Text style={{fontSize: 16, fontWeight: 'bold'}}>Add Money</Text>
+   </View>
+   
+   <View style={styles.home}>
+   <View style={styles.wallet}>
+   <View style={styles.num}>
+   <Text style={{fontSize: 15, fontWeight: 'bold'}}>acc: Soon</Text>
+   </View>
 
 
-                    <View style={styles.acc1}></View>
-                    <View style={styles.window}></View>
+    <View style={styles.acc1}></View>
+    <View style={styles.window}></View>
 
-                    <View style={styles.acc_name}>
-                        <Text style={{fontSize: 15, fontWeight: 'bold'}}>Name: MoPay/habibu</Text>
-                        <Text style={{fontSize: 15, fontWeight: 'bold'}}>charges:  &#8358; 10 Naira</Text>
-                    </View>
-                </View>
-            </View>
-        </View>
+    <View style={styles.acc_name}>
+    <Text style={{fontSize: 15, fontWeight: 'bold'}}>Name: MoPay/habibu</Text>
+    <Text style={{fontSize: 15, fontWeight: 'bold'}}>charges:  &#8358; 10 Naira</Text>
+    </View>
+    </View>
+    </View>
+    </View>
     )
 }
 

@@ -1,4 +1,5 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { PushToken } from './h_pushToken';
 import { useContext } from 'react';
@@ -9,8 +10,13 @@ import { userStore } from './true';
 
 
 export const Notifications1 = () => {
- const setShowRender = userStore(state => state.setShowRender);
  const token = PushToken();
+
+
+ const navigator = useNavigation();
+ const back = () => {
+    navigator.goBack();
+ }
 
 
 
@@ -18,8 +24,7 @@ export const Notifications1 = () => {
  return (
     <View style={styles.App}>
     <View style={styles.header1}>
-    <TouchableOpacity style={styles.back} onPress={() =>
-    {setShowRender()}}>
+    <TouchableOpacity style={styles.back} onPress={() => back()}>
     <Ionicons name='arrow-back-outline' size={30} color='#000'/>
     </TouchableOpacity>
     <Text style={{fontSize: 15, fontWeight: 'bold'}}>Notifications</Text>

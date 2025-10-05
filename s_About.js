@@ -10,7 +10,6 @@ import { UserContext } from "./context";
 
 
 export const About_page = () => {
-  const setShowSTRender = userStore(state => state.setShowSTRender);
 
 
 
@@ -38,8 +37,7 @@ export const About_page = () => {
     return (
       <View entering={FadeIn.duration(500)} style={styles.container}>
       <LinearGradient style={[styles.header]} colors={['#000', '#00cc99']}>
-      <TouchableOpacity style={styles.back} onPress={() =>
-      {setShowSTRender()}}>
+      <TouchableOpacity style={styles.back} onPress={() => null}>
       <Ionicons name="chevron-back-outline" size={30} color='#fff'/>
       </TouchableOpacity>
 

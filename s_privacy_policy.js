@@ -6,7 +6,6 @@ import { userStore } from './true';
 
 
 export const Policy = () => {
-    const setShowSTRender = userStore(state => state.setShowSTRender);
 
 
 
@@ -14,11 +13,7 @@ export const Policy = () => {
 
     return (
         <View style={{backgroundColor: '#fff', flex: 1}}>
-            <View style={styles.header}>
-                <TouchableOpacity style={styles.back} onPress={() => {setShowSTRender()}}>
-                    <Ionicons name='chevron-back-outline' size={30} color='#000'/>
-                </TouchableOpacity>
-            </View>
+            
         </View>
     )
 }

@@ -1,15 +1,15 @@
 import { View, Text, TextInput, StyleSheet, ScrollView, Alert, Keyboard } from "react-native";
 import { TouchableOpacity, Platform, Animated, Dimensions, ActivityIndicator } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { Vibration } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as LocalAuthentication from 'expo-local-authentication';
 import { KeyboardAvoidingView } from "react-native";
 import Icon from '@expo/vector-icons/FontAwesome';
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useEffect, useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "./context";
-import { userStore } from "./true";
-import { SignUpForm } from "./f_singup";
 import * as Haptics from 'expo-haptics';
 import * as Speech from 'expo-speech';
 import axios from "axios";
@@ -19,14 +19,25 @@ import i18n from './a_l-swap-lan';
 
 
 export const LoginForms = () => {
+  const { Login, setLogin} = useContext(UserContext);
+  const [eye, setEye] = useState(true);
 
   const [user_name, setUser_name] = useState('');
   const [password, setPassword] = useState('');
   const [error1, setError1] = useState('');
   const [error2, setError2] = useState('');
-  const LoggedIn = userStore(state => state.LoggedIn);
   const [visible, setVisible] = useState(false);
   const [loadin, setLoading] = useState(false);
+  const [Finger, setFinger] = useState(false);
+
+
+  const navigator = useNavigation();
+
+
+  const GOPAGE = () => {
+    navigator.navigate('SignUp');
+    haptic();
+  }
 
 
 
@@ -86,13 +97,21 @@ export const LoginForms = () => {
 
 
 
+  const author = async () => {
+    const succ = await LocalAuthentication.authenticateAsync({
+      promptMessage: 'Unlock Account',
+      fallbackLabel: 'Use Pin'
+    });
+    if (succ.success) {
+      setFinger(true);
+    }
+  }
+  useEffect(() => {
+    author();
+  }, []);
 
 
 
- const { Logign, SignUp, user } = useContext(UserContext);
- const { setLogign, setSignUp } = useContext(UserContext);
- const { syncForm, setSyncForm } = useContext(UserContext);
- const [eye, setEye] = useState(true);
 
 
   const slide_lock = useRef(new Animated.Value(0)).current;
@@ -111,66 +130,7 @@ export const LoginForms = () => {
   const screnWidth = Dimensions.get('window').width;
   const slide1 = useRef(new Animated.Value(1)).current;
   const slide2 = useRef(new Animated.Value(screnWidth)).current;
-
-
-
-
-  useEffect(() => {
-    const timer1 = setTimeout(() => {
-    if(syncForm) {
-      setLogign(true);
-      Animated.timing(slide1, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true
-      }).start();
-    } else {
-      Animated.timing(slide1, {
-        toValue: -screnWidth * 0.60,
-        duration: 300,
-        useNativeDriver: true
-      }).start(() => {
-        setLogign(false);
-      })
-    }
-  }, 100);
-  return () => clearTimeout(timer1);
-  }, [syncForm]);
-
-
-
-
-
-
-
-  useEffect(() => {
-    const timer2 = setTimeout(() => {
-    if(!syncForm) {
-      setSignUp(true);
-      Animated.timing(slide2, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: false
-      }).start();
-    } else {
-      Animated.timing(slide2, {
-        toValue: screnWidth,
-        duration: 300,
-        useNativeDriver: false
-      }).start(() => {
-        setSignUp(false);
-      })
-    }
-  }, 100);
-  return () => clearTimeout(timer2);
-  }, [syncForm]);
-
-
-
-
-
-
-
+;
 
 const name = 'habibu';
 const pass = "habibu070@A";
@@ -210,7 +170,7 @@ const pass = "habibu070@A";
       return false;
     } finally {
       setLoading(false);
-      LoggedIn(true);
+      setLogin(true);
       speak();
     }
   }
@@ -223,15 +183,8 @@ const pass = "habibu070@A";
       <LinearGradient colors={['royalblue', '#00cc99']} start={{x: 0, y: 0}} end={{x: 0, y: 1}}
       style={{height: '100%', width: '100%'}}>
 
-      {SignUp && (
-        <Animated.View style={[styles.App2, {transform: [{translateX: slide2}]}]}>
-          <SignUpForm/>
-        </Animated.View>
-      )}
 
-
-      {Logign && (
-        <Animated.View style={[styles.App1, {transform: [{translateX: slide1}]}]}>
+        <Animated.View style={[styles.App1]}>
       <View style={styles.header}>
 
         <Animated.View style={[styles.lock_container, {transform: [{scale: slide_lock}]}]}>
@@ -285,12 +238,12 @@ const pass = "habibu070@A";
 
         <View style={styles.role_go}>
         <Text style={{fontSize: 15, fontWeight: 'bold'}}>No Account Yet?</Text>
-        <TouchableOpacity onPress={() => {setSyncForm(false); haptic()}}>
+        <TouchableOpacity onPress={() => GOPAGE()}>
             <Text style={{fontSize: 15, fontWeight: 'bold', color: '#00cc99'}}>Register Now</Text>
           </TouchableOpacity>
           </View>
       </LinearGradient>
-      </Animated.View>)}
+      </Animated.View>
       </LinearGradient>
     </SafeAreaView>
   )
@@ -299,7 +252,7 @@ const pass = "habibu070@A";
 const styles = StyleSheet.create({
   App1: {flex: 1, position: 'relative'},
 
-  header: {height: '30%', width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'center',
+  header: {height: '20%', width: '100%', textAlign: 'center', alignItems: 'center', justifyContent: 'center',
   flexDirection: 'column', gap: 3, padding: 20},
   
   lock_container: {backgroundColor: 'rgba(255,255,255,0.60)', height: 60, width: 60, textAlign: 'center',

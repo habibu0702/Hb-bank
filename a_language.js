@@ -7,7 +7,7 @@ export const ha = {
     my_wallet: "asusu na",
     login: "Shiga",
     logout: "Fitah",
-    settings: "saituna"
+    settings: " Saituna"
 }
 
 

@@ -25,13 +25,23 @@ export const Service7 = () => {
 
     return (
         <View style={[styles.App, {backgroundColor: darkMode ? '#ddd' : '#000'}]}>
+
+
+        {/*---------------------------------header---------------------------------*/}
         <View style={styles.header}>
         <TouchableOpacity style={styles.back} onPress={() => {setShowRender(false)}}>
-        <Ionicons name="arrow-back-outline" size={30} color={darkMode ? '#000' : 'ivory'}/>
+        <Ionicons name="arrow-back-outline" size={30} color='blue'/>
         </TouchableOpacity>
+        <Text style={{fontSize: 13, fontWeight: 'bold', color: darkMode ? '#000' : 'ivory'}}>
+        Pund To Betting Walllet</Text>
         </View>
 
+        
 
+
+
+
+        {/*-----------------------------------home-------------------------------*/}
         <View style={styles.home}>
         <View style={[styles.form, {backgroundColor: darkMode ? '#fff' : '#2a2a2a'}]}>
         <TextInput value={null} placeholder="ID or usename" onChangeText={null} inputMode="number-pad" style={styles.input}
@@ -49,10 +59,10 @@ export const Service7 = () => {
 const styles = StyleSheet.create({
     App: {backgroundColor: '#ddd', flex: 1},
 
-    header: {height: 70, width: '100%', textAlign: 'center', alignItems: 'center',
-    justifyContent: 'flex-end', padding: 15},
+    header: {height: 60, width: '100%', textAlign: 'center', alignItems: 'center',
+    justifyContent: 'flex-end', padding: 5},
 
-    back: {height: 30, width: 30, position: 'absolute', left: 20, bottom: 8},
+    back: {height: 25, width: 30, position: 'absolute', left: 20, bottom: 2},
 
 
 

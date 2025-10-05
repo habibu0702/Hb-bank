@@ -12,7 +12,6 @@ import { userStore } from './true';
 
 
 export const App_pin = () => {
-    const setIsOpenSecurity = userStore((state) => state.setIsOpenSecurity);
     const { user } = useContext(UserContext);
 
 
@@ -42,15 +41,8 @@ export const App_pin = () => {
 
     return (
         <View style={styles.App}>
-        <LinearGradient style={{flex: 1}} colors={['rgba(55, 58, 206, 0.6)', 'rgba(140, 143, 142, 0.6)']}>
+        <LinearGradient style={{flex: 1}} colors={['royalblue', 'rgba(140, 143, 142, 0.6)']}>
         <BlurView intensity={100} tint='light' style={{flex: 1}}>
-        <View style={styles.header1}>
-        <TouchableOpacity style={styles.back} onPress={() =>
-        {setIsOpenSecurity(false)}}>
-        <Ionicons name='chevron-back-outline' size={30} color='ivory'/>
-        </TouchableOpacity>
-        <Text style={{fontSize: 15, fontWeight: 'bold', color: '#fff'}}>Reset PIN</Text>
-        </View>
         
         
         
@@ -74,13 +66,6 @@ export const App_pin = () => {
 
 const styles = StyleSheet.create({
     App: {backgroundColor: 'transparent', flex: 1, borderRadius: 10},
-
-    header1: {backgroundColor: 'transparent', height: 60, width: '100%', textAlign: 'center', alignItems: 'center',
-    justifyContent: 'flex-end', position: 'relative', borderRadius: 10, padding: 15},
-
-    back: {position: 'absolute', left: 15, top: 25},
-
-
 
 
     home: {textAlign: 'center', alignItems: 'center', flexDirection: 'column', flex: 1, padding: 20, gap: 30},

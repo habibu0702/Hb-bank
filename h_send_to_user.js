@@ -13,7 +13,7 @@ import * as Haptics from 'expo-haptics';
 
 
 
-export const Send_Zpay = () => {
+export const P2P = () => {
  const setShowRender = userStore(state => state.setShowRender);
  const { user, darkMode } = useContext(UserContext);
  const [recipient, setRecipient] = useState('');
