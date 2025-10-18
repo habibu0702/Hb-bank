@@ -1,0 +1,78 @@
+.<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>simple calculator</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="container">
+
+    <div id="list">
+        <div id="list-num">
+        <ol>1</ol>
+        <ol>2</ol>
+        <ol>3</ol>
+        <ol>4</ol>
+        <ol>5</ol>
+        <ol>6</ol>
+        <ol>7</ol>
+        <ol>8</ol>
+        <ol>9</ol>
+        <ol>10</ol>
+        </div>
+
+        <div id="list-name">
+        <ol>ND/COM/23/0020</ol>
+        <ol>ND/COM/23/0032</ol>
+        <ol>ND/COM/23/0215</ol>
+        <ol>ND/COM/23/0171</ol>
+        <ol>ND/COM/23/0061</ol>
+        <ol>ND/COM/23/0060</ol>
+        <ol>ND/COM/23/0059</ol>
+        <ol>ND/COM/23/0259</ol>
+        <ol>ND/COM/23/0127</ol>
+        <ol>ND/COM/23/0012</ol>
+        </div>
+    </div>
+        <div class="calculator">
+            <form>
+                <div>
+                    <input id="text" type="text" name="display">
+                </div>
+        <div>
+            <input type="button" value="AC" onclick="display.value = display.value.toString ().slice(0,-0)" class="operator">
+            <input type="button" value="DC" onclick="display.value = display.value.toString ().slice(0,-1)" class="operator">
+            <input type="button" value="."  onclick="display.value += '.'" class="operator">
+            <input type="button" value="/"  onclick="display.value += '/'"class="operator">
+        </div>
+        <div>
+            <input type="button" value="7" onclick="display.value += '7'">
+            <input type="button" value="8" onclick="display.value += '8'">
+            <input type="button" value="9" onclick="display.value += '9'">
+            <input type="button" value="*" onclick="display.value += '*'"class="operator" >
+        </div>
+        <div>
+            <input type="button" value="4" onclick="display.value += '4'">
+            <input type="button" value="5" onclick="display.value += '5'">
+            <input type="button" value="6" onclick="display.value += '6'">
+            <input type="button" value="-" onclick="display.value += '-'" class="operator">
+        </div>
+        <div>
+            <input type="button" value="1" onclick="display.value += '1'">
+            <input type="button" value="2" onclick="display.value += '2'">
+            <input type="button" value="3" onclick="display.value += '3'">
+            <input type="button" value="+" onclick="display.value += '+'" class="operator">
+        </div>
+        <div>
+            <input type="button" value="00" onclick="display.value += '00'">
+            <input type="button" value="0" onclick="display.value += '0'">
+            <input id="equal" type="button" value="=" onclick="display.value = eval(display.value)"class="equal operator">
+        </div>
+      </form>
+    </div>
+ </div>
+
+</body>
+</html>
